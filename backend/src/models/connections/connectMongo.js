@@ -4,7 +4,7 @@ const clc = require("cli-color");
 
 const connnectMongo = async () => {
   try {
-    console.log(databaseConfig.development.stringConnect);
+    console.log(clc.blue("Connecting to MongoDB ..."));
 
     await mongoose.connect(databaseConfig.development.stringConnect, {
       useNewUrlParser: true,

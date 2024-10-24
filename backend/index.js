@@ -5,16 +5,12 @@ const clc = require("cli-color");
 const { port: appPort } = require("./src/configs/app.config");
 const { port: authPort } = require("./src/configs/auth.config");
 
+
+
 const initSystem = async () => {
   try {
-    console.log("====================================");
-    console.log("Start connecting Mongo database...");
-    console.log("====================================");
     await connectMongo();
 
-    console.log("====================================");
-    console.log("Start auth server...");
-    console.log("====================================");
     auth.listen(authPort, () => {
       console.log("====================================");
       console.log(
@@ -23,9 +19,6 @@ const initSystem = async () => {
       console.log("====================================");
     });
 
-    console.log("====================================");
-    console.log("Start app server...");
-    console.log("====================================");
     app.listen(appPort, () => {
       console.log("====================================");
       console.log(

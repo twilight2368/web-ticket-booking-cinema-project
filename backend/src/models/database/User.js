@@ -7,21 +7,24 @@ const email_regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const UserSchema = new mongoose.Schema(
   {
     _id: {
-      type: mongoose.Schema.Types.UUID,
-      default: uuid(),
+      type: String,
+      default: () => uuid(),
     },
     username: {
       type: String,
-      require: true,
+      required: true,
     },
     first_name: {
       type: String,
+      required: true,
     },
     last_name: {
       type: String,
+      required: true,
     },
     email: {
       type: String,
+      required: true,
       validate: {
         validator: function (v) {
           return email_regex.test(v);
@@ -31,7 +34,7 @@ const UserSchema = new mongoose.Schema(
     },
     phone_number: {
       type: String,
-      require: true,
+      required: true,
       validate: {
         validator: function (v) {
           return phone_regex.test(v);
@@ -41,7 +44,7 @@ const UserSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      require: true,
+      required: true,
     },
   },
   { timestamps: true }
@@ -50,4 +53,3 @@ const UserSchema = new mongoose.Schema(
 const UserModel = mongoose.model("user", UserSchema);
 
 module.exports = UserModel;
- 
