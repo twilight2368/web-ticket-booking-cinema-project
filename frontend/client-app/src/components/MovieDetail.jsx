@@ -1,10 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import Showtimes from './Showtimes';
+
+// Dữ liệu giờ chiếu mẫu
+const showtimes = [
+  {
+    date: 'Th. 11 21',
+    day: 'Thứ năm',
+    times: ['12:00', '14:05', '16:10', '19:00', '19:50', '20:55', '21:55', '22:55', '23:10'],
+  },
+  {
+    date: 'Th. 11 22',
+    day: 'Thứ sáu',
+    times: ['10:00', '13:00', '15:10', '18:00', '20:00', '22:00'],
+  },
+];
 
 function MovieDetail() {
   const { id } = useParams(); // Lấy movie ID từ URL
   const [movie, setMovie] = useState(null);
+
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -43,6 +59,8 @@ function MovieDetail() {
           {/* Thêm các chi tiết khác nếu cần */}
         </div>
       </div>
+      {/* Tích hợp phần Showtimes*/}
+      <Showtimes showtimes={showtimes}/>
     </div>
   );
 }
