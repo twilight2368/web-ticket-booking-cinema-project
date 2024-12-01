@@ -18,6 +18,16 @@ const RoomSchema = new mongoose.Schema({
     required: true,
   },
 
+  num_of_rows: {
+    type: Number,
+    required: true,
+  },
+
+  num_of_cols: {
+    type: Number,
+    require: true,
+  },
+
   type_room: {
     type: String,
     required: true,

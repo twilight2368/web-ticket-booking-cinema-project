@@ -6,4 +6,25 @@ const ShowSchema = new mongoose.Schema({
     type: String,
     default: () => uuid(),
   },
+  movie_id: {
+    type: String,
+    ref: "movie",
+  },
+
+  room_id: {
+    type: String,
+    ref: "room",
+  },
+
+  date_show: {
+    type: Date,
+  },
+
+  time_start: {
+    type: Date,
+  },
+
+  time_end: {
+    type: Date,
+  },
 });
