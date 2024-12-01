@@ -1,0 +1,13 @@
+src/
+│
+├── components/
+│   ├── Header.jsx        # Hiển thị thông tin phim
+│   ├── SeatSelector.jsx  # Sơ đồ ghế
+│   ├── Footer.jsx        # Thanh thông tin và nút thanh toán
+│
+├── pages/
+│   ├── AdminBooking.jsx  # Trang chính hiển thị giao diện admin
+│
+├── App.css               # File CSS chính
+├── App.jsx               # Thành phần App chính
+└── index.js              # Điểm khởi đầu của ứng dụng
