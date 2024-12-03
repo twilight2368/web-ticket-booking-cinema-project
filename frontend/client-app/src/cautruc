@@ -1,0 +1,28 @@
+frontend/client-app
+│
+├── public
+│   ├── index.html
+│   └── film-reel.png
+│
+├── src
+│   ├── assets/                    # Tài nguyên (ảnh, logo,...)
+│   ├── components/                # Các component tái sử dụng
+│   │   ├── Navbar.jsx             # Thanh điều hướng
+│   │   ├── Sidebar.jsx            # Sidebar cho admin
+│   │   ├── MovieCard.jsx          # Thẻ phim
+│   │   ├── NewsCard.jsx           # Thẻ tin tức
+│   │
+│   ├── pages/                     # Các trang
+│   │   ├── AdminBooking.jsx       # Trang quản lý vé
+│   │   ├── MovieManagement.jsx    # Trang quản lý phim
+│   │   ├── ScheduleManagement.jsx # Trang quản lý lịch chiếu
+│   │   └── NewsManagement.jsx     # Trang quản lý tin tức
+│   │
+│   ├── styles/                    # Các file CSS (Tailwind)
+│   │   └── index.css
+│   │
+│   ├── App.jsx                    # Điểm bắt đầu của ứng dụng
+│   ├── index.js                   # Khởi động ReactJS
+│   └── tailwind.config.js         # Cấu hình Tailwind
+│
+└── package.json                   # Thông tin package
