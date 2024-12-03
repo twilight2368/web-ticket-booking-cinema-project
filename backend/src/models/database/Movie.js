@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const { v4: uuid } = require("uuid");
-
+const { genres } = require("../genres/genres.json");
 const MovieSchema = new mongoose.Schema({
   _id: {
     type: String,
@@ -18,22 +18,13 @@ const MovieSchema = new mongoose.Schema({
     minlength: 10,
     maxlength: 5000,
   },
-  genre: {
-    type: String,
-    required: true,
-    enum: [
-      "Action",
-      "Comedy",
-      "Drama",
-      "Fantasy",
-      "Horror",
-      "Mystery",
-      "Romance",
-      "Thriller",
-      "Science Fiction",
-      "Documentary",
-    ],
-  },
+  genre: [
+    {
+      type: String,
+      required: true,
+      enum: genres,
+    },
+  ],
   country: {
     type: String,
     maxlength: 100,
@@ -56,6 +47,17 @@ const MovieSchema = new mongoose.Schema({
   },
   banner_url: {
     type: String,
+  },
+  trailer_url: {
+    type: String,
+    validate: {
+      validator: function (v) {
+        const youtubeRegex =
+          /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/;
+        return youtubeRegex.test(v);
+      },
+      message: (props) => `${props.value} is not a valid YouTube URL!`,
+    },
   },
 });
 

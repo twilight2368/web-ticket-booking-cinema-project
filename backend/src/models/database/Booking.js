@@ -45,4 +45,4 @@ BookingSchema.index({ user_id: 1, show_id: 1 });
 
 const BookingModel = mongoose.model("Booking", BookingSchema);
 
-export default BookingModel;
+module.exports = BookingModel;
