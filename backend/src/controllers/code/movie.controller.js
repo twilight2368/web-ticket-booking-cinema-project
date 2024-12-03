@@ -1,4 +1,4 @@
-const MovieModel = require("../models/MovieModel"); // Assuming the model is located here
+const MovieModel = require("../../models/database/Movie"); // Assuming the model is located here
 
 //TODO: Create a new movie
 const createMovie = async (req, res) => {

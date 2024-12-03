@@ -1,8 +1,5 @@
 const mongoose = require("mongoose");
 const { v4: uuid } = require("uuid");
-const bcrypt = require("bcrypt");
-
-const SALT_ROUNDS = 10;
 
 const phoneRegex = /^(?:\+84|0)(3|5|7|8|9)\d{8}$/;
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -62,23 +59,6 @@ const UserSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
-// Pre-save middleware for password hashing
-UserSchema.pre("save", async function (next) {
-  if (this.isModified("password")) {
-    try {
-      this.password = await bcrypt.hash(this.password, SALT_ROUNDS);
-    } catch (err) {
-      return next(err);
-    }
-  }
-  next();
-});
-
-// Method to compare passwords
-UserSchema.methods.comparePassword = async function (candidatePassword) {
-  return await bcrypt.compare(candidatePassword, this.password);
-};
 
 const UserModel = mongoose.model("User", UserSchema);
 

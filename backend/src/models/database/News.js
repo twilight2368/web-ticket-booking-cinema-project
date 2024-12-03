@@ -13,6 +13,13 @@ const NewsSchema = new mongoose.Schema(
       required: true,
     },
 
+    title: {
+      type: String,
+      required: true,
+      minLength: 20,
+      maxLength: 100,
+    },
+
     writer: {
       type: String,
       ref: "admin",

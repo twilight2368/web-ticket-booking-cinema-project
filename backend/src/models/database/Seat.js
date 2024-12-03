@@ -47,7 +47,7 @@ const SeatSchema = new mongoose.Schema({
   },
 });
 
-// Models
+
 const SeatType = mongoose.model("SeatType", SeatTypeSchema);
 const Seat = mongoose.model("Seat", SeatSchema);
 

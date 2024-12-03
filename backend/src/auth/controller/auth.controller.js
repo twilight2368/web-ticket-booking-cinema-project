@@ -6,7 +6,6 @@
 
 //TODO: Logout user
 
-//TODO: Get a ser information
 
 //* ----------------- User controller ---------------------
 
@@ -16,4 +15,3 @@
 
 //TODO: Logout employee or manager
 
-//TODO: Get all users

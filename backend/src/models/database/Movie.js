@@ -48,6 +48,17 @@ const MovieSchema = new mongoose.Schema({
   banner_url: {
     type: String,
   },
+  trailer_url: {
+    type: String,
+    validate: {
+      validator: function (v) {
+        const youtubeRegex =
+          /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/;
+        return youtubeRegex.test(v);
+      },
+      message: (props) => `${props.value} is not a valid YouTube URL!`,
+    },
+  },
 });
 
 // Adding an index for title for optimized search
