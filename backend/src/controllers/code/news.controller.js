@@ -1,7 +1,7 @@
 const News = require("../../models/database/News");
 
 //TODO: Get all news
-const getAllNews = async () => {
+const getAllNews = async (req, res, next) => {
   try {
     const news = await News.find(); // Retrieves all fields for all news documents
     return news;
@@ -11,7 +11,7 @@ const getAllNews = async () => {
 };
 
 //TODO: Get all news title, banner, ID
-const getNewsTitlesAndBanners = async () => {
+const getNewsTitlesAndBanners = async (req, res, next) => {
   try {
     const news = await News.find({}, "_id title banner"); // Select specific fields
     return news;
@@ -21,7 +21,7 @@ const getNewsTitlesAndBanners = async () => {
 };
 
 //TODO: Get a specific news with ID
-const getSpecificNewsById = async (id) => {
+const getSpecificNewsById = async (req, res, next) => {
   try {
     const news = await News.findById(id); // Fetch document by its ID
     if (!news) {
@@ -34,7 +34,7 @@ const getSpecificNewsById = async (id) => {
 };
 
 //TODO: Create a news
-const createNews = async (newsData) => {
+const createNews = async (req, res, next) => {
   try {
     const news = new News(newsData); // Initialize a new document
     await news.save(); // Save to the database
@@ -45,7 +45,7 @@ const createNews = async (newsData) => {
 };
 
 //TODO: Change a news
-const updateNewsById = async (id, updatedData) => {
+const updateNewsById = async (req, res, next) => {
   try {
     const news = await News.findByIdAndUpdate(id, updatedData, {
       new: true, // Return the updated document
@@ -61,7 +61,7 @@ const updateNewsById = async (id, updatedData) => {
 };
 
 //TODO: Delete a news
-const deleteNewsById = async (id) => {
+const deleteNewsById = async (req, res, next) => {
   try {
     const news = await News.findByIdAndDelete(id);
     if (!news) {
