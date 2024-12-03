@@ -1,7 +1,7 @@
 const MovieModel = require("../../models/database/Movie"); // Assuming the model is located here
 
 //TODO: Create a new movie
-const createMovie = async (req, res) => {
+const createMovie = async (req, res, next) => {
   try {
     const {
       title,
@@ -41,7 +41,7 @@ const createMovie = async (req, res) => {
 };
 
 //TODO: Get all movies
-const getAllMovies = async (req, res) => {
+const getAllMovies = async (req, res, next) => {
   try {
     const movies = await MovieModel.find();
     return res.status(200).json(movies);
@@ -54,7 +54,7 @@ const getAllMovies = async (req, res) => {
 };
 
 //TODO: Get a movie by ID
-const getMovieById = async (req, res) => {
+const getMovieById = async (req, res, next) => {
   const { movieId } = req.params;
   try {
     const movie = await MovieModel.findById(movieId);
@@ -73,7 +73,7 @@ const getMovieById = async (req, res) => {
 };
 
 //TODO: Update a movie
-const updateMovie = async (req, res) => {
+const updateMovie = async (req, res, next) => {
   const { movieId } = req.params;
   const updates = req.body;
 
@@ -98,7 +98,7 @@ const updateMovie = async (req, res) => {
 };
 
 //TODO: Delete a movie
-const deleteMovie = async (req, res) => {
+const deleteMovie = async (req, res, next) => {
   const { movieId } = req.params;
 
   try {

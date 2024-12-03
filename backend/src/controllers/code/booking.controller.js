@@ -1,7 +1,7 @@
 const BookingModel = require("../../models/database/Booking");
 
 //TODO: Create a new booking
-const createBooking = async (req, res) => {
+const createBooking = async (req, res, next) => {
   try {
     const { user_id, show_id, seats, total_price } = req.body;
 
@@ -23,28 +23,22 @@ const createBooking = async (req, res) => {
       .status(201)
       .json({ message: "Booking created successfully.", data: savedBooking });
   } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .json({ error: "An error occurred while creating the booking." });
+    next(error);
   }
 };
 
 //TODO: Get all bookings
-const getAllBookings = async (req, res) => {
+const getAllBookings = async (req, res, next) => {
   try {
     const bookings = await BookingModel.find().populate("user_id show_id");
     res.status(200).json({ data: bookings });
   } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .json({ error: "An error occurred while fetching bookings." });
+    next(error);
   }
 };
 
 //TODO: Get booking by ID
-const getBookingById = async (req, res) => {
+const getBookingById = async (req, res, next) => {
   try {
     const { id } = req.params;
 
@@ -55,10 +49,7 @@ const getBookingById = async (req, res) => {
 
     res.status(200).json({ data: booking });
   } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .json({ error: "An error occurred while fetching the booking." });
+    next(error);
   }
 };
 
