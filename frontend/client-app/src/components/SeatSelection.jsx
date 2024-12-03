@@ -1,27 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 function SeatSelection({selectedTime}){
-    // Trang thai ghe
-    const[seats, setSeats] = useState([
-        { id: "A1", type: "normal", status: "available" },
-        { id: "A2", type: "vip", status: "booked" },
-        { id: "A3", type: "normal", status: "available" },
-        { id: "B1", type: "normal", status: "available" },
-        { id: "B2", type: "couple", status: "available" },
-        { id: "B3", type: "couple", status: "available" },
-        { id: "B4", type: "couple", status: "available" },
-        { id: "B5", type: "couple", status: "available" },
-        { id: "B6", type: "couple", status: "available" },
-        { id: "B7", type: "couple", status: "available" },
-        { id: "B8", type: "couple", status: "available" },
-        { id: "B9", type: "couple", status: "available" },
-        { id: "B10", type: "couple", status: "available" },
-        { id: "B11", type: "couple", status: "available" },
-        { id: "B12", type: "couple", status: "available" },
-        { id: "B13", type: "couple", status: "available" },
-    ]);
+    // Trang thai
+    const [roomId, setRoomId] = useState(null);
+    const[seats, setSeats] = useState([]);
     const [selectedSeats, setSelectedSeats] = useState([]); // ghe dang chon
     const [timeLeft, setTimeLeft] = useState(300); // 5 phut dem nguoc
+    const [rows, setRows] = useState(0); // Số hàng
+    const [columns, setColumns] = useState(0); // Số cột
+
+    // Lấy dữ liệu ghế từ API
+    useEffect(() => {
+        const fetchSeats = async () => {
+            try {
+                const response = await fetch("http://localhost:4000/rooms");
+                const data = await response.json();
+                if(data && data.length > 0 ) {
+                    const room = data[0]; // Lấy phòng đầu tiên (Có thể thay đổi nếu cần)
+                    setSeats(data[0].seats); // Lấy ghế từ phòng đầu tiên   
+                    setRoomId(room.roomId); // Gán roomId từ API
+                    setRows(room.rows);
+                    setColumns(room.columns);
+                }
+            } catch (error) {
+                console.error("Lỗi khi gọi API:", error);
+            }
+        };
+        fetchSeats();
+    },[]);
 
     // Bat dau dem nguoc khi component duoc render
     React.useEffect(() => {
@@ -68,13 +74,20 @@ function SeatSelection({selectedTime}){
 
     return (
         <div>
-            <h2>Chọn ghế cho giờ chiếu: {selectedTime}</h2>
-            <div>
-                {/* Hiển thị đếm ngược */}
-                <p>Thời gian giữ ghế: {Math.floor(timeLeft / 60)}:{timeLeft % 60}</p>
+            <p className="flex justify-between w-full">
+                <span className="border-black border-2 rounded-lg p-2 mt-2">Giờ chiếu: {selectedTime}</span>
+                <span className="border-black border-2 rounded-lg p-2 flex items-center justify-center">Thời gian giữ ghế: {Math.floor(timeLeft / 60)}:{timeLeft % 60} </span>
+            </p>
+            <div className="flex items-center justify-center">
+            <p className="text-xl  border-black rounded-lg border-2 p-2 mb-2">Phòng chiếu số: {roomId ||"Đang tải..."}</p>
             </div>
+            
             {/* Sơ đồ ghế */}
-            <div className="grid grid-cols-5 gap-2">
+            <div className="grid gap-2"
+                style={{
+                    gridTemplateColumns: `repeat(${columns}, 1fr)`, // Số cột động
+                }}
+                >
                 {seats.map((seat) => (
                     <button 
                         key={seat.id}
@@ -88,11 +101,11 @@ function SeatSelection({selectedTime}){
             </div>
 
             {/* Tổng tiền và thanh toán*/}
-            <div>
-                <p>Ghế đã chọn: {selectedSeats.join(", ")}</p>
+            <div className="flex justify-between w-full">
+                <p className="border-black border-2 rounded-lg p-2 mt-2 inline-block">Ghế đã chọn: {selectedSeats.join(", ")}</p>
                 <button
                     onClick={handleConfirmBooking}
-                    className="bg-green-500 px-4 py-2 rounded-lg"
+                    className="bg-green-500 px-4 py-2 rounded-lg mt-2 block"
                 >
                     Thanh toán
                 </button>

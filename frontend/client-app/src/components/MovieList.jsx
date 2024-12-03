@@ -19,6 +19,7 @@ function MovieList() {
         });
         setMovies(response.data.results);
         setTotalPages(response.data.total_pages); // Cập nhật tổng số trang từ API
+        console.log(response);
       } catch (error) {
         console.error('Error fetching movies:', error);
       }

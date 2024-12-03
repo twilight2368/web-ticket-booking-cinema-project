@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { Carousel } from '@material-tailwind/react';
 
 function Banner() {
   const [banners, setBanners] = useState([]);
@@ -19,29 +21,47 @@ function Banner() {
   }, []);
 
   useEffect(() => {
+    if (banners.length > 0) {
     const interval = setInterval(() => {
       setCurrentBannerIndex((prevIndex) => (prevIndex + 1) % banners.length);
     }, 5000);
 
     return () => clearInterval(interval);
+  } 
   }, [banners]);
 
   if (banners.length === 0) {
     return null;
   }
 
-  const currentBanner = banners[currentBannerIndex];
-  const backgroundImageUrl = `https://image.tmdb.org/t/p/original${currentBanner.backdrop_path}`;
-
   return (
-    <div
-      className="bg-cover bg-center h-screen flex items-center justify-center text-white transition-all duration-1000 ease-in-out"
-      style={{ backgroundImage: `url(${backgroundImageUrl})` }}
-    >
-      <div className="text-center pt-96 bg-opacity-75">
-        <h2 className="text-4xl font-bold">{currentBanner.title}</h2>
-        <p className="mt-2">{currentBanner.overview}</p>
-      </div>
+    <div className="relative w-full h-screen">
+      <Carousel
+        activeIndex={currentBannerIndex} // Controls the current active slide
+        onChange={(index) => setCurrentBannerIndex(index)} // Sync index on manual change
+        className="rounded-xl"
+      >
+        {banners.map((banner, index) => {
+          const backgroundImageUrl = `https://image.tmdb.org/t/p/original${banner.backdrop_path}`;
+          return (
+            <Link to={`/movie/${banner.id}`} key={banner.id}>
+              <div
+                className="h-screen w-full bg-cover bg-center"
+                style={{
+                  backgroundImage: `url(${backgroundImageUrl})`,
+                }}
+              >
+                <div className="flex flex-col items-center justify-center h-full bg-black bg-opacity-50 text-white">
+                  <h2 className="text-4xl font-bold">{banner.title}</h2>
+                  <p className="mt-4 text-lg max-w-3xl text-center">
+                    {banner.overview}
+                  </p>
+                </div>
+              </div>
+            </Link>
+          );
+        })}
+      </Carousel>
     </div>
   );
 }

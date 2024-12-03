@@ -14,7 +14,7 @@ function Showtimes({showtimes}){
       if (!showtimes || showtimes.length === 0) return <p>No showtimes available</p>;
 
     return (
-        <div className="bg-white p-4 rounded-lg mt-8 text-black">
+        <div className="bg-white p-4 rounded-lg mt-8 text-black border-black border-4">
             {/* Phần chọn ngày */}
             <div className="flex justify-center space-x-4 mb-4">
                 {showtimes.map((day)=>(
