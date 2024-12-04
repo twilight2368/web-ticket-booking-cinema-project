@@ -1,11 +1,11 @@
-import React from "react";
 import MainLogo from "../logo/MainLogo";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Button } from "@material-tailwind/react";
+
 export default function MainHeader() {
   const navigate = useNavigate();
   return (
-    <div className="w-full h-full ">
+    <div className="w-full h-full backdrop-blur">
       <div className="flex flex-row items-center w-4/5 mx-auto">
         <div className=" w-2/12">
           <MainLogo />
@@ -42,8 +42,8 @@ export default function MainHeader() {
         <div className="w-4/12 flex flex-row gap-6 justify-center items-center ">
           <Button
             variant="outlined"
-            color="light-blue"
-            className=" text-blue-200"
+            color="blue"
+            className=" text-white"
             onClick={() => {
               navigate("/register");
             }}

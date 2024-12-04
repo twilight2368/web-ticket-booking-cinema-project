@@ -20,7 +20,9 @@ export default function MainFooter() {
               </p>
               <p>
                 <span>Dev by</span>
-                <a href="https://github.com/twilight2368"> Twilight2368 </a>
+                <a href="https://github.com/twilight2368" target="_blank">
+                  🚀Twilight2368
+                </a>
               </p>
             </div>
           </div>
