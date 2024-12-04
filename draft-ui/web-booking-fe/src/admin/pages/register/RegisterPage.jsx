@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 export default function RegisterPage() {
   const navigate = useNavigate();
   return (
-    <div className="flex flex-row gap-0 w-full bg-green-600 ">
+    <div className="flex flex-row gap-0 w-full bg-green-400 ">
       <div className="h-screen w-1/3 relative">
         <img
           src="https://wallpapers.com/images/hd/the-cat-returns-1024-x-1334-wallpaper-218go8un12mzunpo.jpg"
