@@ -16,7 +16,7 @@ function genKeyPair() {
     },
   });
 
-  //!NOTE: The public key will be publish on Github for example and for keep the folder 'secret' not disappear when commit and push
+  //!NOTE: The public key will be publish on Github for example and keep the folder 'secret' not disappear when commit and push
   //TODO: Create the public key file
   fs.writeFileSync(
     path.join(__dirname, "..") + "/secret/id_rsa.public.pem",

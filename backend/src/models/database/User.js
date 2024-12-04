@@ -43,7 +43,6 @@ const UserSchema = new mongoose.Schema(
     phone_number: {
       type: String,
       required: true,
-      unique: true, // Ensure phone number is unique
       validate: {
         validator: function (v) {
           return phoneRegex.test(v);
