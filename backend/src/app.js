@@ -3,6 +3,7 @@ const app = express();
 const morgan = require("morgan");
 const apiRoutes = require("./routes/app.routes");
 const authRoutes = require("./routes/auth.routes");
+const adminRoutes = require("./routes/admin.routes");
 const errorHandling = require("./middlewares/errorHandling");
 const logger = require("./logging/tools/logger");
 //* Global Middlewares
@@ -34,6 +35,8 @@ app.get("/", (req, res) => {
 app.use("/auth", authRoutes);
 
 app.use("/api", apiRoutes);
+
+app.use("/admin", adminRoutes);
 
 app.use(errorHandling);
 
