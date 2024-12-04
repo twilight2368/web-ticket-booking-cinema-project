@@ -2,6 +2,8 @@ import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
 import HomePage from "./pages/home/HomePage";
+import LoginPage from "./admin/pages/login/LoginPage";
+import RegisterPage from "./admin/pages/register/RegisterPage";
 
 function App() {
   return (
@@ -12,8 +14,8 @@ function App() {
             <Route index element={<HomePage />} />
             <Route path="*" element={<>Not found</>} />
           </Route>
-          <Route path="/login" element={<>Login</>} />
-          <Route path="/register" element={<>Register</>} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
           <Route path="/admin/*">
             <Route index element={<>Hello admin</>} />
             <Route path="*" element={<>Not found</>} />
