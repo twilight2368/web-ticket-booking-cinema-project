@@ -1,8 +1,17 @@
+import LogoBigSVG from "../../assets/studio-ghibli-logo.svg";
+
 export default function MainFooter() {
   const date = new Date();
   return (
     <>
       <footer>
+        <div className="flex justify-center items-center">
+          <img
+            src={LogoBigSVG}
+            alt=""
+            className="h-48 lg:h-60 md:h-52 sm:h-48 w-auto"
+          />
+        </div>
         <div className="mx-auto p-8">
           <ul className="flex items-center justify-center flex-wrap gap-4 sm:gap-10 mb-6 sm:mb-10 text-sm md:text-base">
             <li>Chính sách</li>

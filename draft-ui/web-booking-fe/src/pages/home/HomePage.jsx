@@ -1,6 +1,6 @@
 import MovieList1 from "../../components/home/MovieList1";
 import MovieList2 from "../../components/home/MovieList2";
-import LogoBigSVG from "../../assets/studio-ghibli-logo.svg";
+
 export default function HomePage() {
   return (
     <div className="w-full">
@@ -36,13 +36,7 @@ export default function HomePage() {
       <div className="w-full mb-20">
         <MovieList2 />
       </div>
-      <div className="flex justify-center items-center">
-        <img
-          src={LogoBigSVG}
-          alt=""
-          className="h-48 lg:h-60 md:h-52 sm:h-48 w-auto"
-        />
-      </div>
+      
     </div>
   );
 }
