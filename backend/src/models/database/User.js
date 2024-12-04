@@ -14,8 +14,8 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true, // Prevent duplicate usernames
-      minlength: 3,
-      maxlength: 50,
+      minlength: 10,
+      maxlength: 100,
     },
     first_name: {
       type: String,
@@ -43,7 +43,6 @@ const UserSchema = new mongoose.Schema(
     phone_number: {
       type: String,
       required: true,
-      unique: true, // Ensure phone number is unique
       validate: {
         validator: function (v) {
           return phoneRegex.test(v);

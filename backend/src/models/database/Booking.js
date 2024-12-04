@@ -20,6 +20,7 @@ const BookingSchema = new mongoose.Schema(
     seats: [
       {
         type: String, // Reference to the seat model or seat ID
+        ref: "seat",
         required: true,
       },
     ],

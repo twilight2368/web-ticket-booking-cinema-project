@@ -14,17 +14,20 @@ const MovieSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: true,
     minlength: 10,
     maxlength: 5000,
   },
-  genre: [
-    {
-      type: String,
-      required: true,
-      enum: genres,
-    },
-  ],
+
+  actors: {
+    type: String,
+  },
+  director: {
+    type: String,
+  },
+  genre: {
+    type: String,
+    required: true,
+  },
   country: {
     type: String,
     maxlength: 100,
