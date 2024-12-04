@@ -1,4 +1,4 @@
-import LogoImage from "../../assets/film-reel.png";
+import LogoImage from "../../assets/logo.png";
 import { useNavigate } from "react-router";
 export default function MainLogo() {
   const navigate = useNavigate();

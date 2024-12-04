@@ -1,7 +1,7 @@
-import React from "react";
 import MainLogo from "../logo/MainLogo";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Button } from "@material-tailwind/react";
+
 export default function MainHeader() {
   const navigate = useNavigate();
   return (
