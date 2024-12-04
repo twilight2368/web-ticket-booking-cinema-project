@@ -2,6 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --main-bg-color: #10141b;
+  --main-text-color: white;
+}
+
+html {
+  background-color: rgb(0, 0, 0);
+}
+
 body {
   font-family: "Nunito Variable", sans-serif;
+  color: var(--main-text-color);
+  background-color: var(--main-bg-color);
+  min-height: 100vh;
+}
+
+.header-height {
+  @apply h-16;
+}
+
+.padding-for-header {
+  @apply p-16;
 }
