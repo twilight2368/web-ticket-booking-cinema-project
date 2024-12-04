@@ -23,5 +23,5 @@ body {
 }
 
 .padding-for-header {
-  @apply p-16;
+  @apply pt-16;
 }
