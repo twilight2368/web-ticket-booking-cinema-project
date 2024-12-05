@@ -19,25 +19,9 @@ export default function MainHeader() {
   return (
     <div className="w-full backdrop-blur-md fixed top-0 left-0 z-50 header-height ">
       <div className="relative container mx-auto px-4">
-        
         <div className="flex flex-row items-center justify-between py-4">
-          
           <div className="w-auto">
             <MainLogo />
-          </div>
-
-          
-          <div className="md:hidden">
-            <button
-              onClick={toggleMenu}
-              className="text-white focus:outline-none"
-            >
-              {isMenuOpen ? (
-                <XMarkIcon className="h-6 w-6" />
-              ) : (
-                <Bars3Icon className="h-6 w-6" />
-              )}
-            </button>
           </div>
 
           {/* Navigation Links - Desktop */}
@@ -45,7 +29,7 @@ export default function MainHeader() {
             <NavLink
               to="/"
               className={({ isActive }) =>
-                isActive ? "text-red-400" : "text-white"
+                isActive ? "text-red-400" : "text-white hover:text-red-300"
               }
               end
             >
@@ -54,7 +38,7 @@ export default function MainHeader() {
             <NavLink
               to="/movies"
               className={({ isActive }) =>
-                isActive ? "text-red-400" : "text-white"
+                isActive ? "text-red-400" : "text-white hover:text-red-300"
               }
             >
               Lịch chiếu
@@ -62,7 +46,7 @@ export default function MainHeader() {
             <NavLink
               to="/news"
               className={({ isActive }) =>
-                isActive ? "text-red-400" : "text-white"
+                isActive ? "text-red-400" : "text-white hover:text-red-300"
               }
             >
               Tin tức
@@ -70,7 +54,7 @@ export default function MainHeader() {
             <NavLink
               to="/ticket-price"
               className={({ isActive }) =>
-                isActive ? "text-red-400" : "text-white"
+                isActive ? "text-red-400" : "text-white hover:text-red-300"
               }
               end
             >
@@ -80,14 +64,14 @@ export default function MainHeader() {
 
           {/* User Actions */}
           <div className="w-auto">
-            {false ? (
+            {!true ? (
               <div className="hidden md:flex items-center space-x-2">
                 <UserCircleIcon className="h-8 w-8 text-white" />
                 <Link
                   to="/profile"
-                  className="text-white hover:underline text-sm truncate"
+                  className="text-white hover:underline text-sm truncate w-40"
                 >
-                  Username
+                  <p className=" truncate">Username </p>
                 </Link>
               </div>
             ) : (
@@ -110,6 +94,19 @@ export default function MainHeader() {
               </div>
             )}
           </div>
+
+          <div className="md:hidden">
+            <button
+              onClick={toggleMenu}
+              className="text-white focus:outline-none"
+            >
+              {isMenuOpen ? (
+                <XMarkIcon className="h-6 w-6" />
+              ) : (
+                <Bars3Icon className="h-6 w-6" />
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Menu Dropdown */}
@@ -119,7 +116,7 @@ export default function MainHeader() {
               <NavLink
                 to="/"
                 className={({ isActive }) =>
-                  isActive ? "text-red-400" : "text-white"
+                  isActive ? "text-red-400" : "text-white hover:text-red-300"
                 }
                 onClick={toggleMenu}
                 end
@@ -129,7 +126,7 @@ export default function MainHeader() {
               <NavLink
                 to="/movies"
                 className={({ isActive }) =>
-                  isActive ? "text-red-400" : "text-white"
+                  isActive ? "text-red-400" : "text-white hover:text-red-300"
                 }
                 onClick={toggleMenu}
               >
@@ -138,7 +135,7 @@ export default function MainHeader() {
               <NavLink
                 to="/news"
                 className={({ isActive }) =>
-                  isActive ? "text-red-400" : "text-white"
+                  isActive ? "text-red-400" : "text-white hover:text-red-300"
                 }
                 onClick={toggleMenu}
               >
@@ -147,7 +144,7 @@ export default function MainHeader() {
               <NavLink
                 to="/ticket-price"
                 className={({ isActive }) =>
-                  isActive ? "text-red-400" : "text-white"
+                  isActive ? "text-red-400" : "text-white hover:text-red-300"
                 }
                 onClick={toggleMenu}
                 end
@@ -155,15 +152,15 @@ export default function MainHeader() {
                 Giá vé
               </NavLink>
 
-              {false ? (
+              {!true ? (
                 <div className="flex items-center space-x-2">
                   <UserCircleIcon className="h-8 w-8 text-white" />
                   <Link
                     to="/profile"
-                    className="text-white hover:underline text-sm"
+                    className="text-white hover:underline text-sm w-40"
                     onClick={toggleMenu}
                   >
-                    Username
+                    <p className=" truncate">Username</p>
                   </Link>
                 </div>
               ) : (
