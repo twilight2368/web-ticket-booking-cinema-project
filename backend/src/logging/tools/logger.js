@@ -1,5 +1,6 @@
 const { createLogger, format, transports } = require("winston");
 const path = require("path");
+
 // Configure the Winston logger
 const logger = createLogger({
   level: "info",
@@ -10,7 +11,7 @@ const logger = createLogger({
     })
   ),
   transports: [
-    //new transports.Console(), // Log to the console //! Skip this for now
+    new transports.Console(), // Log to the console
     new transports.File({
       filename: path.join(__dirname, "..", "logs", "app.log"),
     }), // Log to a file

@@ -9,7 +9,7 @@ const RoomSchema = new mongoose.Schema({
   name: {
     type: String,
     default: function () {
-      return `Room-${this._id.split("-")[0]}`; // Generate a dynamic name based on the UUID
+      return "Room-?";
     },
     required: true,
   },

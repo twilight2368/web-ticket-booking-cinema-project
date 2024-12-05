@@ -9,7 +9,7 @@ const connnectMongo = async () => {
   try {
     console.log(clc.blue("Connecting to MongoDB ..."));
 
-    await mongoose.connect(databaseConfig.development.stringConnect, {
+    await mongoose.connect(databaseConfig.stringConnect, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });

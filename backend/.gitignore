@@ -143,4 +143,4 @@ dist
 
 # End of https://www.toptal.com/developers/gitignore/api/node
 
-/src/security/secret/*.private.pem
+/src/auth/security/secret/*.private.pem
