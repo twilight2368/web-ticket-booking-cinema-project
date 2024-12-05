@@ -9,7 +9,7 @@ export default function MainLogo() {
       <img
         src={LogoImage}
         alt="LogoImg"
-        className=" h-16 aspect-square hover:cursor-pointer"
+        className=" h-16 aspect-square select-none hover:cursor-pointer"
         onClick={() => {
           navigate("/");
         }}
