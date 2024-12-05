@@ -1,17 +1,12 @@
 require("dotenv").config();
 
 const databaseConfig = {
-  development: {
-    stringConnect: process.env.DEV_MONGO_CONNECT_STRING,
-    post: process.env.DEV_MONGO_PORT,
-    database: process.env.DEV_MONGO_DATABASE_NAME,
-  },
-  deployment: {
-    username: "",
-    password: "",
-    database: "",
-    connectString: "",
-  },
+  stringConnect: process.env.DEV_MONGO_CONNECT_STRING,
+  post: process.env.DEV_MONGO_PORT,
+  database: process.env.DEV_MONGO_DATABASE_NAME,
+  username: "",
+  password: "",
+  database: "",
 };
 
 module.exports = databaseConfig;

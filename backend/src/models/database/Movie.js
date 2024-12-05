@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const { v4: uuid } = require("uuid");
-const { genres } = require("../genres/genres.json");
+
 const MovieSchema = new mongoose.Schema({
   _id: {
     type: String,
@@ -17,7 +17,6 @@ const MovieSchema = new mongoose.Schema({
     minlength: 10,
     maxlength: 5000,
   },
-
   actors: {
     type: String,
   },
