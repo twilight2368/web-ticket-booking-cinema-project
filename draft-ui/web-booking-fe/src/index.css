@@ -19,9 +19,9 @@ body {
 }
 
 .header-height {
-  @apply h-16;
+  @apply h-24;
 }
 
 .padding-for-header {
-  @apply pt-16;
+  @apply pt-24;
 }

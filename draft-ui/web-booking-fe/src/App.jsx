@@ -4,9 +4,10 @@ import { Helmet } from "react-helmet";
 
 import MainLayout from "./layouts/MainLayout";
 import HomePage from "./pages/home/HomePage";
-import LoginPage from "./admin/pages/login/LoginPage";
-import RegisterPage from "./admin/pages/register/RegisterPage";
+import LoginPage from "./pages/login/LoginPage";
+import RegisterPage from "./pages/register/RegisterPage";
 import NotFoundPage from "./pages/not-found/NotFoundPage";
+import NewsPage from "./pages/news/NewsPage";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Routes>
           <Route path="/*" element={<MainLayout />}>
             <Route index element={<HomePage />} />
+            <Route path="news" element={<NewsPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Route>
           <Route path="/login" element={<LoginPage />} />
