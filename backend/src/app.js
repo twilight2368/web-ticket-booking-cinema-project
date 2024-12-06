@@ -26,7 +26,11 @@ const { dev_mode: DEV_MODE } = require("./configs/app.config");
 const {
   stringConnect: MONGO_STRING_CONNECT,
 } = require("./configs/database.config");
-const { secretSession: SECRET_SESSION } = require("./configs/auth.config");
+const {
+  secretSession: SECRET_SESSION,
+  sessionCookieTTL: SESSION_COOKIE_TTL,
+} = require("./configs/auth.config");
+
 //* Global Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -74,7 +78,7 @@ app.use(
       collectionName: "sessions",
     }),
     cookie: {
-      maxAge: 1000 * 60 * 60 * 24,
+      maxAge: SESSION_COOKIE_TTL,
     },
   })
 );
@@ -92,6 +96,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/error", (req, res, next) => {
+  console.error("Error testing...");
   throw new Error("Something went wrong!!!");
 });
 

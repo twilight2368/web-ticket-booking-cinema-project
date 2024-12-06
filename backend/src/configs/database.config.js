@@ -7,6 +7,9 @@ const databaseConfig = {
   username: "",
   password: "",
   database: "",
+  redis: {
+    
+  }
 };
 
 module.exports = databaseConfig;
