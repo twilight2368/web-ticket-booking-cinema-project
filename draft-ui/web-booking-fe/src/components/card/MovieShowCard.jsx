@@ -1,4 +1,6 @@
 import { Card, CardBody } from "@material-tailwind/react";
+import MovieScheduleLink from "../button/MovieScheduleLink";
+import { Link } from "react-router";
 
 export default function MovieShowCard() {
   return (
@@ -15,7 +17,11 @@ export default function MovieShowCard() {
             </div>
             <div className="sm:w-2/3 sm:h-full w-full p-3 text-white ">
               <div className="w-full text-xl font-bold mb-2">
-                <p className=" line-clamp-2">Princess Mononoke</p>
+                <p className=" line-clamp-2">
+                  <Link to="/movies/1" className=" hover:underline">
+                    Princess Mononoke
+                  </Link>
+                </p>
               </div>
               <div className="flex flex-col gap-1">
                 <div className="w-full font-thin ">
@@ -24,10 +30,10 @@ export default function MovieShowCard() {
                     <span>Lorem ipsum dolor sit amet consectetur,</span>
                   </p>
                 </div>
-                <div className="w-full font-bold">
+                <div className="w-full font-thin">
                   <p className=" truncate">
                     <span>Thời lượng: </span>
-                    <span>100 phút</span>
+                    <span className=" font-black">100 phút</span>
                   </p>
                 </div>
                 <div className="w-full  font-thin">
@@ -70,34 +76,11 @@ export default function MovieShowCard() {
               <span>Lịch chiếu</span>
             </div>
             <div className="w-full px-8 py-2 grid grid-cols-2 md:grid-cols-4 sm:grid-cols-3 gap-3 text-center">
-              <MovieScheduleLink />
-              <MovieScheduleLink />
-              <MovieScheduleLink />
-              <MovieScheduleLink />
-
-              <MovieScheduleLink />
-              <MovieScheduleLink />
-              <MovieScheduleLink />
-              <MovieScheduleLink />
+              <MovieScheduleLink to={"id?showID=showid"} />
             </div>
           </div>
         </CardBody>
       </Card>
     </div>
-  );
-}
-
-function MovieScheduleLink(params) {
-  return (
-    <>
-      <button
-        color="white"
-        className=" hover:bg-blue-gray-800/60 border-[1px] border-white p-1 rounded-lg duration-200 text-white"
-      >
-        <span className=" text-xs">Room-1</span>
-        <br />
-        <span >00:00</span>
-      </button>
-    </>
   );
 }
