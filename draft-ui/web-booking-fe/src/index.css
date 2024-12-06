@@ -11,6 +11,10 @@ html {
   background-color: rgb(0, 0, 0);
 }
 
+.nunito{
+  font-family: "Nunito Variable", sans-serif;
+}
+
 body {
   font-family: "Nunito Variable", sans-serif;
   color: var(--main-text-color);
