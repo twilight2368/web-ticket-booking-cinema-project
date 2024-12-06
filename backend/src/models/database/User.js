@@ -14,7 +14,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true, // Prevent duplicate usernames
-      minlength: 10,
+      minlength: 5,
       maxlength: 100,
     },
     first_name: {

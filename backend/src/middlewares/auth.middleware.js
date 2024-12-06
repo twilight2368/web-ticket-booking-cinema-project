@@ -1,9 +1,30 @@
-function isLoggedIn(req, res, next) {
+const { verifyJWT } = require("../auth/jwt/jsonwebtoken");
+
+function checkIsSessionValid(req, res, next) {
   if (req.isAuthenticated()) {
     next();
   } else {
-    //todo: Handle authentication failure (e.g., redirect to login page)
-    res.status(401).json({ message: "Unauthorized" });
+    res.status(401).json({ message: "Session Unauthorized" });
+  }
+}
+
+async function checkLoggedIn(req, res, next) {
+  try {
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
+    if (token == null) return res.sendStatus(401);
+
+    const isValid = await verifyJWT(token);
+
+    if (isValid) {
+      next();
+    } else {
+      res.status(401).json({ message: "Token Unauthorized" });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!!!",
+    });
   }
 }
 
@@ -14,3 +35,9 @@ function checkCookie(req, res, next) {
 
   next();
 }
+
+module.exports = {
+  checkCookie,
+  checkLoggedIn,
+  checkIsSessionValid,
+};

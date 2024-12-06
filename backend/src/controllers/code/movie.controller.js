@@ -1,6 +1,7 @@
 const MovieModel = require("../../models/database/Movie"); // Assuming the model is located here
-const ShownModel = require("../../models/database/Show");
+const ShowModel = require("../../models/database/Show");
 const timeZoneUtil = require("../../utils/helpers/time-zone");
+
 //TODO: Create a new movie
 const createMovie = async (req, res, next) => {
   try {
@@ -119,6 +120,9 @@ const deleteMovie = async (req, res, next) => {
 };
 
 //todo: Get all movies what will be shown on today and the next 2 days
+/**
+ * 
+ */
 const getMovieBeingShown = async (req, res, next) => {
   try {
     //TODO: Get the current date in server's timezone (UTC+7)
@@ -159,6 +163,9 @@ const getMovieBeingShown = async (req, res, next) => {
 };
 
 //todo: Get all movies what that release date in from the next 3 days and a  month later
+/**
+ * 
+ */
 const getMovieAboutBeingShown = async (req, res, next) => {
   try {
     // Get the current date in the server's timezone
@@ -192,6 +199,96 @@ const getMovieAboutBeingShown = async (req, res, next) => {
   }
 };
 
+//todo: Get all movies being shown and their schedule show from current day and the next 3 days
+/**
+ * example if today is 01-01-2024
+ * @return ({
+ *   "01-01-2024": [
+ *    movie:{
+ *     other_attributes of movie,
+ *     showns:[]
+ *    }
+ *  ],
+ *  "02-01-2024": [
+ *    movie:{
+ *     other_attributes of movie,
+ *     showns:[]
+ *    }
+ *  ],
+ *  "03-01-2024": [
+ *    movie:{
+ *     other_attributes of movie,
+ *     showns:[]
+ *    }
+ *  ],
+ * })
+ */
+const getMovieAndShowsCurrent = async (req, res, next) => {
+  try {
+    // Get the current date in server's timezone
+    const today = timeZoneUtil.getCurrentTimeInServerZone();
+
+    // Calculate the start and end of the date range
+    const startDateUtc = timeZoneUtil.getStartOfDayInUtc(today); // Start of today in UTC
+    const endDateUtc = timeZoneUtil.getEndOfDayInUtc(
+      today.clone().add(3, "days")
+    ); // End of the 3rd day in UTC
+
+    // Query to get all shows in the specified range
+    const shows = await ShowModel.find({
+      date_show: {
+        $gte: startDateUtc.toDate(),
+        $lte: endDateUtc.toDate(),
+      },
+    }).populate("movie_id"); // Populate movie details
+
+    // Initialize an object to group movies and shows by date
+    const result = {};
+
+    // Iterate over shows and group them by date
+    shows.forEach((show) => {
+      const movie = show.movie_id;
+
+      // Format the show date in server's timezone as "DD-MM-YYYY"
+      const showDate = timeZoneUtil
+        .convertUtcToServerZone(show.date_show)
+        .format("DD-MM-YYYY");
+
+      // Initialize the date group if it doesn't exist
+      if (!result[showDate]) {
+        result[showDate] = [];
+      }
+
+      // Find or add the movie in the date group
+      let movieEntry = result[showDate].find(
+        (entry) => entry.movie._id === movie._id
+      );
+      if (!movieEntry) {
+        movieEntry = {
+          movie: {
+            ...movie.toObject(),
+            showns: [],
+          },
+        };
+        result[showDate].push(movieEntry);
+      }
+
+      // Add the show to the movie's schedule
+      movieEntry.movie.showns.push({
+        room_id: show.room_id,
+        time_start: show.time_start,
+        time_end: show.time_end,
+      });
+    });
+
+    // Respond with the grouped result
+    res.status(200).json(result);
+  } catch (error) {
+    console.error("Error fetching movies and shows:", error);
+    next(error); // Pass error to the error-handling middleware
+  }
+};
+
 module.exports = {
   createMovie,
   getAllMovies,
@@ -200,4 +297,5 @@ module.exports = {
   deleteMovie,
   getMovieBeingShown,
   getMovieAboutBeingShown,
+  getMovieAndShowsCurrent,
 };

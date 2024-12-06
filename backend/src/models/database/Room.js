@@ -9,7 +9,7 @@ const RoomSchema = new mongoose.Schema({
   name: {
     type: String,
     default: function () {
-      return "Room-?";
+      return "Phòng chiếu phim-?";
     },
     required: true,
   },

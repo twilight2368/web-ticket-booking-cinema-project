@@ -1,3 +1,5 @@
+const User = require("../../models/database/User");
+
 // * ------------------- ADMIN ----------------------------
 
 // TODO: Get all users' information

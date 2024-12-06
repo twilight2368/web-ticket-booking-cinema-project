@@ -3,7 +3,6 @@ const app = express();
 const cors = require("cors");
 const morgan = require("morgan");
 const session = require("express-session");
-const cliColor = require("cli-color");
 const passport = require("passport");
 const cookieParser = require("cookie-parser");
 

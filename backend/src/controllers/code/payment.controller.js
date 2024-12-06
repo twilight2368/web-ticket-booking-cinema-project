@@ -1,3 +1,11 @@
+const Stripe = require("stripe");
+const Booking = require("../../models/database/Booking");
+const PaymentModel = require("../../models/database/Payment");
+
+
+//TODO: Get all booking information
+const getBookingInformation = async (req, res, next) => {};
+
 //TODO: Get payment information
 const getPaymentInfo = async (req, res, next) => {
   try {
@@ -17,25 +25,7 @@ const getPaymentInfo = async (req, res, next) => {
   }
 };
 
-//TODO: Get bill information
-const getBillInfo = async (req, res, next) => {
-  try {
-    const bookingId = req.params.booking_id; // Booking ID from request parameters
-    const payment = await PaymentModel.findOne({ booking_id: bookingId }); // Find payment by booking_id
-
-    if (!payment) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Bill not found" });
-    }
-
-    res.status(200).json({ success: true, data: payment });
-  } catch (error) {
-    console.error("Error fetching bill information: ", error);
-    next(error); // Pass the error to middleware
-  }
-};
-
+const stripe = Stripe();
 //TODO: Create a payment
 const createPayment = async (req, res, next) => {
   try {
@@ -57,4 +47,32 @@ const createPayment = async (req, res, next) => {
     console.error("Error creating payment: ", error);
     next(error); // Pass the error to middleware
   }
+};
+
+const create_intendent = async (req, res) => {
+  try {
+    console.log(req.body);
+
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: req.body.amount,
+      currency: "usd",
+      automatic_payment_methods: { enabled: true },
+    });
+
+    console.log(paymentIntent);
+
+    res.status(200).json({
+      clientSecret: paymentIntent.client_secret,
+    });
+  } catch (error) {
+    res.status(500).send({
+      error: error.message,
+    });
+  }
+};
+
+module.exports = {
+  createPayment,
+  create_intendent,
+  getPaymentInfo,
 };

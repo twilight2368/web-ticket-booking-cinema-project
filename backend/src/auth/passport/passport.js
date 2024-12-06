@@ -5,15 +5,23 @@ const User = require("../../models/database/User");
 
 passport.use(
   new LocalStrategy(async (username, password, done) => {
-    const user = users.find(
-      (u) => u.username === username || u.email === username
-    );
-    if (!user) return done(null, false, { message: "Incorrect username." });
+    try {
+      const user = await User.findOne({
+        $or: [{ username: username }, { email: username }],
+      });
+      if (!user) {
+        return done(null, false, { message: "Incorrect username or email." });
+      }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return done(null, false, { message: "Incorrect password." });
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        return done(null, false, { message: "Incorrect password." });
+      }
 
-    return done(null, user);
+      return done(null, user);
+    } catch (err) {
+      return done(err);
+    }
   })
 );
 

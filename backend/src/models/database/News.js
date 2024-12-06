@@ -20,6 +20,10 @@ const NewsSchema = new mongoose.Schema(
       maxLength: 100,
     },
 
+    banner: {
+      type: String,
+    },
+
     writer: {
       type: String,
       ref: "admin",

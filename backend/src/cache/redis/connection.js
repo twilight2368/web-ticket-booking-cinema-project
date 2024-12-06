@@ -20,7 +20,7 @@ client.on("ready", () => {
   console.log("====================================");
 });
 
-async function connectRedis(params) {
+async function connectRedis() {
   try {
     console.log("====================================");
     console.log(clc.blue("Connecting to Redis ..."));

@@ -3,7 +3,11 @@ const bcrypt = require("bcrypt");
 const passport = require("passport");
 const cliColor = require("cli-color");
 const UserModel = require("../models/database/User");
+
 const { saltRounds: SALT_ROUNDS } = require("../configs/auth.config");
+
+const { issueJWT } = require("../auth/jwt/jsonwebtoken");
+
 const router = express.Router();
 
 //todo: ----------------------- AUTH ROUTES --------------------------------------
@@ -46,7 +50,9 @@ router.post("/register", async (req, res, next) => {
 
     // Check password length
     if (password.length < 8 || password.length > 20) {
-      throw new Error("Password must be between 8 and 20 characters long.");
+      return res
+        .status(400)
+        .json({ error: "Password must be between 8 and 20 characters long." });
     }
 
     // Hash the password
@@ -62,12 +68,11 @@ router.post("/register", async (req, res, next) => {
       password: hashedPassword,
     });
 
-    const savedUser = await newUser.save();
-    res
-      .status(201)
-      .json({ message: "User registered successfully.", data: savedUser });
+    await newUser.save();
+
+    res.status(201).json({ message: "User registered successfully." });
   } catch (error) {
-    next(err);
+    next(error);
   }
 });
 
@@ -76,10 +81,15 @@ router.post(
   "/login",
   passport.authenticate("local", { session: true }),
   (req, res, next) => {
-    return res.json({
-      jwt: "",
-      message: "Successfully login",
-    });
+    try {
+      const tokenData = issueJWT(req.user);
+      return res.json({
+        jwt: tokenData.token,
+        message: "Successfully logged in",
+      });
+    } catch (error) {
+      next(error);
+    }
   }
 );
 
@@ -93,14 +103,26 @@ router.post("/logout", (req, res, next) => {
       if (err) {
         return next(err);
       }
-      res.clearCookie("connect.sid"); //todo: Clear the session cookie
-      req.session.destroy(); //todo: delete session out of database
+      res.clearCookie("connect.sid");
+      req.session.destroy();
       res.json({
         message: "Successfully log out",
       });
     });
   } catch (error) {
-    next(err);
+    next(error);
+  }
+});
+
+router.get("/new-token", (req, res, next) => {
+  try {
+    const tokenData = issueJWT(req.user);
+    return res.json({
+      jwt: tokenData.token,
+      message: "Successfully logged in",
+    });
+  } catch (error) {
+    next(error);
   }
 });
 
