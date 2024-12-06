@@ -22,10 +22,10 @@ export default function RegisterForm() {
                   className="w-full"
                 />
               </div>
-              <div className="col-span-1">
+              <div className="md:col-span-1 col-span-2">
                 <Input required label="Họ" color="gray" className="w-full" />
               </div>
-              <div className="col-span-1">
+              <div className="md:col-span-1 col-span-2">
                 <Input required label="Tên" color="gray" className="w-full" />
               </div>
               <div className="col-span-2">
@@ -45,7 +45,7 @@ export default function RegisterForm() {
                   className="w-full"
                 />
               </div>
-              <div className="col-span-1">
+              <div className="md:col-span-1 col-span-2">
                 <Input
                   required
                   label="Mật khẩu"
@@ -54,7 +54,7 @@ export default function RegisterForm() {
                   className="w-full"
                 />
               </div>
-              <div className="col-span-1">
+              <div className="md:col-span-1 col-span-2">
                 <Input
                   required
                   label="Xác nhận mật khẩu"

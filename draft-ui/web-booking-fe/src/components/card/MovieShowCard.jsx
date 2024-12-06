@@ -1,5 +1,4 @@
-import { Button, Card, CardBody } from "@material-tailwind/react";
-import React from "react";
+import { Card, CardBody } from "@material-tailwind/react";
 
 export default function MovieShowCard() {
   return (
@@ -66,7 +65,7 @@ export default function MovieShowCard() {
               </div>
             </div>
           </div>
-          <div className=" min-h-32 mt-3 mb-8">
+          <div className=" min-h-32 mt-4 mb-8">
             <div className=" w-full text-center font-bold text-xl text-white mb-3 ">
               <span>Lịch chiếu</span>
             </div>
@@ -91,15 +90,14 @@ export default function MovieShowCard() {
 function MovieScheduleLink(params) {
   return (
     <>
-      <Button
-        variant="outlined"
+      <button
         color="white"
-        className=" font-bold  hover:bg-blue-gray-800/60"
+        className=" hover:bg-blue-gray-800/60 border-[1px] border-white p-1 rounded-lg duration-200 text-white"
       >
-        <span>Room-1</span>
+        <span className=" text-xs">Room-1</span>
         <br />
-        <span>00:00</span>
-      </Button>
+        <span >00:00</span>
+      </button>
     </>
   );
 }

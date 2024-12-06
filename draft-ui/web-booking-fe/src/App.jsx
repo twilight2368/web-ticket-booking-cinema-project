@@ -13,6 +13,7 @@ import UpdateProfilePage from "./pages/profile/UpdateProfilePage";
 import UpdatePasswordPage from "./pages/profile/UpdatePasswordPage";
 import TicketPricePage from "./pages/tickets/TicketPricePage";
 import MoviePage from "./pages/movies/MoviePage";
+import MovieLayout from "./layouts/MovieLayout";
 
 function App() {
   return (
@@ -26,7 +27,11 @@ function App() {
             <Route index element={<HomePage />} />
             <Route path="news" element={<NewsPage />} />
             <Route path="ticket-price" element={<TicketPricePage />} />
-            <Route path="movies" element={<MoviePage />} />
+
+            <Route path="movies/*">
+              <Route index element={<MoviePage />} />
+              <Route path=":id" element={<MovieLayout />}></Route>
+            </Route>
             <Route path="profile" element={<ProfilePage />} />
             <Route path="update-profile" element={<UpdateProfilePage />} />
             <Route path="update-password" element={<UpdatePasswordPage />} />
