@@ -150,11 +150,45 @@ const getMovieBeingShown = async (req, res, next) => {
     //TODO: Respond with the list of unique movies
     res.status(200).json({
       status: 200,
+      message: "success",
       data: Array.from(uniqueMovies.values()),
     });
   } catch (error) {
-    console.error("Error fetching movies being shown:", error);
-    res.status(500).json({ error: "Failed to fetch movies being shown." });
+    next(error);
+  }
+};
+
+//todo: Get all movies what that release date in from the next 3 days and a  month later
+const getMovieAboutBeingShown = async (req, res, next) => {
+  try {
+    // Get the current date in the server's timezone
+    const today = timeZoneUtil.getCurrentTimeInServerZone();
+
+    // Calculate the date range
+    const startDateUtc = timeZoneUtil.getStartOfDayInUtc(
+      today.clone().add(3, "days")
+    ); // Start of the 3rd day from now in UTC
+    const endDateUtc = timeZoneUtil.getEndOfDayInUtc(
+      today.clone().add(1, "month")
+    ); // End of the day 1 month later in UTC
+
+    // Query movies with release_date in the calculated range
+    const movies = await MovieModel.find({
+      release_date: {
+        $gte: startDateUtc.toDate(),
+        $lte: endDateUtc.toDate(),
+      },
+    });
+
+    // Respond with the list of movies
+    res.status(200).json({
+      status: 200,
+      message: "success",
+      data: movies,
+    });
+  } catch (error) {
+    console.error("Error fetching movies about to be shown:", error);
+    next(error); // Pass error to the error-handling middleware
   }
 };
 
@@ -164,6 +198,6 @@ module.exports = {
   getMovieById,
   updateMovie,
   deleteMovie,
-
   getMovieBeingShown,
+  getMovieAboutBeingShown,
 };
