@@ -28,12 +28,6 @@ const RoomSchema = new mongoose.Schema({
     required: true,
     min: 1, // Ensure num_of_cols is a positive integer
   },
-  type_room: {
-    type: String,
-    required: true,
-    enum: ["3D", "2D"],
-    default: "2D", // Default to "2D" if no value is provided
-  },
 });
 
 const RoomModel = mongoose.model("room", RoomSchema);
