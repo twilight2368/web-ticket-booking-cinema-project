@@ -1,69 +1,50 @@
 import { Button, Card, CardBody } from "@material-tailwind/react";
 import { useState } from "react";
-import classNames from "classnames";
-
+import SeatDisplay from "./SeatDisplay";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-// Fake room data matching the schema
-const fakeRoomData = {
-  _id: "room-123",
-  name: "Cinema Room 1",
-  total_seats: 100,
-  num_of_rows: 5,
-  num_of_cols: 10,
-};
-
-// Fake seats data matching the schema
-const fakeSeatsData = [
-  ...Array.from({ length: 10 }, (_, rowIndex) =>
-    Array.from({ length: 10 }, (_, colIndex) => ({
-      _id: `seat-${rowIndex + 1}-${colIndex + 1}`,
-      room_id: "room-123",
-      seat_row: rowIndex + 1,
-      seat_column: colIndex + 1,
-      seat_type: rowIndex < 2 ? "Vip" : "Normal",
-    }))
-  ).flat(),
-];
-
-// Individual Seat Component
-const SeatDisplay = ({ seat, isReserved, isSelected, onSelect }) => {
-  return (
-    <button
-      className={classNames(
-        "md:w-12 md:h-12 h-8 w-8 m-1 rounded-md flex justify-center items-center",
-        {
-          "bg-gray-900 cursor-not-allowed": isReserved,
-          "bg-blue-400": isSelected,
-          "bg-yellow-800": !isSelected && seat.seat_type === "Vip",
-          "bg-blue-gray-400 ": !isSelected && seat.seat_type !== "Vip",
-          "hover:opacity-80 cursor-pointer": !isReserved,
-        }
-      )}
-      disabled={isReserved}
-      onClick={() => onSelect(seat)}
-    >
-      {isReserved ? (
-        <XMarkIcon strokeWidth={6} className=" h-6 w-6 text-blue-gray-800" />
-      ) : (
-        <span className=" text-xs sm:hidden hidden md:block lg:block ">
-          {seat.seat_column}-{seat.seat_row}
-        </span>
-      )}
-    </button>
-  );
-};
-
+import toast from "react-hot-toast";
 // Seat Map Component
-export default function SeatMap() {
+export default function SeatMap({ fakeRoomData, fakeSeatsData }) {
   const [selectedSeats, setSelectedSeats] = useState([]);
+
+  // Check if a seat is adjacent to any of the selected seats
+  const isAdjacent = (seat) => {
+    for (let selectedSeat of selectedSeats) {
+      // Same row and adjacent column
+      if (
+        selectedSeat.seat_row === seat.seat_row &&
+        Math.abs(selectedSeat.seat_column - seat.seat_column) === 1
+      ) {
+        return true;
+      }
+      // Adjacent row and same column
+      if (
+        Math.abs(selectedSeat.seat_row - seat.seat_row) === 1 &&
+        selectedSeat.seat_column === seat.seat_column
+      ) {
+        return true;
+      }
+    }
+    return false;
+  };
 
   // Handle seat selection
   const handleSeatSelect = (seat) => {
-    setSelectedSeats((prev) =>
-      prev.some((s) => s._id === seat._id)
-        ? prev.filter((s) => s._id !== seat._id)
-        : [...prev, seat]
-    );
+    if (selectedSeats.some((s) => s._id === seat._id)) {
+      setSelectedSeats((prev) => prev.filter((s) => s._id !== seat._id));
+    } else {
+      // Only allow selection if it's adjacent to a selected seat or if there are no selected seats
+      if (selectedSeats.length === 0 || isAdjacent(seat)) {
+        setSelectedSeats((prev) => [...prev, seat]);
+      } else {
+        toast.error(
+          " Mua ghế tạo ghế trống.\n Quý khách nên chọn ghế bên cạnh ",
+          {
+            position: "bottom-center",
+          }
+        );
+      }
+    }
   };
 
   // Organize seats by row
@@ -84,26 +65,36 @@ export default function SeatMap() {
   return (
     <>
       <div className="flex flex-col items-center space-y-4 mb-12">
-        <div className="flex flex-col">
+        <div className="flex flex-col space-y-2">
           {Object.keys(seatsByRow).map((rowNumber) => (
-            <div key={rowNumber} className="flex">
+            <div
+              key={rowNumber}
+              className="flex w-full justify-center items-center gap-2"
+            >
               {seatsByRow[rowNumber]
                 .sort((a, b) => a.seat_column - b.seat_column)
-                .map((seat) => (
-                  <SeatDisplay
-                    key={seat._id}
-                    seat={seat}
-                    isReserved={seat.seat_row > 5}
-                    isSelected={selectedSeats.some((s) => s._id === seat._id)}
-                    onSelect={handleSeatSelect}
-                  />
-                ))}
+                .map((seat) => {
+                  return (
+                    <>
+                      <SeatDisplay
+                        key={seat._id}
+                        seat={seat}
+                        isReserved={seat.seat_row > 5}
+                        isSelected={selectedSeats.some(
+                          (s) => s._id === seat._id
+                        )}
+                        onSelect={handleSeatSelect}
+                      />
+                    </>
+                  );
+                })}
             </div>
           ))}
         </div>
       </div>
+
       {/* Seat Legend */}
-      <div className="flex space-x-4 mb-4 justify-center items-center">
+      <div className="flex sm:space-x-4 sm:space-y-0 space-y-4 mb-4 sm:flex-row flex-col justify-center items-center">
         <div className="flex items-center space-x-2">
           <div className="w-6 h-6 bg-blue-gray-400 rounded-md"></div>
           <span>Ghế thường</span>
@@ -140,8 +131,10 @@ export default function SeatMap() {
                 return total + (seat.seat_type === "Vip" ? 60000 : 50000);
               }, 0)}{" "}
             </p>
-            <div className="w-full flex justify-end items-center">
-                <Button>Next</Button>
+            <div className="w-full p-6 flex justify-end items-center">
+              <Button className="" color="red" variant="gradient">
+                thanh toán
+              </Button>
             </div>
           </CardBody>
         </Card>

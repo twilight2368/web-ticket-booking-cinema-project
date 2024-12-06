@@ -12,6 +12,8 @@ export default function MovieLayout() {
   const [searchParams] = useSearchParams();
   // Retrieve the 'query' parameter from the URL
   const showID = searchParams.get("showID");
+
+  
   return (
     <div className="w-full">
       <div className=" relative w-full md:h-[500px] h-[1200px]">

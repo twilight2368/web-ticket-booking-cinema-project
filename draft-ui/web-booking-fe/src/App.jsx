@@ -1,7 +1,7 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Helmet } from "react-helmet";
-
+import { Toaster } from "react-hot-toast";
 import MainLayout from "./layouts/MainLayout";
 import HomePage from "./pages/home/HomePage";
 import LoginPage from "./pages/login/LoginPage";
@@ -21,6 +21,7 @@ function App() {
       <Helmet>
         <title>Trung tâm chiếu phim Ghibli</title>
       </Helmet>
+      <Toaster />
       <BrowserRouter>
         <Routes>
           <Route path="/*" element={<MainLayout />}>
