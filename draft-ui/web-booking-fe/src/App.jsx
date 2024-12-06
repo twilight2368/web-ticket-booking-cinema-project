@@ -1,7 +1,7 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Helmet } from "react-helmet";
-
+import { Toaster } from "react-hot-toast";
 import MainLayout from "./layouts/MainLayout";
 import HomePage from "./pages/home/HomePage";
 import LoginPage from "./pages/login/LoginPage";
@@ -14,6 +14,7 @@ import UpdatePasswordPage from "./pages/profile/UpdatePasswordPage";
 import TicketPricePage from "./pages/tickets/TicketPricePage";
 import MoviePage from "./pages/movies/MoviePage";
 import MovieLayout from "./layouts/MovieLayout";
+import BookingPage from "./pages/booking/BookingPage";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
       <Helmet>
         <title>Trung tâm chiếu phim Ghibli</title>
       </Helmet>
+      <Toaster />
       <BrowserRouter>
         <Routes>
           <Route path="/*" element={<MainLayout />}>
@@ -32,6 +34,7 @@ function App() {
               <Route index element={<MoviePage />} />
               <Route path=":id" element={<MovieLayout />}></Route>
             </Route>
+            <Route path="making-booking" element={<BookingPage />} />
             <Route path="profile" element={<ProfilePage />} />
             <Route path="update-profile" element={<UpdateProfilePage />} />
             <Route path="update-password" element={<UpdatePasswordPage />} />
