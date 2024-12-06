@@ -15,7 +15,8 @@ export default function SeatDisplay({
         {
           "bg-gray-900 cursor-not-allowed": isReserved,
           "bg-blue-400": isSelected,
-          "bg-yellow-800": !isSelected && seat.seat_type === "Vip",
+          "bg-yellow-800":
+            !isReserved && !isSelected && seat.seat_type === "Vip",
           "bg-blue-gray-400 ": !isSelected && seat.seat_type !== "Vip",
           "hover:opacity-80 cursor-pointer": !isReserved,
         }
