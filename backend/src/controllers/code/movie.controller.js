@@ -117,6 +117,11 @@ const deleteMovie = async (req, res, next) => {
   }
 };
 
+//todo: Get all movies what will be shown on today and the next 2 days
+const getMovieBeingShown = async (req, res, next) => {
+  
+};
+
 module.exports = {
   createMovie,
   getAllMovies,

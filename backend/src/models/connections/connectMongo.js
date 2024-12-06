@@ -14,11 +14,11 @@ const connnectMongo = async () => {
       useUnifiedTopology: true,
     });
     console.log("====================================");
-    console.log(clc.green("Connection Success"));
+    console.log(clc.green("Connection MongoDB Success"));
     console.log("====================================");
   } catch (error) {
     console.log("====================================");
-    console.log(clc.red("Connection failed"));
+    console.log(clc.red("Connection MongoDB failed"));
     console.log("====================================");
   }
 };

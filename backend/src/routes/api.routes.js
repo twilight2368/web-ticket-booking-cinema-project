@@ -7,4 +7,7 @@ router.get("/", (req, res, next) => {
   });
 });
 
+//todo: Get all movies what will be shown on today and the next 2 days
+router.get("/now-movies",);
+
 module.exports = router;
