@@ -5,8 +5,8 @@ import { Link } from "react-router";
 // LoginForm Component
 export default function LoginForm() {
   return (
-    <div className="w-full flex justify-center">
-      <Card className="bg-white text-black w-full max-w-md md:w-[450px] md:h-[400px]">
+    <div className="w-full flex justify-center item">
+      <Card className="bg-white text-black w-full max-w-md md:w-96 md:h-96">
         <CardBody>
           <div>
             <div className="w-full mb-4 md:mb-6">
@@ -33,17 +33,7 @@ export default function LoginForm() {
                 />
               </div>
             </div>
-            {!false ? (
-              <>
-                <div className="h-8 md:h-12 text-center w-full text-gray-400 mb-2"></div>
-              </>
-            ) : (
-              <>
-                <div className="h-8 md:h-12 text-center w-full text-red-400 mb-2">
-                  Something went wrong!!!
-                </div>
-              </>
-            )}
+
             <div className="w-full text-center mb-4">
               <Button
                 className="w-full md:w-auto"

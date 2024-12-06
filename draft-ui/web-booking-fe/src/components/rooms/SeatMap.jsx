@@ -3,10 +3,11 @@ import { useState } from "react";
 import SeatDisplay from "./SeatDisplay";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router";
 // Seat Map Component
 export default function SeatMap({ fakeRoomData, fakeSeatsData }) {
   const [selectedSeats, setSelectedSeats] = useState([]);
-
+  const navigate = useNavigate();
   // Check if a seat is adjacent to any of the selected seats
   const isAdjacent = (seat) => {
     for (let selectedSeat of selectedSeats) {
@@ -116,23 +117,31 @@ export default function SeatMap({ fakeRoomData, fakeSeatsData }) {
       </div>
       {/* Selected Seats Display */}
       <div className="mt-12 px-16">
-        <Card className=" bg-gray-900 shadow-md shadow-black">
+        <Card className=" w-2/3 mx-auto bg-gray-900 shadow-md shadow-black">
           <CardBody className=" text-white text-lg p-8">
             <p className="px-6">
-              <span>Selected Seats: </span>
+              <span>Ghế đã chọn: </span>
               {selectedSeats
                 .map((seat) => `R${seat.seat_row}C${seat.seat_column}`)
                 .join(", ")}
             </p>
             <div className=" border-t border-dashed m-6 border-blue-gray-800"></div>
             <p className=" text-right px-6 after:content-['vnd']">
-              Total:{" "}
+              Tổng cộng:{" "}
               {selectedSeats.reduce((total, seat) => {
                 return total + (seat.seat_type === "Vip" ? 60000 : 50000);
               }, 0)}{" "}
             </p>
             <div className="w-full p-6 flex justify-end items-center">
-              <Button className="" color="red" variant="gradient">
+              <Button
+                className=""
+                color="red"
+                variant="gradient"
+                disabled={!selectedSeats.length}
+                onClick={() => {
+                  navigate("/making-booking");
+                }}
+              >
                 thanh toán
               </Button>
             </div>
