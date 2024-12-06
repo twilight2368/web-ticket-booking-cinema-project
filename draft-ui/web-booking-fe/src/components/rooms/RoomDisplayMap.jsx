@@ -11,7 +11,7 @@ const fakeRoomData = {
 
 // Fake seats data matching the schema
 const fakeSeatsData = [
-  ...Array.from({ length: 10 }, (_, rowIndex) =>
+  ...Array.from({ length: 5 }, (_, rowIndex) =>
     Array.from({ length: 10 }, (_, colIndex) => ({
       _id: `seat-${rowIndex + 1}-${colIndex + 1}`,
       room_id: "room-123",
