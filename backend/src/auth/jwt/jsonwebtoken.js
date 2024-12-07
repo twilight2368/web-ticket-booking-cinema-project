@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
 const path = require("path");
+const { jwt: jwtConfig } = require("../../configs/auth.config");
 
 const PUB_KEY = fs.readFileSync(
   path.join(__dirname, "..", "security/secret/id_rsa.public.pem"),
@@ -14,21 +15,19 @@ const PRIV_KEY = fs.readFileSync(
 function issueJWT(user) {
   const _id = user._id;
 
-  const expiresIn = "1d";
-
   const payload = {
     sub: _id,
     iat: Math.floor(Date.now() / 1000), // Epoch seconds
   };
 
   const signedToken = jwt.sign(payload, PRIV_KEY, {
-    expiresIn: expiresIn,
-    algorithm: "RS256",
+    expiresIn: jwtConfig.expiresIn,
+    algorithm: jwtConfig.algorithm,
   });
 
   return {
     token: signedToken,
-    expires: expiresIn,
+    expires: jwtConfig.expiresIn,
   };
 }
 
@@ -37,18 +36,17 @@ function verifyJWT(signedJWT) {
     jwt.verify(
       signedJWT,
       PUB_KEY,
-      { algorithms: ["RS256"] },
+      { algorithms: [jwtConfig.algorithm] },
       (err, payload) => {
         if (err) {
           console.error("Token verification failed:", err);
-          return reject(false); 
+          return reject(false);
         }
         console.log("Verified payload:", payload);
-        return resolve(true); 
+        return resolve(true);
       }
     );
   });
 }
-
 
 module.exports = { issueJWT, verifyJWT };

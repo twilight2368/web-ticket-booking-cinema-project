@@ -1,4 +1,5 @@
 const { verifyJWT } = require("../auth/jwt/jsonwebtoken");
+const cliColor = require("cli-color");
 
 function checkIsSessionValid(req, res, next) {
   if (req.isAuthenticated()) {
@@ -32,7 +33,6 @@ function checkCookie(req, res, next) {
   console.log(cliColor.red("Cookies:"), req.cookies); // Access parsed cookies
   // Or
   console.log(cliColor.red("Raw Cookies:"), req.headers.cookie); // Access raw cookie header
-
   next();
 }
 

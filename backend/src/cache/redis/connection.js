@@ -7,6 +7,7 @@ const client = createClient({
   socket: {
     host: redis.config.socket.host,
     port: redis.config.socket.port,
+    timeout: 10000,
   },
 });
 // Set up Redis connection at application startup

@@ -25,15 +25,19 @@ passport.use(
   })
 );
 
-passport.serializeUser(function (user, cb) {
-  cb(null, user.id);
+passport.serializeUser(function (user, done) {
+  try {
+    done(null, user.id);
+  } catch (error) {
+    done(err);
+  }
 });
 
-passport.deserializeUser(function (id, cb) {
-  User.findById(id, function (err, user) {
-    if (err) {
-      return cb(err);
-    }
-    cb(null, user);
-  });
+passport.deserializeUser(async function (id, done) {
+  try {
+    const user = await User.findById(id);
+    done(null, user);
+  } catch (error) {
+    done(err);
+  }
 });

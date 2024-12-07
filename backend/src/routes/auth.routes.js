@@ -8,6 +8,14 @@ const { saltRounds: SALT_ROUNDS } = require("../configs/auth.config");
 
 const { issueJWT } = require("../auth/jwt/jsonwebtoken");
 
+//todo: Import middlewares
+
+const {
+  checkCookie,
+  checkLoggedIn,
+  checkIsSessionValid,
+} = require("../middlewares/auth.middleware");
+
 const router = express.Router();
 
 //todo: ----------------------- AUTH ROUTES --------------------------------------
@@ -120,6 +128,26 @@ router.get("/new-token", (req, res, next) => {
     return res.json({
       jwt: tokenData.token,
       message: "Successfully logged in",
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/cookie", checkCookie, (req, res, next) => {
+  try {
+    res.status(200).json({
+      message: "Protected",
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/protected", checkLoggedIn, (req, res, next) => {
+  try {
+    res.status(200).json({
+      message: "Protected",
     });
   } catch (error) {
     next(error);
