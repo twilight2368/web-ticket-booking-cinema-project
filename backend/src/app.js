@@ -99,10 +99,10 @@ app.get("/", (req, res) => {
   });
 });
 
-app.get("/error", (req, res, next) => {
-  console.error("Error testing...");
-  throw new Error("Something went wrong!!!");
-});
+// app.get("/error", (req, res, next) => {
+//   console.error("Error testing...");
+//   throw new Error("Something went wrong!!!");
+// });
 
 app.use("/auth", authRoutes);
 
