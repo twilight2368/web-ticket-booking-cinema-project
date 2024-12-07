@@ -109,3 +109,11 @@ const delDeleteUserProfile = async (req, res, next) => {
     next(error);
   }
 };
+
+module.exports = {
+  getAllUserInfo,
+  getUserInfoByID,
+  putChangeUserInfo,
+  putChangeUserPassword,
+  delDeleteUserProfile,
+};
