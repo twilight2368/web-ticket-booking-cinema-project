@@ -126,10 +126,10 @@ export default function SeatMap({ fakeRoomData, fakeSeatsData }) {
                 .join(", ")}
             </p>
             <div className=" border-t border-dashed m-6 border-blue-gray-800"></div>
-            <p className=" text-right px-6 after:content-['vnd']">
+            <p className=" text-right px-6 after:content-['¥']">
               Tổng cộng:{" "}
               {selectedSeats.reduce((total, seat) => {
-                return total + (seat.seat_type === "Vip" ? 60000 : 50000);
+                return total + (seat.seat_type === "Vip" ? 600 : 500);
               }, 0)}{" "}
             </p>
             <div className="w-full p-6 flex justify-end items-center">
