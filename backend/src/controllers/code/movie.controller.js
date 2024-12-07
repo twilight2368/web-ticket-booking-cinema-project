@@ -1,8 +1,9 @@
-const MovieModel = require("../../models/database/Movie"); // Assuming the model is located here
-const ShowModel = require("../../models/database/Show");
 const timeZoneUtil = require("../../utils/helpers/time-zone");
+const MovieModel = require("../../models/database/Movie");
+const ShowModel = require("../../models/database/Show");
+const moment = require("moment-timezone");
 
-//TODO: Create a new movie
+// Create Movie with UTC+7 date
 const createMovie = async (req, res, next) => {
   try {
     const {
@@ -13,6 +14,7 @@ const createMovie = async (req, res, next) => {
       duration_in_minutes,
       release_date,
       parental_guidance,
+      image_url: poster_url,
     } = req.body;
 
     // Validate incoming data
@@ -20,7 +22,37 @@ const createMovie = async (req, res, next) => {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
+    // Convert release date to UTC+7
+    const formattedReleaseDate = timeZoneUtil
+      .convertToServerTimezone(release_date)
+      .toDate();
+
     const newMovie = new MovieModel({
+      title,
+      description,
+      genre,
+      country,
+      duration_in_minutes,
+      release_date: formattedReleaseDate, // Store in UTC (which will be UTC+7)
+      parental_guidance,
+      poster_url,
+    });
+
+    await newMovie.save();
+    return res
+      .status(201)
+      .json({ message: "Movie created successfully", movie: newMovie });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Update Movie
+const updateMovie = async (req, res, next) => {
+  const { movieId } = req.params;
+
+  try {
+    const {
       title,
       description,
       genre,
@@ -28,34 +60,60 @@ const createMovie = async (req, res, next) => {
       duration_in_minutes,
       release_date,
       parental_guidance,
+      image_url: poster_url,
+    } = req.body;
+
+    // Convert release_date to UTC+7 if present
+    const formattedReleaseDate = timeZoneUtil
+      .convertToServerTimezone(release_date)
+      .toDate();
+
+    const updatedMovie = await MovieModel.findByIdAndUpdate(
+      movieId,
+      {
+        title,
+        description,
+        genre,
+        country,
+        duration_in_minutes,
+        formattedReleaseDate,
+        parental_guidance,
+        image_url: poster_url,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!updatedMovie) {
+      return res.status(404).json({ message: "Movie not found" });
+    }
+
+    return res.status(200).json({
+      message: "Movie updated successfully",
+      movie: updatedMovie,
     });
-
-    await newMovie.save();
-    return res
-      .status(201)
-      .json({ message: "Movie created successfully", movie: newMovie });
-  } catch (err) {
-    console.error(err);
-    return res
-      .status(500)
-      .json({ message: "Error creating movie", error: err.message });
+  } catch (error) {
+    next(error);
   }
 };
 
-//TODO: Get all movies
-const getAllMovies = async (req, res, next) => {
+//TODO: Delete a movie
+const deleteMovie = async (req, res, next) => {
+  const { movieId } = req.params;
   try {
-    const movies = await MovieModel.find();
-    return res.status(200).json(movies);
-  } catch (err) {
-    console.error(err);
-    return res
-      .status(500)
-      .json({ message: "Error retrieving movies", error: err.message });
+    const movie = await MovieModel.findByIdAndDelete(movieId);
+    if (!movie) {
+      return res.status(404).json({ message: "Movie not found" });
+    }
+    return res.status(200).json({ message: "Movie deleted successfully" });
+  } catch (error) {
+    next(error);
   }
 };
 
-//TODO: Get a movie by ID
+// Get Movie by ID with formatted dates
 const getMovieById = async (req, res, next) => {
   const { movieId } = req.params;
   try {
@@ -66,83 +124,34 @@ const getMovieById = async (req, res, next) => {
     }
 
     return res.status(200).json(movie);
-  } catch (err) {
-    console.error(err);
-    return res
-      .status(500)
-      .json({ message: "Error retrieving movie", error: err.message });
-  }
-};
-
-//TODO: Update a movie
-const updateMovie = async (req, res, next) => {
-  const { movieId } = req.params;
-  const updates = req.body;
-
-  try {
-    const updatedMovie = await MovieModel.findByIdAndUpdate(movieId, updates, {
-      new: true,
-    });
-
-    if (!updatedMovie) {
-      return res.status(404).json({ message: "Movie not found" });
-    }
-
-    return res
-      .status(200)
-      .json({ message: "Movie updated successfully", movie: updatedMovie });
-  } catch (err) {
-    console.error(err);
-    return res
-      .status(500)
-      .json({ message: "Error updating movie", error: err.message });
-  }
-};
-
-//TODO: Delete a movie
-const deleteMovie = async (req, res, next) => {
-  const { movieId } = req.params;
-
-  try {
-    const movie = await MovieModel.findByIdAndDelete(movieId);
-
-    if (!movie) {
-      return res.status(404).json({ message: "Movie not found" });
-    }
-
-    return res.status(200).json({ message: "Movie deleted successfully" });
-  } catch (err) {
-    console.error(err);
-    return res
-      .status(500)
-      .json({ message: "Error deleting movie", error: err.message });
+  } catch (error) {
+    next(error);
   }
 };
 
 //todo: Get all movies what will be shown on today and the next 2 days
-/**
- * 
- */
 const getMovieBeingShown = async (req, res, next) => {
   try {
-    //TODO: Get the current date in server's timezone (UTC+7)
-    const today = timeZoneUtil.getCurrentTimeInServerZone();
+    // Get the current date in server's timezone (UTC+7)
+    const todayInServerZone = timeZoneUtil.getCurrentTimeInServerZone();
 
-    //TODO: Calculate the start and end of the date range (today to next 2 days)
-    const startDateUtc = timeZoneUtil.getStartOfDayInUtc(today); // Start of today in UTC
-    const endDateUtc = timeZoneUtil.getEndOfDayInUtc(
-      today.clone().add(2, "days")
-    ); //TODO: End of next 2 days in UTC
+    // Calculate the start and end of the date range in server timezone
+    const startDate = todayInServerZone.clone().startOf("day");
+    const endDate = todayInServerZone.clone().add(2, "days").endOf("day");
 
-    //TODO: Query to find shows within the specified range
+    // Convert start and end dates to UTC+7
+    const startDateInServerZone = startDate.toDate();
+    const endDateInServerZone = endDate.toDate();
+
+    // Query to find shows within the specified range
     const shows = await ShowModel.find({
       date_show: {
-        $gte: startDateUtc.toDate(),
-        $lte: endDateUtc.toDate(),
+        $gte: startDateInServerZone,
+        $lte: endDateInServerZone,
       },
-    }).populate("movie_id"); //TODO: Populate movie details
+    }).populate("movie_id");
 
-    //TODO: Extract unique movies being shown in the retrieved shows
+    // Extract unique movies being shown in the retrieved shows
     const uniqueMovies = new Map();
     shows.forEach((show) => {
       const movie = show.movie_id;
@@ -151,7 +160,7 @@ const getMovieBeingShown = async (req, res, next) => {
       }
     });
 
-    //TODO: Respond with the list of unique movies
+    // Respond with the list of unique movies
     res.status(200).json({
       status: 200,
       message: "success",
@@ -162,28 +171,25 @@ const getMovieBeingShown = async (req, res, next) => {
   }
 };
 
-//todo: Get all movies what that release date in from the next 3 days and a  month later
-/**
- * 
- */
+//todo: Get all movies that will be released in the next 3 days to a month later
 const getMovieAboutBeingShown = async (req, res, next) => {
   try {
     // Get the current date in the server's timezone
-    const today = timeZoneUtil.getCurrentTimeInServerZone();
+    const todayInServerZone = timeZoneUtil.getCurrentTimeInServerZone();
 
-    // Calculate the date range
-    const startDateUtc = timeZoneUtil.getStartOfDayInUtc(
-      today.clone().add(3, "days")
-    ); // Start of the 3rd day from now in UTC
-    const endDateUtc = timeZoneUtil.getEndOfDayInUtc(
-      today.clone().add(1, "month")
-    ); // End of the day 1 month later in UTC
+    // Calculate the date range in server timezone
+    const startDate = todayInServerZone.clone().add(3, "days").startOf("day");
+    const endDate = todayInServerZone.clone().add(1, "month").endOf("day");
+
+    // Convert start and end dates to UTC+7
+    const startDateInServerZone = startDate.toDate();
+    const endDateInServerZone = endDate.toDate();
 
     // Query movies with release_date in the calculated range
     const movies = await MovieModel.find({
       release_date: {
-        $gte: startDateUtc.toDate(),
-        $lte: endDateUtc.toDate(),
+        $gte: startDateInServerZone,
+        $lte: endDateInServerZone,
       },
     });
 
@@ -194,65 +200,40 @@ const getMovieAboutBeingShown = async (req, res, next) => {
       data: movies,
     });
   } catch (error) {
-    console.error("Error fetching movies about to be shown:", error);
-    next(error); // Pass error to the error-handling middleware
+    next(error);
   }
 };
 
-//todo: Get all movies being shown and their schedule show from current day and the next 3 days
-/**
- * example if today is 01-01-2024
- * @return ({
- *   "01-01-2024": [
- *    movie:{
- *     other_attributes of movie,
- *     showns:[]
- *    }
- *  ],
- *  "02-01-2024": [
- *    movie:{
- *     other_attributes of movie,
- *     showns:[]
- *    }
- *  ],
- *  "03-01-2024": [
- *    movie:{
- *     other_attributes of movie,
- *     showns:[]
- *    }
- *  ],
- * })
- */
+//todo: Get all movies being shown and their schedule from current day and the next 3 days
 const getMovieAndShowsCurrent = async (req, res, next) => {
   try {
     // Get the current date in server's timezone
-    const today = timeZoneUtil.getCurrentTimeInServerZone();
+    const todayInServerZone = timeZoneUtil.getCurrentTimeInServerZone();
 
-    // Calculate the start and end of the date range
-    const startDateUtc = timeZoneUtil.getStartOfDayInUtc(today); // Start of today in UTC
-    const endDateUtc = timeZoneUtil.getEndOfDayInUtc(
-      today.clone().add(3, "days")
-    ); // End of the 3rd day in UTC
+    // Calculate the start and end of the date range in server timezone
+    const startDate = todayInServerZone.clone().startOf("day");
+    const endDate = todayInServerZone.clone().add(2, "days").endOf("day");
+
+    // Convert start and end dates to UTC+7
+    const startDateInServerZone = startDate.toDate();
+    const endDateInServerZone = endDate.toDate();
 
     // Query to get all shows in the specified range
     const shows = await ShowModel.find({
       date_show: {
-        $gte: startDateUtc.toDate(),
-        $lte: endDateUtc.toDate(),
+        $gte: startDateInServerZone,
+        $lte: endDateInServerZone,
       },
-    }).populate("movie_id"); // Populate movie details
+    }).populate("movie_id");
 
     // Initialize an object to group movies and shows by date
     const result = {};
 
     // Iterate over shows and group them by date
     shows.forEach((show) => {
-      const movie = show.movie_id;
-
-      // Format the show date in server's timezone as "DD-MM-YYYY"
-      const showDate = timeZoneUtil
-        .convertUtcToServerZone(show.date_show)
-        .format("DD-MM-YYYY");
+      // Convert show date to server timezone for formatting
+      const showDateInServerZone = moment(show.date_show).tz("Asia/Bangkok");
+      const showDate = showDateInServerZone.format("DD-MM-YYYY");
 
       // Initialize the date group if it doesn't exist
       if (!result[showDate]) {
@@ -260,21 +241,23 @@ const getMovieAndShowsCurrent = async (req, res, next) => {
       }
 
       // Find or add the movie in the date group
+      const movie = show.movie_id;
       let movieEntry = result[showDate].find(
-        (entry) => entry.movie._id === movie._id
+        (entry) => entry.movie._id.toString() === movie._id.toString()
       );
+
       if (!movieEntry) {
         movieEntry = {
           movie: {
             ...movie.toObject(),
-            showns: [],
+            shows: [],
           },
         };
         result[showDate].push(movieEntry);
       }
 
       // Add the show to the movie's schedule
-      movieEntry.movie.showns.push({
+      movieEntry.movie.shows.push({
         room_id: show.room_id,
         time_start: show.time_start,
         time_end: show.time_end,
@@ -284,8 +267,7 @@ const getMovieAndShowsCurrent = async (req, res, next) => {
     // Respond with the grouped result
     res.status(200).json(result);
   } catch (error) {
-    console.error("Error fetching movies and shows:", error);
-    next(error); // Pass error to the error-handling middleware
+    next(error);
   }
 };
 

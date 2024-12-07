@@ -28,6 +28,11 @@ const NewsSchema = new mongoose.Schema(
       type: String,
       ref: "admin",
     },
+
+    write_at: {
+      type: Date,
+      default: Date.now,
+    },
   },
   { timestamps: true }
 );
