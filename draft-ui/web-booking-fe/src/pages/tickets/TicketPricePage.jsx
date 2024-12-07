@@ -24,7 +24,7 @@ export default function TicketPricePage() {
                 Giá vé (Ticket price)
               </th>
               <th className="border border-blue-gray-600 p-3 text-center">
-                💲
+                💴
               </th>
             </tr>
           </thead>
@@ -34,10 +34,10 @@ export default function TicketPricePage() {
                 Ghế thường (Standard)
               </td>
               <td className="border border-blue-gray-600 text-blue-gray-400 p-3 text-center">
-                50.000
+                500
               </td>
               <td className="border border-blue-gray-600 text-blue-gray-400 p-3 text-center">
-                vnd
+                ¥
               </td>
             </tr>
             <tr className=" hover:bg-blue-gray-900/25">
@@ -45,10 +45,10 @@ export default function TicketPricePage() {
                 Ghế VIP (VIP)
               </td>
               <td className="border border-blue-gray-600 text-yellow-800 p-3 text-center">
-                60.000
+                600
               </td>
               <td className="border border-blue-gray-600 text-yellow-800 p-3 text-center">
-                vnd
+                ¥
               </td>
             </tr>
           </tbody>

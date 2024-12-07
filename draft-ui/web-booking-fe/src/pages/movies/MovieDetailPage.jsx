@@ -1,19 +1,17 @@
 import { Button } from "@material-tailwind/react";
 import { useNavigate, useParams } from "react-router";
 import { useSearchParams } from "react-router-dom";
-import MovieDescriptionModal from "../components/modals/MovieDescriptionModal";
-import TrailerPlayerModal from "../components/modals/TrailerPlayerModal";
-import MovieScheduleLink from "../components/button/MovieScheduleLink";
-import RoomDisplayMap from "../components/rooms/RoomDisplayMap";
+import MovieDescriptionModal from "../../components/modals/MovieDescriptionModal";
+import TrailerPlayerModal from "../../components/modals/TrailerPlayerModal";
+import MovieScheduleLink from "../../components/button/MovieScheduleLink";
+import RoomDisplayMap from "../../components/rooms/RoomDisplayMap";
 export default function MovieLayout() {
   const { id } = useParams();
-  const navigate = useNavigate();
   // Get search params object
   const [searchParams] = useSearchParams();
   // Retrieve the 'query' parameter from the URL
   const showID = searchParams.get("showID");
 
-  
   return (
     <div className="w-full">
       <div className=" relative w-full md:h-[500px] h-[1200px]">

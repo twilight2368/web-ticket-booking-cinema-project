@@ -13,7 +13,7 @@ import UpdateProfilePage from "./pages/profile/UpdateProfilePage";
 import UpdatePasswordPage from "./pages/profile/UpdatePasswordPage";
 import TicketPricePage from "./pages/tickets/TicketPricePage";
 import MoviePage from "./pages/movies/MoviePage";
-import MovieLayout from "./layouts/MovieLayout";
+import MovieLayout from "./pages/movies/MovieDetailPage";
 import BookingPage from "./pages/booking/BookingPage";
 
 function App() {
@@ -23,6 +23,7 @@ function App() {
         <title>Trung tâm chiếu phim Ghibli</title>
       </Helmet>
       <Toaster />
+
       <BrowserRouter>
         <Routes>
           <Route path="/*" element={<MainLayout />}>
@@ -32,7 +33,7 @@ function App() {
 
             <Route path="movies/*">
               <Route index element={<MoviePage />} />
-              <Route path=":id" element={<MovieLayout />}></Route>
+              <Route path=":id" element={<MovieLayout />} />
             </Route>
             <Route path="making-booking" element={<BookingPage />} />
             <Route path="profile" element={<ProfilePage />} />
