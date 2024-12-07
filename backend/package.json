@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npx nodemon",
-    "gen-key-pair": "node src/security/tools/genKeyPair.js"
+    "gen-key-pair": "node src/security/tools/genKeyPair.js",
+    "gen-cinema-room": "node src/models/migration/mock/mock.js"
   },
   "keywords": [],
   "author": "",
@@ -40,6 +41,7 @@
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "redis": "^4.7.0",
+    "stripe": "^17.4.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "uuid": "^10.0.0",

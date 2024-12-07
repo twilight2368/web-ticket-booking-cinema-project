@@ -80,7 +80,7 @@ export default function SeatMap({ fakeRoomData, fakeSeatsData }) {
                       <SeatDisplay
                         key={seat._id}
                         seat={seat}
-                        isReserved={seat.seat_row > 5}
+                        isReserved={seat.seat_row == 5}
                         isSelected={selectedSeats.some(
                           (s) => s._id === seat._id
                         )}

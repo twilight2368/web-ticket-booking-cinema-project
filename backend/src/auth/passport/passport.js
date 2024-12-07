@@ -5,27 +5,39 @@ const User = require("../../models/database/User");
 
 passport.use(
   new LocalStrategy(async (username, password, done) => {
-    const user = users.find(
-      (u) => u.username === username || u.email === username
-    );
-    if (!user) return done(null, false, { message: "Incorrect username." });
+    try {
+      const user = await User.findOne({
+        $or: [{ username: username }, { email: username }],
+      }).select("+password");
+      if (!user) {
+        return done(null, false, { message: "Incorrect username or email." });
+      }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return done(null, false, { message: "Incorrect password." });
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        return done(null, false, { message: "Incorrect password." });
+      }
 
-    return done(null, user);
+      return done(null, user);
+    } catch (err) {
+      return done(err);
+    }
   })
 );
 
-passport.serializeUser(function (user, cb) {
-  cb(null, user.id);
+passport.serializeUser(function (user, done) {
+  try {
+    done(null, user.id);
+  } catch (error) {
+    done(err);
+  }
 });
 
-passport.deserializeUser(function (id, cb) {
-  User.findById(id, function (err, user) {
-    if (err) {
-      return cb(err);
-    }
-    cb(null, user);
-  });
+passport.deserializeUser(async function (id, done) {
+  try {
+    const user = await User.findById(id);
+    done(null, user);
+  } catch (error) {
+    done(err);
+  }
 });

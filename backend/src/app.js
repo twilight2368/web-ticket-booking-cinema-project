@@ -3,9 +3,10 @@ const app = express();
 const cors = require("cors");
 const morgan = require("morgan");
 const session = require("express-session");
-const cliColor = require("cli-color");
 const passport = require("passport");
 const cookieParser = require("cookie-parser");
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./docs/openapi/api.json");
 
 //TODO: Import mongo store to connect session
 const MongoStore = require("connect-mongo");
@@ -87,6 +88,9 @@ require("./auth/passport/passport");
 app.use(passport.initialize());
 app.use(passport.session());
 
+//* Set up  JSdoc
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 //* ---------- Routes ------------
 
 app.get("/", (req, res) => {
@@ -95,10 +99,10 @@ app.get("/", (req, res) => {
   });
 });
 
-app.get("/error", (req, res, next) => {
-  console.error("Error testing...");
-  throw new Error("Something went wrong!!!");
-});
+// app.get("/error", (req, res, next) => {
+//   console.error("Error testing...");
+//   throw new Error("Something went wrong!!!");
+// });
 
 app.use("/auth", authRoutes);
 

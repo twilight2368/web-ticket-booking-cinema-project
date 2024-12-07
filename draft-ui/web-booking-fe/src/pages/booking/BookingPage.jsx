@@ -147,7 +147,7 @@ const PaymentForm = ({ amount }) => {
         color="red"
         className="w-full my-6"
       >
-        Pay {amount} VND
+        Thanh toán
       </Button>
       <Button
         color="white"
@@ -160,9 +160,9 @@ const PaymentForm = ({ amount }) => {
         quay lại
       </Button>
       <div className=" text-orange-800 italic text-sm">
-        ! Lưu ý: Không mua vé cho trẻ em dưới 13 tuổi đối với các suất chiếu phim
-        kết thúc sau 22h00 và không mua vé cho trẻ em dưới 16 tuổi đối với các
-        suất chiếu phim kết thúc sau 23h00.
+        ! Lưu ý: Không mua vé cho trẻ em dưới 13 tuổi đối với các suất chiếu
+        phim kết thúc sau 22h00 và không mua vé cho trẻ em dưới 16 tuổi đối với
+        các suất chiếu phim kết thúc sau 23h00.
       </div>
     </form>
   );

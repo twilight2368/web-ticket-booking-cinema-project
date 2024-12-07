@@ -9,24 +9,24 @@ const RoomSchema = new mongoose.Schema({
   name: {
     type: String,
     default: function () {
-      return "Room-?";
+      return "Ghibli...";
     },
     required: true,
   },
   total_seats: {
     type: Number,
     required: true,
-    min: 1, // Ensure total_seats is a positive integer
+    min: 1,
   },
   num_of_rows: {
     type: Number,
     required: true,
-    min: 1, // Ensure num_of_rows is a positive integer
+    min: 1,
   },
   num_of_cols: {
     type: Number,
     required: true,
-    min: 1, // Ensure num_of_cols is a positive integer
+    min: 1,
   },
 });
 

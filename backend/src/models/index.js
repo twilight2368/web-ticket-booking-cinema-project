@@ -1,12 +1,12 @@
-require("./database/Admin");
-require("./database/Booking");
-require("./database/Movie");
-require("./database/News");
-require("./database/Payment");
-require("./database/Room");
-require("./database/Seat");
-require("./database/Show");
-require("./database/User");
+const Admin = require("./database/Admin");
+const Booking = require("./database/Booking");
+const Movie = require("./database/Movie");
+const News = require("./database/News");
+const Payment = require("./database/Payment");
+const Room = require("./database/Room");
+const Seat = require("./database/Seat");
+const Show = require("./database/Show");
+const User = require("./database/User");
 
 const init = () => {
   console.log("====================================");

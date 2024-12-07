@@ -17,11 +17,6 @@ const AdminSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  role: {
-    type: String,
-    enum: ["manager", "employee"],
-    required: true,
-  },
 });
 
 const AdminModel = mongoose.model("admin", AdminSchema);
