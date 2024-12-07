@@ -5,6 +5,8 @@ const morgan = require("morgan");
 const session = require("express-session");
 const passport = require("passport");
 const cookieParser = require("cookie-parser");
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./docs/openapi/api.json");
 
 //TODO: Import mongo store to connect session
 const MongoStore = require("connect-mongo");
@@ -85,6 +87,9 @@ app.use(
 require("./auth/passport/passport");
 app.use(passport.initialize());
 app.use(passport.session());
+
+//* Set up  JSdoc
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 //* ---------- Routes ------------
 

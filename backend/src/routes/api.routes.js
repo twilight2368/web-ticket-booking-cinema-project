@@ -17,6 +17,17 @@ const {
   getAllRoomInformation,
   getRoomInformationByShow,
 } = require("../controllers/code/room.controller");
+const {
+  getAllUserInfo,
+  getUserInfoByID,
+  putChangeUserInfo,
+  putChangeUserPassword,
+  delDeleteUserProfile,
+} = require("../controllers/code/user.controller");
+const {
+  checkCookie,
+  checkLoggedIn,
+} = require("../middlewares/auth.middleware");
 
 //todo: ----------------------- APP ROUTES --------------------------------------
 router.get("/", (req, res, next) => {
@@ -47,5 +58,25 @@ router.get("/rooms", getAllRoomInformation);
 router.get("/rooms/:show_id", getRoomInformationByShow);
 
 //? User routes
+router.get("/all-users", getAllUserInfo);
+router.get("/user/:id", getUserInfoByID);
+router.put("/change-user-info/:id", putChangeUserInfo);
+router.put("/change-user-password/:id", putChangeUserPassword);
+router.delete("/delete-profile", delDeleteUserProfile);
+
+//! Testing only
+// router.get("/header", checkLoggedIn, (req, res, next) => {
+//   console.log("====================================");
+//   console.log(req.user);
+//   console.log("====================================");
+//   console.log('====================================');
+//   console.log(req.user.id);
+//   console.log('====================================');
+//   res.json({
+//     data: "Hello world",
+//   });
+// });
+
+//? News routes
 
 module.exports = router;

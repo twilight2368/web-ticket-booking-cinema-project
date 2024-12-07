@@ -15,9 +15,9 @@ async function checkLoggedIn(req, res, next) {
     const token = authHeader && authHeader.split(" ")[1];
     if (token == null) return res.sendStatus(401);
 
-    const isValid = await verifyJWT(token);
+    const verifyToken = await verifyJWT(token);
 
-    if (isValid) {
+    if (verifyToken.status) {
       next();
     } else {
       res.status(401).json({ message: "Token Unauthorized" });

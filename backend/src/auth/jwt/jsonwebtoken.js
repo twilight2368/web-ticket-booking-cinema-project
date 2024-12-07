@@ -40,10 +40,16 @@ function verifyJWT(signedJWT) {
       (err, payload) => {
         if (err) {
           console.error("Token verification failed:", err);
-          return reject(false);
+          return reject({
+            status: false,
+            decode: undefined,
+          });
         }
         console.log("Verified payload:", payload);
-        return resolve(true);
+        return resolve({
+          status: true,
+          decoded: payload,
+        });
       }
     );
   });

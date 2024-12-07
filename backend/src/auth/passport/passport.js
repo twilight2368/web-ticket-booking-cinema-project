@@ -8,7 +8,7 @@ passport.use(
     try {
       const user = await User.findOne({
         $or: [{ username: username }, { email: username }],
-      });
+      }).select("+password");
       if (!user) {
         return done(null, false, { message: "Incorrect username or email." });
       }

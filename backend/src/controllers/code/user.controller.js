@@ -36,7 +36,7 @@ const getUserInfoByID = async (req, res, next) => {
 // TODO: Change password
 const putChangeUserPassword = async (req, res, next) => {
   try {
-    const userId = req.user.id; // Assuming user ID is in the JWT payload
+    const userId = req.user.id;
     const { oldPassword, newPassword } = req.body;
 
     const user = await User.findById(userId);
@@ -66,22 +66,35 @@ const putChangeUserPassword = async (req, res, next) => {
   }
 };
 
-// TODO: Change user profile information
 const putChangeUserInfo = async (req, res, next) => {
   try {
-    const userId = req.user.id; // Assuming user ID is in the JWT payload
+    const userIdFromParams = req.params.user_id;
+    const userIdFromToken = req.user.id;
+
+    // Check if the user IDs match
+    if (userIdFromParams !== userIdFromToken) {
+      return res.status(403).json({
+        success: false,
+        message: "You are not authorized to update this user's information.",
+      });
+    }
+
     const updates = req.body;
 
-    const user = await User.findByIdAndUpdate(userId, updates, {
+    // Perform the update operation
+    const user = await User.findByIdAndUpdate(userIdFromToken, updates, {
       new: true,
       runValidators: true,
-    });
+    }).select("-password");
+
+    // If user not found, return 404
     if (!user) {
       return res
         .status(404)
         .json({ success: false, message: "User not found" });
     }
 
+    // Respond with updated user data
     res.status(200).json({ success: true, data: user });
   } catch (error) {
     console.error("Error updating user profile: ", error);
@@ -92,9 +105,18 @@ const putChangeUserInfo = async (req, res, next) => {
 // TODO: Delete user profile
 const delDeleteUserProfile = async (req, res, next) => {
   try {
-    const userId = req.user.id; // Assuming user ID is in the JWT payload
+    const userIdFromParams = req.params.user_id;
+    const userIdFromToken = req.user.id;
 
-    const user = await User.findByIdAndDelete(userId);
+    // Check if the user IDs match
+    if (userIdFromParams !== userIdFromToken) {
+      return res.status(403).json({
+        success: false,
+        message: "You are not authorized to delete this user's information.",
+      });
+    }
+
+    const user = await User.findByIdAndDelete(userIdFromParams);
     if (!user) {
       return res
         .status(404)
