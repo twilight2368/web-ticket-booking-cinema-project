@@ -11,7 +11,7 @@ const {
   createMovie,
   updateMovie,
   deleteMovie,
-} = require("../controllers/code/movie.controller");
+} = require("../controllers/movie.controller");
 
 const {
   getAllRoomInformation,
@@ -24,10 +24,6 @@ const {
   putChangeUserPassword,
   delDeleteUserProfile,
 } = require("../controllers/code/user.controller");
-const {
-  checkCookie,
-  checkLoggedIn,
-} = require("../middlewares/auth.middleware");
 
 //todo: ----------------------- APP ROUTES --------------------------------------
 router.get("/", (req, res, next) => {
@@ -64,19 +60,10 @@ router.put("/change-user-info/:id", putChangeUserInfo);
 router.put("/change-user-password/:id", putChangeUserPassword);
 router.delete("/delete-profile", delDeleteUserProfile);
 
-//! Testing only
-// router.get("/header", checkLoggedIn, (req, res, next) => {
-//   console.log("====================================");
-//   console.log(req.user);
-//   console.log("====================================");
-//   console.log('====================================');
-//   console.log(req.user.id);
-//   console.log('====================================');
-//   res.json({
-//     data: "Hello world",
-//   });
-// });
-
 //? News routes
+
+//? Shows routes
+
+//? Payment and booking route
 
 module.exports = router;

@@ -1,6 +1,6 @@
-const timeZoneUtil = require("../../utils/helpers/time-zone");
-const MovieModel = require("../../models/database/Movie");
-const ShowModel = require("../../models/database/Show");
+const timeZoneUtil = require("../utils/helpers/time-zone");
+const MovieModel = require("../models/database/Movie");
+const ShowModel = require("../models/database/Show");
 const moment = require("moment-timezone");
 
 // Create Movie with UTC+7 date

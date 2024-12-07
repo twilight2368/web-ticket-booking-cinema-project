@@ -30,17 +30,6 @@ const PaymentSchema = new mongoose.Schema(
       enum: ["pending", "successful", "failed"],
       default: "pending", // Default payment status is pending
     },
-    transaction_id: {
-      type: String,
-      unique: true, // Transaction ID should be unique
-    },
-    payment_time: {
-      type: Date,
-      default: Date.now, // Automatically set the payment date
-    },
-    payment_details: {
-      type: String, // Optional field for storing payment-related details (e.g., payer name or gateway reference)
-    },
   },
   { timestamps: true }
 );
