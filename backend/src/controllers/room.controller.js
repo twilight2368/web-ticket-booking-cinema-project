@@ -71,7 +71,10 @@ const getRoomInformationByShow = async (req, res, next) => {
       seat_id: seat._id,
       seat_row: seat.seat_row,
       seat_column: seat.seat_column,
-      seat_type: seat.seat_type.name,
+      seat_type: {
+        name: seat.seat_type.name,
+        price: seat.seat_type.price,
+      },
       is_booked: bookedSeats.has(seat._id), // Check if seat is booked
     }));
 
