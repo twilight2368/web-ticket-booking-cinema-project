@@ -11,6 +11,13 @@ const appConfig = {
       api_secret: process.env.CLOUDINARY_API_SECRET,
     },
     folder: "web-booking-upload",
+    image: {
+      default_poster_movie:
+        "https://res.cloudinary.com/dy2xmyytw/image/upload/v1733622170/82648f28c011896cd0128956e8ebf230_aw3mzu.jpg",
+    },
+  },
+  stripe: {
+    private_key: process.env.STRIPE_PRIVATE_KEY,
   },
 };
 

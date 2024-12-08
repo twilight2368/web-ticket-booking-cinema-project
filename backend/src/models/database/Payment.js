@@ -16,11 +16,6 @@ const PaymentSchema = new mongoose.Schema(
       type: String,
       ref: "user",
     },
-    payment_method: {
-      type: String,
-      enum: ["online", "offline"],
-      required: true,
-    },
     amount: {
       type: Number,
       required: true, // The amount paid

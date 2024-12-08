@@ -44,19 +44,11 @@ const MovieSchema = new mongoose.Schema({
     type: String,
     enum: ["G", "PG", "PG-13", "R", "NC-17"], // Common MPAA ratings
   },
-  poster_url: {
+  image_url: {
     type: String,
   },
   trailer_url: {
     type: String,
-    validate: {
-      validator: function (v) {
-        const youtubeRegex =
-          /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/;
-        return youtubeRegex.test(v);
-      },
-      message: (props) => `${props.value} is not a valid YouTube URL!`,
-    },
   },
 });
 

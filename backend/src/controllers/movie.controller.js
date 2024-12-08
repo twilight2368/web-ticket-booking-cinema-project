@@ -2,6 +2,16 @@ const timeZoneUtil = require("../utils/helpers/time-zone");
 const MovieModel = require("../models/database/Movie");
 const ShowModel = require("../models/database/Show");
 const moment = require("moment-timezone");
+const appConfig = require("../configs/app.config");
+const getAllMovies = async (req, res, next) => {
+  try {
+    const movies = await MovieModel.find();
+    res.status(200).json(movies);
+  } catch (error) {
+    console.error("Error fetching all movies:", error);
+    next(error); // Pass error to error-handling middleware
+  }
+};
 
 // Create Movie with UTC+7 date
 const createMovie = async (req, res, next) => {
@@ -9,12 +19,15 @@ const createMovie = async (req, res, next) => {
     const {
       title,
       description,
+      actors,
+      director,
       genre,
       country,
       duration_in_minutes,
       release_date,
       parental_guidance,
-      image_url: poster_url,
+      image_url = appConfig.cloudinary.image.default_poster_movie,
+      trailer_url = "https://www.youtube.com/embed/i63STOtAL2g",
     } = req.body;
 
     // Validate incoming data
@@ -30,12 +43,15 @@ const createMovie = async (req, res, next) => {
     const newMovie = new MovieModel({
       title,
       description,
+      actors,
+      director,
       genre,
       country,
       duration_in_minutes,
       release_date: formattedReleaseDate, // Store in UTC (which will be UTC+7)
       parental_guidance,
-      poster_url,
+      image_url,
+      trailer_url,
     });
 
     await newMovie.save();
@@ -55,11 +71,15 @@ const updateMovie = async (req, res, next) => {
     const {
       title,
       description,
+      actors,
+      director,
       genre,
       country,
       duration_in_minutes,
       release_date,
       parental_guidance,
+      image_url,
+      trailer_url,
     } = req.body;
 
     // Convert release_date to UTC+7 if present
@@ -72,11 +92,15 @@ const updateMovie = async (req, res, next) => {
       {
         title,
         description,
+        actors,
+        director,
         genre,
         country,
         duration_in_minutes,
         formattedReleaseDate,
         parental_guidance,
+        image_url,
+        trailer_url,
       },
       {
         new: true,

@@ -7,9 +7,18 @@ const appConfig = require("../configs/app.config");
 // Configure Cloudinary
 cloudinary.config(appConfig.cloudinary.config);
 
+// File filter
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+    cb(null, true); // Accept the file
+  } else {
+    cb(new Error("Only .jpg and .png files are allowed!"), false); // Reject the file
+  }
+};
+
 // Configure Multer (memory storage to hold the image in memory)
 const storage = multer.memoryStorage();
-const upload = multer({ storage });
+const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 const { handlingFileImage } = require("../middlewares/app.middleware");
 //TODO: import controllers
@@ -27,14 +36,14 @@ const {
 const {
   getAllRoomInformation,
   getRoomInformationByShow,
-} = require("../controllers/code/room.controller");
+} = require("../controllers/room.controller");
 const {
   getAllUserInfo,
   getUserInfoByID,
   putChangeUserInfo,
   putChangeUserPassword,
   delDeleteUserProfile,
-} = require("../controllers/code/user.controller");
+} = require("../controllers/user.controller");
 const {
   getAllNews,
   getNewsTitlesAndBanners,

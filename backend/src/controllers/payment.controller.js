@@ -1,4 +1,5 @@
-const Stripe = require("stripe");
+const appConfig = require("../configs/app.config");
+const stripe = require("stripe")(appConfig.stripe.private_key);
 const BookingModel = require("../models/database/Booking");
 const PaymentModel = require("../models/database/Payment");
 
@@ -122,7 +123,6 @@ const createBooking = async (req, res, next) => {
   }
 };
 
-const stripe = Stripe();
 //TODO: Create payment intent for Stripe
 const create_intent_payment = async (req, res) => {
   try {
@@ -135,18 +135,10 @@ const create_intent_payment = async (req, res) => {
         .json({ success: false, message: "All fields are required" });
     }
 
-    // Validate the payment method
-    if (!["online", "offline"].includes(payment_method)) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid payment method" });
-    }
-
     // Create a payment record in the database
     const newPayment = await PaymentModel.create({
       booking_id,
       user_id,
-      payment_method,
       amount,
       payment_status: "pending",
     });
