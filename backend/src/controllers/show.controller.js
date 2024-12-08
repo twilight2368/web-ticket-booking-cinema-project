@@ -2,10 +2,16 @@ const Show = require("../models/database/Show");
 const Movie = require("../models/database/Movie");
 const Room = require("../models/database/Room");
 const timeZoneUtil = require("../utils/helpers/time-zone");
-
+const moment = require("moment");
 //TODO: Create new show with a specific movie
 const createShow = async (req, res, next) => {
   try {
+    /**
+     * movie_id
+     * room_id
+     * date_show: YYYY-MM-DD (UTC+7)
+     * time_start: HH:MM (UTC+7)
+     */
     const { movie_id, room_id, date_show, time_start } = req.body;
 
     // Fetch movie details to get duration
@@ -21,8 +27,12 @@ const createShow = async (req, res, next) => {
     }
 
     // Convert input times to server timezone (UTC+7)
-    const serverTimeStart = timeZoneUtil.convertToServerTimezone(time_start);
-    const serverDateShow = timeZoneUtil.convertToServerTimezone(date_show);
+
+    const serverDateShow = timeZoneUtil.convertDateToServerTimezone(date_show);
+
+    const serverTimeStart = timeZoneUtil.convertDateAndTimeToServerTimezone(
+      `${date_show} ${time_start}`
+    );
     const serverTimeEnd = moment(serverTimeStart).add(
       movie.duration_in_minutes,
       "minutes"
@@ -84,18 +94,7 @@ const createShow = async (req, res, next) => {
 
     res.status(201).json({
       message: "Show created successfully",
-      show: {
-        ...newShow.toObject(),
-        time_start: timeZoneUtil
-          .convertToServerTimezone(newShow.time_start)
-          .format(),
-        time_end: timeZoneUtil
-          .convertToServerTimezone(newShow.time_end)
-          .format(),
-        date_show: timeZoneUtil
-          .convertToServerTimezone(newShow.date_show)
-          .format("YYYY-MM-DD"),
-      },
+      show: newShow,
     });
   } catch (error) {
     console.error("Error creating show:", error);
@@ -123,7 +122,152 @@ const deleteShow = async (req, res, next) => {
   }
 };
 
+//todo: Get all movies what will be shown on today and the next 2 days
+const getMovieBeingShown = async (req, res, next) => {
+  try {
+    // Get the current date in server's timezone (UTC+7)
+    const todayInServerZone = timeZoneUtil.getCurrentTimeInServerZone();
+
+    // Calculate the start and end of the date range in server timezone
+    const startDate = todayInServerZone.clone().startOf("day");
+    const endDate = todayInServerZone.clone().add(2, "days").endOf("day");
+
+    // Convert start and end dates to UTC+7
+    const startDateInServerZone = startDate.toDate();
+    const endDateInServerZone = endDate.toDate();
+
+    // Query to find shows within the specified range
+    const shows = await Show.find({
+      date_show: {
+        $gte: startDateInServerZone,
+        $lte: endDateInServerZone,
+      },
+    }).populate("movie_id");
+
+    // Extract unique movies being shown in the retrieved shows
+    const uniqueMovies = new Map();
+    shows.forEach((show) => {
+      const movie = show.movie_id;
+      if (!uniqueMovies.has(movie._id)) {
+        uniqueMovies.set(movie._id, movie);
+      }
+    });
+
+    // Respond with the list of unique movies
+    res.status(200).json({
+      status: 200,
+      message: "success",
+      data: Array.from(uniqueMovies.values()),
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+//todo: Get all movies that will be released in the next 3 days to a month later
+const getMovieAboutBeingShown = async (req, res, next) => {
+  try {
+    // Get the current date in the server's timezone
+    const todayInServerZone = timeZoneUtil.getCurrentTimeInServerZone();
+
+    // Calculate the date range in server timezone
+    const startDate = todayInServerZone.clone().add(3, "days").startOf("day");
+    const endDate = todayInServerZone.clone().add(1, "month").endOf("day");
+
+    // Convert start and end dates to UTC+7
+    const startDateInServerZone = startDate.toDate();
+    const endDateInServerZone = endDate.toDate();
+
+    // Query movies with release_date in the calculated range
+    const movies = await Movie.find({
+      release_date: {
+        $gte: startDateInServerZone,
+        $lte: endDateInServerZone,
+      },
+    });
+
+    // Respond with the list of movies
+    res.status(200).json({
+      status: 200,
+      message: "success",
+      data: movies,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+//todo: Get all movies being shown and their schedule from current day and the next 3 days
+const getMovieAndShowsCurrent = async (req, res, next) => {
+  try {
+    // Get the current date in server's timezone
+    const todayInServerZone = timeZoneUtil.getCurrentTimeInServerZone();
+
+    // Calculate the start and end of the date range in server timezone
+    const startDate = todayInServerZone.clone().startOf("day");
+    const endDate = todayInServerZone.clone().add(2, "days").endOf("day");
+
+    // Convert start and end dates to UTC+7
+    const startDateInServerZone = startDate.toDate();
+    const endDateInServerZone = endDate.toDate();
+
+    // Query to get all shows in the specified range
+    const shows = await Show.find({
+      date_show: {
+        $gte: startDateInServerZone,
+        $lte: endDateInServerZone,
+      },
+    }).populate("movie_id");
+
+    // Initialize an object to group movies and shows by date
+    const result = {};
+
+    // Iterate over shows and group them by date
+    shows.forEach((show) => {
+      // Convert show date to server timezone for formatting
+      const showDateInServerZone = moment(show.date_show).tz("Asia/Bangkok");
+      const showDate = showDateInServerZone.format("DD-MM-YYYY");
+
+      // Initialize the date group if it doesn't exist
+      if (!result[showDate]) {
+        result[showDate] = [];
+      }
+
+      // Find or add the movie in the date group
+      const movie = show.movie_id;
+      let movieEntry = result[showDate].find(
+        (entry) => entry.movie._id.toString() === movie._id.toString()
+      );
+
+      if (!movieEntry) {
+        movieEntry = {
+          movie: {
+            ...movie.toObject(),
+            shows: [],
+          },
+        };
+        result[showDate].push(movieEntry);
+      }
+
+      // Add the show to the movie's schedule
+      movieEntry.movie.shows.push({
+        room_id: show.room_id,
+        time_start: show.time_start,
+        time_end: show.time_end,
+      });
+    });
+
+    // Respond with the grouped result
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createShow,
   deleteShow,
+  getMovieBeingShown,
+  getMovieAboutBeingShown,
+  getMovieAndShowsCurrent,
 };

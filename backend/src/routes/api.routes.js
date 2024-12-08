@@ -23,9 +23,6 @@ const upload = multer({ storage: storage, fileFilter: fileFilter });
 const { handlingFileImage } = require("../middlewares/app.middleware");
 //TODO: import controllers
 const {
-  getMovieBeingShown,
-  getMovieAboutBeingShown,
-  getMovieAndShowsCurrent,
   getAllMovies,
   getMovieById,
   createMovie,
@@ -53,7 +50,13 @@ const {
   deleteNewsById,
   updateNewsById,
 } = require("../controllers/news.controller");
-const { createShow, deleteShow } = require("../controllers/show.controller");
+const {
+  createShow,
+  deleteShow,
+  getMovieBeingShown,
+  getMovieAboutBeingShown,
+  getMovieAndShowsCurrent,
+} = require("../controllers/show.controller");
 const {
   getBookingInformation,
   getBookingInformationById,
@@ -70,15 +73,8 @@ router.get("/", (req, res, next) => {
   });
 });
 
-//? Movies routes
-//todo: Get all movies what will be shown on today and the next 2 days
-router.get("/movies-today", getMovieBeingShown);
-//todo: Get all movies what that release date in from the next 3 days and a  month later
-router.get("/movies-about-release", getMovieAboutBeingShown);
-//todo: Get all movies being shown and their schedule show from current day and the next 3 days
-router.get("/movie-days", getMovieAndShowsCurrent);
+// //? Movies routes
 
-//todo: Other movie routes
 router.get("/movies", getAllMovies);
 router.get("/movies/:movieId", getMovieById);
 router.post("/movies", upload.single("image"), handlingFileImage, createMovie); //? Image require
@@ -108,8 +104,14 @@ router.put("/news:id", updateNewsById);
 router.delete("/news/:id", deleteNewsById);
 
 //? Shows routes
-router.post("create-shows", createShow);
-router.delete("delete-show/:showId", deleteShow);
+router.post("/create-shows", createShow);
+router.delete("/delete-show/:showId", deleteShow);
+// //todo: Get all movies what will be shown on today and the next 2 days
+router.get("/show-movies-today", getMovieBeingShown);
+// //todo: Get all movies what that release date in from the next 3 days and a  month later
+router.get("/show-movies-about-release", getMovieAboutBeingShown);
+// //todo: Get all movies being shown and their schedule show from current day and the next 3 days
+router.get("/show-movie-days", getMovieAndShowsCurrent);
 
 //? Payment and booking route
 router.get("/booking-info", getBookingInformation);

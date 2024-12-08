@@ -38,17 +38,19 @@ const MovieSchema = new mongoose.Schema({
   },
   release_date: {
     type: Date,
-    default: Date.now, // Default to current date
+    required: true,
   },
   parental_guidance: {
     type: String,
     enum: ["G", "PG", "PG-13", "R", "NC-17"], // Common MPAA ratings
+    required: true,
   },
   image_url: {
     type: String,
   },
   trailer_url: {
     type: String,
+    default: "https://www.youtube.com/embed/i63STOtAL2g",
   },
 });
 

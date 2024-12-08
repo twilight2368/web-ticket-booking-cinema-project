@@ -14,6 +14,24 @@ const timeZoneUtil = {
   },
 
   /**
+   * Convert a input time to the server's timezone (Asia/Bangkok).
+   * @param {string} (YYYY-MM-DD) utcTime - The UTC time to convert.
+   * @returns {moment.Moment} The converted time in the server's timezone.
+   */
+  convertDateToServerTimezone: (inputDate) => {
+    return moment(inputDate, "YYYY-MM-DD").tz("Asia/Bangkok");
+  },
+
+  /**
+   * Convert a input time to the server's timezone (Asia/Bangkok).
+   * @param {string} (YYYY-MM-DD HH:mm) utcTime - The UTC time to convert.
+   * @returns {moment.Moment} The converted time in the server's timezone.
+   */
+  convertDateAndTimeToServerTimezone: (inputDate) => {
+    return moment(inputDate, "YYYY-MM-DD HH:mm").tz("Asia/Bangkok");
+  },
+
+  /**
    * Get the current time in the server's timezone (UTC+7).
    * @returns {moment.Moment} The current time in the server's timezone.
    */

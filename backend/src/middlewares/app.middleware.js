@@ -5,7 +5,10 @@ async function handlingFileImage(req, res, next) {
   try {
     // Ensure a file is provided
     if (!req.file) {
-      return res.status(400).json({ error: "No file uploaded" });
+      console.log("====================================");
+      console.log(clc.red("No Upload file"));
+      console.log("====================================");
+      next();
     }
 
     // Wrap Cloudinary upload_stream in a promise
