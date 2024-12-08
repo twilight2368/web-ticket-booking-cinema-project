@@ -1,5 +1,7 @@
 import { Button } from "@material-tailwind/react";
 import { Link } from "react-router";
+import UpdateImageModal from "../../components/UpdateImageModal";
+import { UpdateMovieModal } from "./UpdateMovieModal";
 
 export default function MovieAdminPage() {
   return (
@@ -69,10 +71,7 @@ const MovieDisplayItem = ({ movie_id, title, durations, release_date }) => {
   return (
     <tr className="hover:bg-gray-100">
       <td className="border border-gray-300 px-4 py-2 w-96 truncate">
-        <div
-          title={title}
-          className="w-96 overflow-hidden whitespace-nowrap text-ellipsis"
-        >
+        <div className="w-96 overflow-hidden whitespace-nowrap text-ellipsis">
           {title}
         </div>
       </td>
@@ -82,17 +81,18 @@ const MovieDisplayItem = ({ movie_id, title, durations, release_date }) => {
       <td className="border border-gray-300 px-4 py-2 text-center">
         {release_date}
       </td>
-      <td className="border border-gray-300 px-4 py-2 text-center flex justify-center gap-2">
+      <td className="border border-gray-300 px-4 py-2 text-center flex justify-center items-center gap-2">
         <Link to={`/movies/${movie_id}`}>
           <Button color="green" size="sm">
             Chi tiết
           </Button>
         </Link>
-        <Link to={`/movies/edit/${movie_id}`}>
-          <Button color="orange" size="sm">
-            Sửa
-          </Button>
-        </Link>
+        <div>
+          <UpdateMovieModal />
+        </div>
+        <div>
+          <UpdateImageModal display_text="thay đổi poster" />
+        </div>
       </td>
     </tr>
   );
