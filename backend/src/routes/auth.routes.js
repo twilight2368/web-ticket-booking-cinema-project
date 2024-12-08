@@ -124,6 +124,7 @@ router.get("/logout", (req, res, next) => {
   }
 });
 
+//TODO: Get new JWT token
 router.get("/new-token", checkIsSessionValid, (req, res, next) => {
   try {
     const tokenData = issueJWT(req.user);
@@ -136,6 +137,7 @@ router.get("/new-token", checkIsSessionValid, (req, res, next) => {
   }
 });
 
+//! Testing only: Check cookie
 router.get("/cookie", checkCookie, (req, res, next) => {
   try {
     res.status(200).json({
@@ -144,6 +146,19 @@ router.get("/cookie", checkCookie, (req, res, next) => {
   } catch (error) {
     next(error);
   }
+});
+
+//! Testing only
+router.get("/header", checkLoggedIn, (req, res, next) => {
+  console.log("====================================");
+  console.log(req.user);
+  console.log("====================================");
+  console.log("====================================");
+  console.log(req.user.id);
+  console.log("====================================");
+  res.json({
+    data: "Hello world",
+  });
 });
 
 router.get("/protected", checkLoggedIn, (req, res, next) => {

@@ -7,8 +7,8 @@ const RoomModel = require("../../database/Room");
 const generateSeatType = async () => {
   try {
     const seatTypes = [
-      { name: "Vip", price: 60000 },
-      { name: "Normal", price: 50000 },
+      { name: "Vip", price: 600 },
+      { name: "Normal", price: 500 },
     ];
 
     const createdSeatTypes = [];

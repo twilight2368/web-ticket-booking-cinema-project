@@ -1,0 +1,233 @@
+[
+  {
+    "title": "Castle in the Sky",
+    "description": "A young boy and girl wander into a magical world above the clouds.",
+    "voice_actors": "Mayumi Tanaka, Minami Takayama, Toru Furusawa",
+    "director": "Hayao Miyazaki",
+    "genre": "Fantasy, Adventure",
+    "country": "Japan",
+    "release_date": "1986-04-30",
+    "duration_in_minutes": 124,
+    "parental_guidance": "G"
+  },
+  {
+    "title": "My Neighbor Totoro",
+    "description": "Two young sisters move to the country with their father and discover magical creatures in the forest.",
+    "voice_actors": "Hino Hinano, Sakamoto Chika, Nobuo Tsukamoto",
+    "director": "Hayao Miyazaki",
+    "genre": "Fantasy, Family",
+    "country": "Japan",
+    "release_date": "1988-04-16",
+    "duration_in_minutes": 86,
+    "parental_guidance": "G"
+  },
+  {
+    "title": "Grave of the Fireflies",
+    "description": "A heart-wrenching tale of two siblings struggling to survive in war-torn Japan.",
+    "voice_actors": "Tsutomu Tatsumi, Ayano Shiraishi",
+    "director": "Isao Takahata",
+    "genre": "Drama, War",
+    "country": "Japan",
+    "release_date": "1988-04-16",
+    "duration_in_minutes": 89,
+    "parental_guidance": "PG-13"
+  },
+  {
+    "title": "Kiki's Delivery Service",
+    "description": "A young witch, Kiki, moves to a coastal town to hone her magical skills.",
+    "voice_actors": "Minami Takayama, Rei Sakaguchi",
+    "director": "Hayao Miyazaki",
+    "genre": "Fantasy, Coming-of-Age",
+    "country": "Japan",
+    "release_date": "1989-07-29",
+    "duration_in_minutes": 103,
+    "parental_guidance": "G"
+  },
+  {
+    "title": "Only Yesterday",
+    "description": "A woman reflects on her life and first love while on a trip to the countryside.",
+    "voice_actors": "Yoshiko Sakakibara, Toshiro Yanagiba",
+    "director": "Isao Takahata",
+    "genre": "Drama, Romance",
+    "country": "Japan",
+    "release_date": "1991-07-20",
+    "duration_in_minutes": 119,
+    "parental_guidance": "PG"
+  },
+  {
+    "title": "Porco Rosso",
+    "description": "A World War I flying ace turned pig fights air pirates over the Adriatic Sea.",
+    "voice_actors": "Shūichirō Moriyama, Akio Ōtsuka",
+    "director": "Hayao Miyazaki",
+    "genre": "Fantasy, Adventure",
+    "country": "Japan",
+    "release_date": "1992-07-18",
+    "duration_in_minutes": 93,
+    "parental_guidance": "PG"
+  },
+  {
+    "title": "Pom Poko",
+    "description": "A group of shape-shifting raccoon dogs fight to protect their forest home.",
+    "voice_actors": "Shigeru Kiritani, Yōko Honna",
+    "director": "Isao Takahata",
+    "genre": "Fantasy, Comedy",
+    "country": "Japan",
+    "release_date": "1994-07-16",
+    "duration_in_minutes": 119,
+    "parental_guidance": "PG"
+  },
+  {
+    "title": "Whisper of the Heart",
+    "description": "A young girl with a love for books discovers her passion for writing.",
+    "voice_actors": "Yōko Honna, Issei Takahashi",
+    "director": "Yoshifumi Kondō",
+    "genre": "Romance, Drama",
+    "country": "Japan",
+    "release_date": "1995-07-15",
+    "duration_in_minutes": 111,
+    "parental_guidance": "G"
+  },
+  {
+    "title": "Princess Mononoke",
+    "description": "A young prince fights to protect a forest spirit from greedy humans.",
+    "voice_actors": "Yōji Matsuda, Yuriko Ishida",
+    "director": "Hayao Miyazaki",
+    "genre": "Fantasy, Adventure",
+    "country": "Japan",
+    "release_date": "1997-07-12",
+    "duration_in_minutes": 133,
+    "parental_guidance": "PG-13"
+  },
+  {
+    "title": "My Neighbors the Yamadas",
+    "description": "A humorous look at the everyday life of a Japanese family.",
+    "voice_actors": "Masako Motai, Akira Kamiya",
+    "director": "Isao Takahata",
+    "genre": "Comedy, Drama",
+    "country": "Japan",
+    "release_date": "1999-07-17",
+    "duration_in_minutes": 103,
+    "parental_guidance": "G"
+  },
+  {
+    "title": "Spirited Away",
+    "description": "A young girl is whisked away to a spirit world and must use her wits to survive.",
+    "voice_actors": "Rumi Hiiragi, Miyu Irino",
+    "director": "Hayao Miyazaki",
+    "genre": "Fantasy, Adventure",
+    "country": "Japan",
+    "release_date": "2001-07-20",
+    "duration_in_minutes": 125,
+    "parental_guidance": "PG"
+  },
+  {
+    "title": "The Cat Returns",
+    "description": "A young girl is whisked away to a magical cat kingdom.",
+    "voice_actors": "Chieko Baisho, Kōji Yada",
+    "director": "Hiroyuki Morita",
+    "genre": "Fantasy, Comedy",
+    "country": "Japan",
+    "release_date": "2002-07-19",
+    "duration_in_minutes": 75,
+    "parental_guidance": "G"
+  },
+  {
+    "title": "Howl's Moving Castle",
+    "description": "A young woman is cursed and must seek the help of a powerful wizard.",
+    "voice_actors": "Chieko Baisho, Takuya Kimura",
+    "director": "Hayao Miyazaki",
+    "genre": "Fantasy, Romance",
+    "country": "Japan",
+    "release_date": "2004-11-20",
+    "duration_in_minutes": 119,
+    "parental_guidance": "PG"
+  },
+  {
+    "title": "Tales from Earthsea",
+    "description": "A young prince must confront a growing darkness in his world.",
+    "voice_actors": "Rumi Hiiragi, Yūki Morita",
+    "director": "Gorō Miyazaki",
+    "genre": "Fantasy, Adventure",
+    "country": "Japan",
+    "release_date": "2006-07-29",
+    "duration_in_minutes": 115,
+    "parental_guidance": "PG"
+  },
+  {
+    "title": "Ponyo",
+    "description": "A young boy befriends a magical fish princess.",
+    "voice_actors": "Yuria Nara, Hiroki Doi",
+    "director": "Hayao Miyazaki",
+    "genre": "Fantasy, Adventure",
+    "country": "Japan",
+    "release_date": "2008-07-19",
+    "duration_in_minutes": 101,
+    "parental_guidance": "G"
+  },
+  {
+    "title": "Arrietty",
+    "description": "A tiny girl and her family live secretly in the walls of a human house.",
+    "voice_actors": "Mirai Shida, Ryunosuke Kamiki",
+    "director": "Hiromasa Yonebayashi",
+    "genre": "Fantasy, Family",
+    "country": "Japan",
+    "release_date": "2010-07-17",
+    "duration_in_minutes": 94,
+    "parental_guidance": "G"
+  },
+  {
+    "title": "From Up on Poppy Hill",
+    "description": "A young couple works to save their school's historic clubhouse.",
+    "voice_actors": "Yū Aoi, Masami Nagasawa",
+    "director": "Gorō Miyazaki",
+    "genre": "Romance, Drama",
+    "country": "Japan",
+    "release_date": "2011-07-16",
+    "duration_in_minutes": 91,
+    "parental_guidance": "PG"
+  },
+  {
+    "title": "The Wind Rises",
+    "description": "A historical fiction about the life of Jiro Horikoshi, the designer of Japanese fighter planes.",
+    "voice_actors": "Joseph Gordon-Levitt, Emily Blunt (English dub)",
+    "director": "Hayao Miyazaki",
+    "genre": "Drama, Historical",
+    "country": "Japan",
+    "release_date": "2013-07-20",
+    "duration_in_minutes": 126,
+    "parental_guidance": "PG-13"
+  },
+  {
+    "title": "The Tale of the Princess Kaguya",
+    "description": "A bamboo cutter finds a tiny girl inside a glowing bamboo stalk and raises her as his own daughter. As she grows, her extraordinary beauty attracts unwanted attention, leading to a series of challenges and heartbreaks.",
+    "voice_actors": "Aki Matsui, Kengo Kora",
+    "director": "Isao Takahata",
+    "genre": "Fantasy, Drama",
+    "country": "Japan",
+    "release_date": "2013-11-23",
+    "duration_in_minutes": 137,
+    "parental_guidance": "PG"
+  },
+  {
+    "title": "When Marnie Was There",
+    "description": "A lonely girl spends a summer by the sea and befriends a mysterious girl named Marnie.",
+    "voice_actors": "Sara Takatsuki, Aoi Miyazaki",
+    "director": "Hiromasa Yonebayashi",
+    "genre": "Fantasy, Drama",
+    "country": "Japan",
+    "release_date": "2014-07-19",
+    "duration_in_minutes": 103,
+    "parental_guidance": "PG"
+  },
+  {
+    "title": "The Red Turtle",
+    "description": "A man shipwrecked on a deserted island encounters a mysterious turtle.",
+    "voice_actors": "Mathieu Amalric (French), David Tennant (English dub)",
+    "director": "Michaël Dudok de Wit",
+    "genre": "Fantasy, Drama",
+    "country": "France, Japan, Belgium",
+    "release_date": "2016-11-17",
+    "duration_in_minutes": 80,
+    "parental_guidance": "PG"
+  }
+]

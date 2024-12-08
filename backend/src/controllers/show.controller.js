@@ -1,129 +1,122 @@
-const timeZoneUtil = require("../../utils/helpers/time-zone");
-const MovieModel = require("../../models/database/Movie");
-const ShowModel = require("../../models/database/Show");
-const moment = require("moment-timezone");
-
-// Create Movie with UTC+7 date
-const createMovie = async (req, res, next) => {
+const Show = require("../models/database/Show");
+const Movie = require("../models/database/Movie");
+const Room = require("../models/database/Room");
+const timeZoneUtil = require("../utils/helpers/time-zone");
+const moment = require("moment");
+//TODO: Create new show with a specific movie
+const createShow = async (req, res, next) => {
   try {
-    const {
-      title,
-      description,
-      genre,
-      country,
-      duration_in_minutes,
-      release_date,
-      parental_guidance,
-      image_url: poster_url,
-    } = req.body;
+    /**
+     * movie_id
+     * room_id
+     * date_show: YYYY-MM-DD (UTC+7)
+     * time_start: HH:MM (UTC+7)
+     */
+    const { movie_id, room_id, date_show, time_start } = req.body;
 
-    // Validate incoming data
-    if (!title || !description || !genre || !duration_in_minutes) {
-      return res.status(400).json({ message: "Missing required fields" });
+    // Fetch movie details to get duration
+    const movie = await Movie.findById(movie_id);
+    if (!movie) {
+      return res.status(404).json({ message: "Movie not found" });
     }
 
-    // Convert release date to UTC+7
-    const formattedReleaseDate = timeZoneUtil
-      .convertToServerTimezone(release_date)
-      .toDate();
+    // Fetch movie details to get duration
+    const room = await Room.findById(room_id);
+    if (!room) {
+      return res.status(404).json({ message: "Room not found" });
+    }
 
-    const newMovie = new MovieModel({
-      title,
-      description,
-      genre,
-      country,
-      duration_in_minutes,
-      release_date: formattedReleaseDate, // Store in UTC (which will be UTC+7)
-      parental_guidance,
-      poster_url,
-    });
+    // Convert input times to server timezone (UTC+7)
 
-    await newMovie.save();
-    return res
-      .status(201)
-      .json({ message: "Movie created successfully", movie: newMovie });
-  } catch (error) {
-    next(error);
-  }
-};
+    const serverDateShow = timeZoneUtil.convertDateToServerTimezone(date_show);
 
-// Update Movie
-const updateMovie = async (req, res, next) => {
-  const { movieId } = req.params;
-
-  try {
-    const {
-      title,
-      description,
-      genre,
-      country,
-      duration_in_minutes,
-      release_date,
-      parental_guidance,
-      image_url: poster_url,
-    } = req.body;
-
-    // Convert release_date to UTC+7 if present
-    const formattedReleaseDate = timeZoneUtil
-      .convertToServerTimezone(release_date)
-      .toDate();
-
-    const updatedMovie = await MovieModel.findByIdAndUpdate(
-      movieId,
-      {
-        title,
-        description,
-        genre,
-        country,
-        duration_in_minutes,
-        formattedReleaseDate,
-        parental_guidance,
-        image_url: poster_url,
-      },
-      {
-        new: true,
-        runValidators: true,
-      }
+    const serverTimeStart = timeZoneUtil.convertDateAndTimeToServerTimezone(
+      `${date_show} ${time_start}`
+    );
+    const serverTimeEnd = moment(serverTimeStart).add(
+      movie.duration_in_minutes,
+      "minutes"
     );
 
-    if (!updatedMovie) {
-      return res.status(404).json({ message: "Movie not found" });
+    // Check for overlapping shows in the same room
+    const existingShows = await Show.find({
+      room_id: room_id,
+      date_show: {
+        $eq: serverDateShow.toDate(),
+      },
+      $or: [
+        // New show starts during an existing show
+        {
+          time_start: { $lt: serverTimeEnd.toDate() },
+          time_end: { $gt: serverTimeStart.toDate() },
+        },
+        // New show completely encompasses an existing show
+        {
+          time_start: {
+            $gte: serverTimeStart.toDate(),
+            $lt: serverTimeEnd.toDate(),
+          },
+          time_end: { $lte: serverTimeEnd.toDate() },
+        },
+        // Existing show completely encompasses the new show
+        {
+          time_start: { $lte: serverTimeStart.toDate() },
+          time_end: { $gte: serverTimeEnd.toDate() },
+        },
+      ],
+    });
+
+    // If there are overlapping shows, return an error
+    if (existingShows.length > 0) {
+      return res.status(400).json({
+        message: "Room is not available.",
+        shows: existingShows.map((show) => ({
+          showId: show._id,
+          startTime: timeZoneUtil
+            .convertToServerTimezone(show.time_start)
+            .format(),
+          endTime: timeZoneUtil.convertToServerTimezone(show.time_end).format(),
+        })),
+      });
     }
 
-    return res.status(200).json({
-      message: "Movie updated successfully",
-      movie: updatedMovie,
+    // Create new show (storing in UTC, but calculated in UTC+7)
+    const newShow = new Show({
+      movie_id,
+      room_id,
+      date_show: serverDateShow.toDate(),
+      time_start: serverTimeStart.toDate(),
+      time_end: serverTimeEnd.toDate(),
+    });
+
+    // Save the show
+    await newShow.save();
+
+    res.status(201).json({
+      message: "Show created successfully",
+      show: newShow,
     });
   } catch (error) {
+    console.error("Error creating show:", error);
     next(error);
   }
 };
 
-//TODO: Delete a movie
-const deleteMovie = async (req, res, next) => {
-  const { movieId } = req.params;
+//TODO: Delete a specific show
+const deleteShow = async (req, res, next) => {
   try {
-    const movie = await MovieModel.findByIdAndDelete(movieId);
-    if (!movie) {
-      return res.status(404).json({ message: "Movie not found" });
-    }
-    return res.status(200).json({ message: "Movie deleted successfully" });
-  } catch (error) {
-    next(error);
-  }
-};
+    const { showId } = req.params;
 
-// Get Movie by ID with formatted dates
-const getMovieById = async (req, res, next) => {
-  const { movieId } = req.params;
-  try {
-    const movie = await MovieModel.findById(movieId);
+    // Find and delete the show
+    const deletedShow = await Show.findByIdAndDelete(showId);
 
-    if (!movie) {
-      return res.status(404).json({ message: "Movie not found" });
+    if (!deletedShow) {
+      return res.status(404).json({ message: "Show not found" });
     }
 
-    return res.status(200).json(movie);
+    res.status(200).json({
+      message: "Show deleted successfully",
+    });
   } catch (error) {
     next(error);
   }
@@ -144,7 +137,7 @@ const getMovieBeingShown = async (req, res, next) => {
     const endDateInServerZone = endDate.toDate();
 
     // Query to find shows within the specified range
-    const shows = await ShowModel.find({
+    const shows = await Show.find({
       date_show: {
         $gte: startDateInServerZone,
         $lte: endDateInServerZone,
@@ -186,7 +179,7 @@ const getMovieAboutBeingShown = async (req, res, next) => {
     const endDateInServerZone = endDate.toDate();
 
     // Query movies with release_date in the calculated range
-    const movies = await MovieModel.find({
+    const movies = await Movie.find({
       release_date: {
         $gte: startDateInServerZone,
         $lte: endDateInServerZone,
@@ -219,7 +212,7 @@ const getMovieAndShowsCurrent = async (req, res, next) => {
     const endDateInServerZone = endDate.toDate();
 
     // Query to get all shows in the specified range
-    const shows = await ShowModel.find({
+    const shows = await Show.find({
       date_show: {
         $gte: startDateInServerZone,
         $lte: endDateInServerZone,
@@ -272,11 +265,8 @@ const getMovieAndShowsCurrent = async (req, res, next) => {
 };
 
 module.exports = {
-  createMovie,
-  getAllMovies,
-  getMovieById,
-  updateMovie,
-  deleteMovie,
+  createShow,
+  deleteShow,
   getMovieBeingShown,
   getMovieAboutBeingShown,
   getMovieAndShowsCurrent,

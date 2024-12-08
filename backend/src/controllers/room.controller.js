@@ -1,7 +1,7 @@
-const ShowModel = require("../../models/database/Show");
-const BookingModel = require("../../models/database/Booking");
-const RoomModel = require("../../models/database/Room");
-const { Seat, SeatType } = require("../../models/database/Seat");
+const ShowModel = require("../models/database/Show");
+const BookingModel = require("../models/database/Booking");
+const RoomModel = require("../models/database/Room");
+const { Seat, SeatType } = require("../models/database/Seat");
 
 //TODO: Get cinema room information
 const getAllRoomInformation = async (req, res, next) => {

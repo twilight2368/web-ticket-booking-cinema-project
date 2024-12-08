@@ -20,7 +20,7 @@ const NewsSchema = new mongoose.Schema(
       maxLength: 100,
     },
 
-    banner: {
+    image_url: {
       type: String,
     },
 

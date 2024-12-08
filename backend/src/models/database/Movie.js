@@ -38,25 +38,19 @@ const MovieSchema = new mongoose.Schema({
   },
   release_date: {
     type: Date,
-    default: Date.now, // Default to current date
+    required: true,
   },
   parental_guidance: {
     type: String,
     enum: ["G", "PG", "PG-13", "R", "NC-17"], // Common MPAA ratings
+    required: true,
   },
-  poster_url: {
+  image_url: {
     type: String,
   },
   trailer_url: {
     type: String,
-    validate: {
-      validator: function (v) {
-        const youtubeRegex =
-          /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/;
-        return youtubeRegex.test(v);
-      },
-      message: (props) => `${props.value} is not a valid YouTube URL!`,
-    },
+    default: "https://www.youtube.com/embed/i63STOtAL2g",
   },
 });
 
