@@ -21,6 +21,7 @@ import AdminMainLayout from "./admin/layouts/AdminMainLayout";
 import NotFoundAdminPage from "./admin/pages/NotFoundAdminPage";
 import RoomAdminPage from "./admin/pages/rooms/RoomAdminPage";
 import MovieAdminPage from "./admin/pages/movies/MovieAdminPage";
+import { AddMovieAdminPage } from "./admin/pages/movies/AddMovieAdminPage";
 
 function App() {
   return (
@@ -55,6 +56,7 @@ function App() {
             <Route index element={<></>} />
             <Route path="bookings" element={<></>} />
             <Route path="movies" element={<MovieAdminPage />} />
+            <Route path="movies/add" element={<AddMovieAdminPage />} />
             <Route path="rooms" element={<RoomAdminPage />} />
             <Route path="shows" element={<></>} />
             <Route path="news" element={<></>} />

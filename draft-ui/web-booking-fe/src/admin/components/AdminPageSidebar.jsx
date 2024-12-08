@@ -16,7 +16,7 @@ export default function AdminPageSidebar() {
           displayText={"quản lý lịch chiếu phim"}
         />
         <NavLinkAdminDisplay
-          end={true}
+          end={false}
           to="/admin/movies"
           displayText={"quản lý phim"}
         />
