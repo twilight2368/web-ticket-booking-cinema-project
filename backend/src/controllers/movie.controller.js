@@ -60,7 +60,6 @@ const updateMovie = async (req, res, next) => {
       duration_in_minutes,
       release_date,
       parental_guidance,
-      image_url: poster_url,
     } = req.body;
 
     // Convert release_date to UTC+7 if present
@@ -78,7 +77,6 @@ const updateMovie = async (req, res, next) => {
         duration_in_minutes,
         formattedReleaseDate,
         parental_guidance,
-        image_url: poster_url,
       },
       {
         new: true,

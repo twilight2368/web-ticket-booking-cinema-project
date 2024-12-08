@@ -1,6 +1,17 @@
 const express = require("express");
 const router = express.Router();
+const multer = require("multer");
+const { v2: cloudinary } = require("cloudinary");
+const appConfig = require("../configs/app.config");
 
+// Configure Cloudinary
+cloudinary.config(appConfig.cloudinary.config);
+
+// Configure Multer (memory storage to hold the image in memory)
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+
+const { handlingFileImage } = require("../middlewares/app.middleware");
 //TODO: import controllers
 const {
   getMovieBeingShown,
@@ -24,6 +35,24 @@ const {
   putChangeUserPassword,
   delDeleteUserProfile,
 } = require("../controllers/code/user.controller");
+const {
+  getAllNews,
+  getNewsTitlesAndBanners,
+  getNewsTitlesAndBannersPagination,
+  createNews,
+  getSpecificNewsById,
+  deleteNewsById,
+  updateNewsById,
+} = require("../controllers/news.controller");
+const { createShow, deleteShow } = require("../controllers/show.controller");
+const {
+  getBookingInformation,
+  getBookingInformationById,
+  createBooking,
+  getPaymentInfo,
+  create_intent_payment,
+  updatePaymentAndBookingStatus,
+} = require("../controllers/payment.controller");
 
 //todo: ----------------------- APP ROUTES --------------------------------------
 router.get("/", (req, res, next) => {
@@ -43,7 +72,7 @@ router.get("/movie-days", getMovieAndShowsCurrent);
 //todo: Other movie routes
 router.get("/movies", getAllMovies);
 router.get("/movies/:movieId", getMovieById);
-router.post("/movies", createMovie);
+router.post("/movies", upload.single("image"), handlingFileImage, createMovie); //? Image require
 router.put("/movies/:movieId", updateMovie);
 router.delete("/movies/:movieId", deleteMovie);
 
@@ -61,9 +90,24 @@ router.put("/change-user-password/:id", putChangeUserPassword);
 router.delete("/delete-profile", delDeleteUserProfile);
 
 //? News routes
+router.get("/all-news", getAllNews);
+router.get("/news-all-titles", getNewsTitlesAndBanners);
+router.get("/news", getNewsTitlesAndBannersPagination);
+router.post("/news", upload.single("image"), handlingFileImage, createNews); //? Image require
+router.get("/news:id", getSpecificNewsById);
+router.put("/news:id", updateNewsById);
+router.delete("/news/:id", deleteNewsById);
 
 //? Shows routes
+router.post("create-shows", createShow);
+router.delete("delete-show/:showId", deleteShow);
 
 //? Payment and booking route
+router.get("/booking-info", getBookingInformation);
+router.get("/booking-info/:id", getBookingInformationById);
+router.post("/create-booking", createBooking);
+router.get("/payment-info/:id", getPaymentInfo);
+router.post("/create_intent_payment", create_intent_payment);
+router.put("/update-pd-status", updatePaymentAndBookingStatus);
 
 module.exports = router;
