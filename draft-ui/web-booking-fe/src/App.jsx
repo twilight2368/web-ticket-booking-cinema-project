@@ -15,6 +15,12 @@ import TicketPricePage from "./pages/tickets/TicketPricePage";
 import MoviePage from "./pages/movies/MoviePage";
 import MovieLayout from "./pages/movies/MovieDetailPage";
 import BookingPage from "./pages/booking/BookingPage";
+import PaymentSuccess from "./pages/payment/PaymentSuccess";
+import PaymentFail from "./pages/payment/PaymentFail";
+import AdminMainLayout from "./admin/layouts/AdminMainLayout";
+import NotFoundAdminPage from "./admin/pages/NotFoundAdminPage";
+import RoomAdminPage from "./admin/pages/rooms/RoomAdminPage";
+import MovieAdminPage from "./admin/pages/movies/MovieAdminPage";
 
 function App() {
   return (
@@ -36,6 +42,8 @@ function App() {
               <Route path=":id" element={<MovieLayout />} />
             </Route>
             <Route path="making-booking" element={<BookingPage />} />
+            <Route path="payment/:id" element={<PaymentSuccess />} />
+            <Route path="payment-fail" element={<PaymentFail />} />
             <Route path="profile" element={<ProfilePage />} />
             <Route path="update-profile" element={<UpdateProfilePage />} />
             <Route path="update-password" element={<UpdatePasswordPage />} />
@@ -43,9 +51,15 @@ function App() {
           </Route>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/admin/*">
-            <Route index element={<>Hello admin</>} />
-            <Route path="*" element={<>Not found</>} />
+          <Route path="/admin/*" element={<AdminMainLayout />}>
+            <Route index element={<></>} />
+            <Route path="bookings" element={<></>} />
+            <Route path="movies" element={<MovieAdminPage />} />
+            <Route path="rooms" element={<RoomAdminPage />} />
+            <Route path="shows" element={<></>} />
+            <Route path="news" element={<></>} />
+            <Route path="users" element={<></>} />
+            <Route path="*" element={<NotFoundAdminPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
