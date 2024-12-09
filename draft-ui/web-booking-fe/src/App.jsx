@@ -27,6 +27,7 @@ import CreateAdminNewsPage from "./admin/pages/news/CreateAdminNewsPage";
 import BookingAdminPage from "./admin/pages/booking/BookingAdminPage";
 import AdminNewsPage from "./admin/pages/news/AdminNewsPage";
 import UserAdminPage from "./admin/pages/users/UserAdminPage";
+import NewPageById from "./pages/news/NewPageById";
 
 function App() {
   return (
@@ -41,14 +42,14 @@ function App() {
           <Route path="/*" element={<MainLayout />}>
             <Route index element={<HomePage />} />
             <Route path="news" element={<NewsPage />} />
+            <Route path="news/:id" element={<NewPageById />} />
             <Route path="ticket-price" element={<TicketPricePage />} />
-
             <Route path="movies/*">
               <Route index element={<MoviePage />} />
               <Route path=":id" element={<MovieLayout />} />
             </Route>
             <Route path="making-booking" element={<BookingPage />} />
-            <Route path="payment/:id" element={<PaymentSuccess />} />
+            <Route path="ticket/:id" element={<PaymentSuccess />} />
             <Route path="payment-fail" element={<PaymentFail />} />
             <Route path="profile" element={<ProfilePage />} />
             <Route path="update-profile" element={<UpdateProfilePage />} />

@@ -5,10 +5,16 @@ import App from "./App.jsx";
 import { ThemeProvider } from "@material-tailwind/react";
 // Supports weights 200-900
 import "@fontsource-variable/nunito";
+
+import { store } from "./app/store.js";
+import { Provider } from "react-redux";
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <ThemeProvider>
-      <App />
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider>
+        <App />
+      </ThemeProvider>
+    </Provider>
   </StrictMode>
 );
