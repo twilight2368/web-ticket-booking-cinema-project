@@ -197,7 +197,7 @@ const getMovieAboutBeingShown = async (req, res, next) => {
   }
 };
 
-//todo: Get all movies being shown and their schedule from current day and the next 3 days
+//todo: Get all movies being shown and their schedule from current day and the next 2 days
 const getMovieAndShowsCurrent = async (req, res, next) => {
   try {
     // Get the current date in server's timezone
@@ -264,10 +264,86 @@ const getMovieAndShowsCurrent = async (req, res, next) => {
   }
 };
 
+//todo: Get movie information and its schedule on today and the next 2 days
+const getAMovieAndItsShowsCurrent = async (req, res, next) => {
+  try {
+    const { movieId } = req.params;
+
+    if (!movieId) {
+      return res.status(400).json({
+        success: false,
+        message: "Movie ID is required",
+      });
+    }
+
+    const currentTime = timeZoneUtil.getCurrentTimeInServerZone();
+    const endDate = moment(currentTime).add(2, "days").endOf("day");
+
+    const movie = await Movie.findById(movieId);
+    if (!movie) {
+      return res.status(404).json({
+        success: false,
+        message: "Movie not found",
+      });
+    }
+
+    const shows = await Show.aggregate([
+      {
+        $match: {
+          movie_id: movieId,
+          date_show: {
+            $gte: currentTime.toDate(),
+            $lte: endDate.toDate(),
+          },
+        },
+      },
+      {
+        $sort: { date_show: 1, time_start: 1 },
+      },
+    ]);
+
+    const showsByDate = shows.reduce((acc, show) => {
+      const formattedDate = moment(show.date_show).format("DD-MM-YYYY");
+
+      if (!acc[formattedDate]) {
+        acc[formattedDate] = [];
+      }
+
+      acc[formattedDate].push({
+        _id: show._id,
+        time_start: show.time_start,
+        time_end: show.time_end,
+        room_id: show.room_id,
+      });
+
+      return acc;
+    }, {});
+
+    res.status(200).json({
+      success: true,
+      data: {
+        movie: {
+          _id: movie._id,
+          title: movie.title,
+          description: movie.description,
+          duration_in_minutes: movie.duration_in_minutes,
+          genre: movie.genre,
+          image_url: movie.image_url,
+          trailer_url: movie.trailer_url,
+        },
+        shows: showsByDate,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createShow,
   deleteShow,
   getMovieBeingShown,
   getMovieAboutBeingShown,
   getMovieAndShowsCurrent,
+  getAMovieAndItsShowsCurrent,
 };

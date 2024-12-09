@@ -1,4 +1,5 @@
 const appConfig = require("../configs/app.config");
+const sendPaymentConfirmationEmail = require("../mail/nodemailer");
 const stripe = require("stripe")(appConfig.stripe.private_key);
 const BookingModel = require("../models/database/Booking");
 const PaymentModel = require("../models/database/Payment");
@@ -205,6 +206,16 @@ const updatePaymentAndBookingStatus = async (req, res, next) => {
     if (paymentStatus) {
       payment.payment_status = paymentStatus;
       await payment.save();
+    }
+
+    if (paymentStatus) {
+      payment.payment_status = paymentStatus;
+      await payment.save();
+
+      //* Send email if payment status is successful
+      if (paymentStatus === "successful") {
+        await sendPaymentConfirmationEmail(booking);
+      }
     }
 
     // Response with the updated booking and payment details

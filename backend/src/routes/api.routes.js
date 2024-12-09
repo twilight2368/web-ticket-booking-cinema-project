@@ -33,6 +33,7 @@ const {
 const {
   getAllRoomInformation,
   getRoomInformationByShow,
+  generateRoom,
 } = require("../controllers/room.controller");
 const {
   getAllUserInfo,
@@ -56,6 +57,7 @@ const {
   getMovieBeingShown,
   getMovieAboutBeingShown,
   getMovieAndShowsCurrent,
+  getAMovieAndItsShowsCurrent,
 } = require("../controllers/show.controller");
 const {
   getBookingInformation,
@@ -86,6 +88,8 @@ router.delete("/movies/:movieId", deleteMovie);
 router.get("/rooms", getAllRoomInformation);
 //todo: Get cinema room information with the status of specific shows
 router.get("/rooms/:show_id", getRoomInformationByShow);
+//todo: Create room
+router.get("/create-room", generateRoom);
 
 //? User routes
 router.get("/all-users", getAllUserInfo);
@@ -106,12 +110,14 @@ router.delete("/news/:id", deleteNewsById);
 //? Shows routes
 router.post("/create-shows", createShow);
 router.delete("/delete-show/:showId", deleteShow);
-// //todo: Get all movies what will be shown on today and the next 2 days
+//todo: Get all movies what will be shown on today and the next 2 days
 router.get("/show-movies-today", getMovieBeingShown);
-// //todo: Get all movies what that release date in from the next 3 days and a  month later
+//todo: Get all movies what that release date in from the next 3 days and a  month later
 router.get("/show-movies-about-release", getMovieAboutBeingShown);
-// //todo: Get all movies being shown and their schedule show from current day and the next 3 days
+//todo: Get all movies being shown and their schedule show from current day and the next 2 days
 router.get("/show-movie-days", getMovieAndShowsCurrent);
+//todo: Get movie information and its schedule on today and the next 2 days
+router.get("/show-movie-days/:movieId", getAMovieAndItsShowsCurrent);
 
 //? Payment and booking route
 router.get("/booking-info", getBookingInformation);
