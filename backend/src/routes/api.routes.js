@@ -58,6 +58,7 @@ const {
   getMovieAboutBeingShown,
   getMovieAndShowsCurrent,
   getAMovieAndItsShowsCurrent,
+  getAllShowsWithMovie,
 } = require("../controllers/show.controller");
 const {
   getBookingInformation,
@@ -149,6 +150,8 @@ router.delete("/news/:id", checkAdminLogin, deleteNewsById);
 router.post("/create-shows", checkAdminLogin, createShow);
 
 router.delete("/delete-show/:showId", checkAdminLogin, deleteShow);
+
+router.get("/all-shows", getAllShowsWithMovie);
 
 //todo: Get all movies what will be shown on today and the next 2 days
 router.get("/show-movies-today", getMovieBeingShown);

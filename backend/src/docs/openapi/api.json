@@ -500,6 +500,16 @@
         }
       }
     },
+    "/api/all-shows": {
+      "get": {
+        "description": "Get all show with movie.",
+        "responses": {
+          "200": {
+            "description": "Successfully."
+          }
+        }
+      }
+    },
     "/api/create-shows": {
       "post": {
         "description": "Create a new show.",
