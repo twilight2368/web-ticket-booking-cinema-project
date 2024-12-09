@@ -75,11 +75,11 @@ function SeatSelection({selectedTime}){
     return (
         <div>
             <p className="flex justify-between w-full">
-                <span className="border-black border-2 rounded-lg p-2 mt-2">Giờ chiếu: {selectedTime}</span>
-                <span className="border-black border-2 rounded-lg p-2 flex items-center justify-center">Thời gian giữ ghế: {Math.floor(timeLeft / 60)}:{timeLeft % 60} </span>
+                <span className="border-orange-300 border-2 rounded-lg p-2 mt-2">Giờ chiếu: {selectedTime}</span>
+                <span className="border-orange-300 border-2 rounded-lg p-2 flex items-center justify-center">Thời gian giữ ghế: {Math.floor(timeLeft / 60)}:{timeLeft % 60} </span>
             </p>
             <div className="flex items-center justify-center">
-            <p className="text-xl  border-black rounded-lg border-2 p-2 mb-2">Phòng chiếu số: {roomId ||"Đang tải..."}</p>
+            <p className="text-xl  border-orange-300 rounded-lg border-2 p-2 mb-2">Phòng chiếu số: {roomId ||"Đang tải..."}</p>
             </div>
             
             {/* Sơ đồ ghế */}
@@ -102,7 +102,7 @@ function SeatSelection({selectedTime}){
 
             {/* Tổng tiền và thanh toán*/}
             <div className="flex justify-between w-full">
-                <p className="border-black border-2 rounded-lg p-2 mt-2 inline-block">Ghế đã chọn: {selectedSeats.join(", ")}</p>
+                <p className="border-orange-300 border-2 rounded-lg p-2 mt-2 inline-block">Ghế đã chọn: {selectedSeats.join(", ")}</p>
                 <button
                     onClick={handleConfirmBooking}
                     className="bg-green-500 px-4 py-2 rounded-lg mt-2 block"
