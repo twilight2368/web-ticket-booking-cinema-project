@@ -67,7 +67,17 @@ const getBookingInformationById = async (req, res, next) => {
         .json({ success: false, message: "Booking ID is required" });
     }
 
-    const booking = await BookingModel.findById(id); // Replace with your DB's query method
+    const booking = await BookingModel.findById(id)
+      .populate("user_id") // Populate user details
+      .populate({
+        path: "show_id",
+        populate: [
+          { path: "movie_id" }, // Populate movie details
+          { path: "room_id", select: "-seats" }, // Populate room details excluding seats
+        ],
+      })
+      .populate("seats"); // Populate seat details
+
     if (!booking) {
       return res
         .status(404)
@@ -136,6 +146,7 @@ const createBooking = async (req, res, next) => {
       show_id,
       status: "confirmed",
     });
+    
     const bookedSeats = new Set(
       existingBookings.flatMap((booking) => booking.seats)
     );
