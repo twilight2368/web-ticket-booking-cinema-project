@@ -8,6 +8,7 @@ const initSystem = async () => {
   try {
     await connectMongo();
     await connectRedis();
+    
 
     app.listen(PORT, () => {
       console.log("====================================");
