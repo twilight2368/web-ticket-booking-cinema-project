@@ -212,8 +212,11 @@ const updatePaymentAndBookingStatus = async (req, res, next) => {
       payment.payment_status = paymentStatus;
       await payment.save();
 
+      const paymentSaved = await PaymentModel.findOne({
+        booking_id: bookingId,
+      });
       //* Send email if payment status is successful
-      if (paymentStatus === "successful") {
+      if (paymentSaved.status === "successful") {
         await sendPaymentConfirmationEmail(booking);
       }
     }
