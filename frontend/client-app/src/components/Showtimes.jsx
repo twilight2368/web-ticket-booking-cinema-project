@@ -41,7 +41,7 @@ function Showtimes({showtimes}){
                             <button
                                 key={index}
                                 onClick={() => setSelectedTime(time)} // Cập nhật giờ chiếu đã chọn
-                                className="bg-black hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-center"
+                                className="bg-black hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-center border-orange-300 border-2"
                             >{time}
                             </button>
                         ))

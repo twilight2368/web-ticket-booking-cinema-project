@@ -36,7 +36,7 @@ function Register() {
               type="email"
               id="email"
               name="email"
-              className="w-full px-4 py-2 border-2 rounded-lg border-orange-300 focus:outline-none focus:ring-2 focus:ring-deep-orange-300 text-black bg-gray-800 mt-1"
+              className="w-full px-4 py-2 border-2 rounded-lg border-orange-300 focus:outline-none focus:ring-2 focus:ring-deep-orange-300 text-white bg-gray-800 mt-1"
               placeholder="Nhập email của bạn"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -50,7 +50,7 @@ function Register() {
               type="password"
               id="password"
               name="password"
-              className="w-full px-4 py-2 border-2 rounded-lg border-orange-300 focus:outline-none focus:ring-2 focus:ring-deep-orange-300 text-black bg-gray-800 mt-1"
+              className="w-full px-4 py-2 border-2 rounded-lg border-orange-300 focus:outline-none focus:ring-2 focus:ring-deep-orange-300 text-white bg-gray-800 mt-1"
               placeholder="Nhập mật khẩu của bạn"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -64,7 +64,7 @@ function Register() {
               type="password"
               id="confirmPassword"
               name="confirmPassword"
-              className="w-full px-4 py-2 border-2 rounded-lg border-orange-300 focus:outline-none focus:ring-2 focus:ring-deep-orange-300 text-black bg-gray-800 mt-1"
+              className="w-full px-4 py-2 border-2 rounded-lg border-orange-300 focus:outline-none focus:ring-2 focus:ring-deep-orange-300 text-white bg-gray-800 mt-1"
               placeholder="Xác nhận mật khẩu"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}

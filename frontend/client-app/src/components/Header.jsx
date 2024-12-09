@@ -16,7 +16,7 @@ function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 mb-8 ${
         isScrolled ? 'bg-primary/30 shadow-lg backdrop-blur-md' : 'bg-black'
       }`}
     >

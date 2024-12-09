@@ -43,7 +43,7 @@ function MovieDetail() {
   if (!movie) return <p>Loading...</p>;
 
   return (
-    <div className="container mx-auto my-8 text-white">
+    <div className="container mx-auto my-8 text-white bg-gray-900">
       <div className="flex">
         <img
           src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}

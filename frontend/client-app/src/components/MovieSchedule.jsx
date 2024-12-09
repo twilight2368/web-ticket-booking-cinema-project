@@ -17,8 +17,8 @@ function MovieSchedule() {
   }, []);
 
   return (
-    <div className="bg-black text-white py-10 px-6">
-      <h1 className="text-3xl font-bold mb-8 text-center">🎬Phim Đang Chiếu</h1>
+    <div className="bg-gray-900 text-white py-10 px-6">
+      <h1 className="text-3xl font-bold mb-8 text-center mt-6">🎬Phim Đang Chiếu</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {movies.map((movie) => (
           <Link to={`/movie/${movie.id}`}
