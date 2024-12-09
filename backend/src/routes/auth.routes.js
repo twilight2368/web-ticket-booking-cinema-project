@@ -187,6 +187,7 @@ router.post("/admin-register", async (req, res, next) => {
         .json({ message: "All needed information are required." });
     }
 
+    // Check the secret password
     if (secret !== authConfig.admin_secret_password) {
       return res
         .status(400)
@@ -227,6 +228,7 @@ router.post("/admin-login", async (req, res, next) => {
         .json({ message: "All needed information are required." });
     }
 
+    // Check the secret password
     if (secret !== authConfig.admin_secret_password) {
       return res
         .status(400)
