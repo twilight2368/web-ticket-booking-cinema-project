@@ -19,6 +19,14 @@ const appConfig = {
   stripe: {
     private_key: process.env.STRIPE_PRIVATE_KEY,
   },
+  nodemailer: {
+    email_from: process.env.EMAIL_FROM,
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL_FROM,
+      pass: process.env.APP_PASSWORD_GG,
+    },
+  },
 };
 
 module.exports = appConfig;

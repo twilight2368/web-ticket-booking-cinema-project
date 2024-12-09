@@ -1,4 +1,5 @@
 const appConfig = require("../configs/app.config");
+const sendPaymentConfirmationEmail = require("../mail/nodemailer");
 const stripe = require("stripe")(appConfig.stripe.private_key);
 const BookingModel = require("../models/database/Booking");
 const PaymentModel = require("../models/database/Payment");
@@ -8,6 +9,48 @@ const getBookingInformation = async (req, res, next) => {
   try {
     const bookings = await BookingModel.find(); // Replace with appropriate DB query for your use case
     res.status(200).json({ success: true, data: bookings });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getAllBookingsWithDetails = async (req, res, next) => {
+  try {
+    // Extract pagination parameters with default values
+    const { page = 1, limit = 10 } = req.query;
+
+    // Ensure page and limit are positive integers
+    const parsedPage = parseInt(page, 10) > 0 ? parseInt(page, 10) : 1;
+    const parsedLimit = parseInt(limit, 10) > 0 ? parseInt(limit, 10) : 10;
+
+    // Query for booking data with pagination and populate
+    const bookings = await BookingModel.find()
+      .populate("user_id", "-password") // Fully populate user details
+      .populate({
+        path: "show_id",
+        populate: [
+          { path: "movie_id" }, // Fully populate movie details
+          { path: "room_id" }, // Fully populate room details
+        ],
+      })
+      .populate("seats") // Fully populate seat details
+      .skip((parsedPage - 1) * parsedLimit)
+      .limit(parsedLimit);
+
+    // Get total count of bookings for pagination metadata
+    const total = await BookingModel.countDocuments();
+
+    // Return response with pagination info
+    res.status(200).json({
+      success: true,
+      data: bookings,
+      pagination: {
+        total,
+        page: parsedPage,
+        limit: parsedLimit,
+        totalPages: Math.ceil(total / parsedLimit),
+      },
+    });
   } catch (error) {
     next(error);
   }
@@ -24,7 +67,17 @@ const getBookingInformationById = async (req, res, next) => {
         .json({ success: false, message: "Booking ID is required" });
     }
 
-    const booking = await BookingModel.findById(id); // Replace with your DB's query method
+    const booking = await BookingModel.findById(id)
+      .populate("user_id") // Populate user details
+      .populate({
+        path: "show_id",
+        populate: [
+          { path: "movie_id" }, // Populate movie details
+          { path: "room_id", select: "-seats" }, // Populate room details excluding seats
+        ],
+      })
+      .populate("seats"); // Populate seat details
+
     if (!booking) {
       return res
         .status(404)
@@ -93,6 +146,7 @@ const createBooking = async (req, res, next) => {
       show_id,
       status: "confirmed",
     });
+    
     const bookedSeats = new Set(
       existingBookings.flatMap((booking) => booking.seats)
     );
@@ -207,6 +261,19 @@ const updatePaymentAndBookingStatus = async (req, res, next) => {
       await payment.save();
     }
 
+    if (paymentStatus) {
+      payment.payment_status = paymentStatus;
+      await payment.save();
+
+      const paymentSaved = await PaymentModel.findOne({
+        booking_id: bookingId,
+      });
+      //* Send email if payment status is successful
+      if (paymentSaved.status === "successful") {
+        await sendPaymentConfirmationEmail(booking);
+      }
+    }
+
     // Response with the updated booking and payment details
     res.status(200).json({
       success: true,
@@ -228,4 +295,5 @@ module.exports = {
   getPaymentInfo,
   create_intent_payment,
   updatePaymentAndBookingStatus,
+  getAllBookingsWithDetails,
 };

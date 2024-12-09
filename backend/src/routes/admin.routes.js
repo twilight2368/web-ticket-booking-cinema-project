@@ -1,13 +1,17 @@
 const express = require("express");
 const router = express.Router();
-//todo: ----------------------- ADMIN ROUTES --------------------------------------
-router.get("/", (req, res, next) => {
-  return res.json({
-    message: "Hello from admin",
-  });
-});
 
-router.post("/verify-recaptcha", async (req, res) => {
+const { checkAdminLogin } = require("../middlewares/auth.middleware");
+
+const Admin = require("../models/database/Admin");
+//todo: ----------------------- ADMIN ROUTES --------------------------------------
+// router.get("/", (req, res, next) => {
+//   return res.json({
+//     message: "Hello from admin",
+//   });
+// });
+
+router.post("/verify-recaptcha", async (req, res, next) => {
   const { captchaToken } = req.body;
 
   if (!captchaToken) {
@@ -34,9 +38,22 @@ router.post("/verify-recaptcha", async (req, res) => {
         .json({ success: false, message: "Captcha verification failed" });
     }
   } catch (error) {
-    return res
-      .status(500)
-      .json({ success: false, message: "Internal server error" });
+    next(error);
+  }
+});
+
+router.get("/info/:id", checkAdminLogin, async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ message: "id are required." });
+    }
+    const admin = Admin.findById(id).select("-password");
+
+    res.json(admin);
+  } catch (error) {
+    next(error);
   }
 });
 

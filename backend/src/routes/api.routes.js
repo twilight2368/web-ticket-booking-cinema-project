@@ -33,6 +33,7 @@ const {
 const {
   getAllRoomInformation,
   getRoomInformationByShow,
+  generateRoom,
 } = require("../controllers/room.controller");
 const {
   getAllUserInfo,
@@ -56,6 +57,7 @@ const {
   getMovieBeingShown,
   getMovieAboutBeingShown,
   getMovieAndShowsCurrent,
+  getAMovieAndItsShowsCurrent,
 } = require("../controllers/show.controller");
 const {
   getBookingInformation,
@@ -64,61 +66,107 @@ const {
   getPaymentInfo,
   create_intent_payment,
   updatePaymentAndBookingStatus,
+  getAllBookingsWithDetails,
 } = require("../controllers/payment.controller");
 
+//TODO: Import Authentication middlewares
+const {
+  checkAdminLogin,
+  checkLoggedIn,
+} = require("../middlewares/auth.middleware");
+
 //todo: ----------------------- APP ROUTES --------------------------------------
-router.get("/", (req, res, next) => {
-  return res.json({
-    message: "Hello from API",
-  });
-});
+// router.get("/", (req, res, next) => {
+//   return res.json({
+//     message: "Hello from API",
+//   });
+// });
 
 // //? Movies routes
 
 router.get("/movies", getAllMovies);
+
 router.get("/movies/:movieId", getMovieById);
-router.post("/movies", upload.single("image"), handlingFileImage, createMovie); //? Image require
-router.put("/movies/:movieId", updateMovie);
-router.delete("/movies/:movieId", deleteMovie);
+
+router.post(
+  "/movies",
+  checkAdminLogin,
+  upload.single("image"),
+  handlingFileImage,
+  createMovie
+); //? Image require
+
+router.put("/movies/:movieId", checkAdminLogin, updateMovie);
+
+router.delete("/movies/:movieId", checkAdminLogin, deleteMovie);
 
 //? Rooms routes
 //todo: Get cinema room information
 router.get("/rooms", getAllRoomInformation);
 //todo: Get cinema room information with the status of specific shows
 router.get("/rooms/:show_id", getRoomInformationByShow);
+//todo: Create room
+router.get("/create-room", checkAdminLogin, generateRoom);
 
 //? User routes
-router.get("/all-users", getAllUserInfo);
-router.get("/user/:id", getUserInfoByID);
-router.put("/change-user-info/:id", putChangeUserInfo);
-router.put("/change-user-password/:id", putChangeUserPassword);
-router.delete("/delete-profile", delDeleteUserProfile);
+router.get("/all-users", checkAdminLogin, getAllUserInfo);
+
+router.get("/user/:id", checkLoggedIn, getUserInfoByID);
+
+router.put("/change-user-info/:id", checkLoggedIn, putChangeUserInfo);
+
+router.put("/change-user-password/:id", checkLoggedIn, putChangeUserPassword);
+
+router.delete("/delete-profile", checkLoggedIn, delDeleteUserProfile);
 
 //? News routes
 router.get("/all-news", getAllNews);
+
 router.get("/news-all-titles", getNewsTitlesAndBanners);
+
 router.get("/news", getNewsTitlesAndBannersPagination);
-router.post("/news", upload.single("image"), handlingFileImage, createNews); //? Image require
-router.get("/news:id", getSpecificNewsById);
-router.put("/news:id", updateNewsById);
-router.delete("/news/:id", deleteNewsById);
+
+router.post(
+  "/news",
+  checkAdminLogin,
+  upload.single("image"),
+  handlingFileImage,
+  createNews
+); //? Image require
+
+router.get("/news/:id", getSpecificNewsById);
+
+router.put("/news/:id", checkAdminLogin, updateNewsById);
+
+router.delete("/news/:id", checkAdminLogin, deleteNewsById);
 
 //? Shows routes
-router.post("/create-shows", createShow);
-router.delete("/delete-show/:showId", deleteShow);
-// //todo: Get all movies what will be shown on today and the next 2 days
+router.post("/create-shows", checkAdminLogin, createShow);
+
+router.delete("/delete-show/:showId", checkAdminLogin, deleteShow);
+
+//todo: Get all movies what will be shown on today and the next 2 days
 router.get("/show-movies-today", getMovieBeingShown);
-// //todo: Get all movies what that release date in from the next 3 days and a  month later
+//todo: Get all movies what that release date in from the next 3 days and a  month later
 router.get("/show-movies-about-release", getMovieAboutBeingShown);
-// //todo: Get all movies being shown and their schedule show from current day and the next 3 days
+//todo: Get all movies being shown and their schedule show from current day and the next 2 days
 router.get("/show-movie-days", getMovieAndShowsCurrent);
+//todo: Get movie information and its schedule on today and the next 2 days
+router.get("/show-movie-days/:movieId", getAMovieAndItsShowsCurrent);
 
 //? Payment and booking route
-router.get("/booking-info", getBookingInformation);
-router.get("/booking-info/:id", getBookingInformationById);
-router.post("/create-booking", createBooking);
-router.get("/payment-info/:id", getPaymentInfo);
-router.post("/create_intent_payment", create_intent_payment);
-router.put("/update-pd-status", updatePaymentAndBookingStatus);
+router.get("/booking-info", checkAdminLogin, getBookingInformation);
+
+router.get("/booking-info/:id", checkAdminLogin, getBookingInformationById);
+
+router.post("/create-booking", checkLoggedIn, createBooking);
+
+router.get("/payment-info/:id", checkAdminLogin, getPaymentInfo);
+
+router.post("/create_intent_payment", checkLoggedIn, create_intent_payment);
+
+router.put("/update-pd-status", checkLoggedIn, updatePaymentAndBookingStatus);
+
+router.get("/all-booking-details", checkAdminLogin, getAllBookingsWithDetails);
 
 module.exports = router;

@@ -95,7 +95,76 @@ const getRoomInformationByShow = async (req, res, next) => {
   }
 };
 
+//TODO: Create room
+const generateRoom = async (req, res, next) => {
+  try {
+    const {
+      name,
+      rows,
+      cols,
+      row_vip_start,
+      row_vip_end,
+      col_vip_start,
+      col_vip_end,
+    } = req.body;
+
+    // Validate SeatTypes exist
+    const vipSeatType = await SeatType.findOne({ name: "Vip" });
+    const normalSeatType = await SeatType.findOne({ name: "Normal" });
+
+    if (!vipSeatType || !normalSeatType) {
+      throw new Error("Seat types 'Vip' and 'Normal' must exist.");
+    }
+
+    // Calculate total seats
+    const totalSeats = rows * cols;
+
+    // Create Room
+    const newRoom = new RoomModel({
+      name,
+      total_seats: totalSeats,
+      num_of_rows: rows,
+      num_of_cols: cols,
+    });
+
+    const savedRoom = await newRoom.save();
+    console.log("Room created:", savedRoom);
+
+    // Generate Seats
+    const seats = [];
+    for (let row = 1; row <= rows; row++) {
+      for (let col = 1; col <= cols; col++) {
+        // Determine seat type (Vip or Normal)
+        const isVip =
+          row >= row_vip_start &&
+          row <= row_vip_end &&
+          col >= col_vip_start &&
+          col <= col_vip_end;
+        const seatType = isVip ? vipSeatType._id : normalSeatType._id;
+
+        // Create seat object
+        const seat = {
+          room_id: savedRoom._id,
+          seat_row: row,
+          seat_column: col,
+          seat_type: seatType,
+        };
+        seats.push(seat);
+      }
+    }
+
+    // Save all seats to the database
+    await Seat.insertMany(seats);
+    console.log("Seats created:", seats.length);
+
+    return res.json({ room: savedRoom, seats: seats });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getAllRoomInformation,
   getRoomInformationByShow,
+  generateRoom,
 };

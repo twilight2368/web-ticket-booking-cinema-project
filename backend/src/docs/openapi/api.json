@@ -11,86 +11,677 @@
     }
   ],
   "paths": {
-    "/": {
-      "get": {
-        "description": "This is an example endpoint",
+    "/auth/register": {
+      "post": {
+        "description": "",
         "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "example1": {
-                    "value": {
-                      "message": "Hello world"
-                    }
-                  }
-                }
-              }
-            }
+          "201": {
+            "description": "User registered successfully"
+          },
+          "400": {
+            "description": "Validation error"
           }
         }
       }
     },
-    "/api": {
-      "get": {
-        "description": "This is an example endpoint",
+    "/auth/login": {
+      "post": {
+        "description": "",
         "responses": {
           "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "example1": {
-                    "value": {
-                      "message": "Hello from API"
-                    }
-                  }
-                }
-              }
-            }
+            "description": "Successfully logged in"
+          },
+          "401": {
+            "description": "Invalid credentials"
           }
         }
       }
     },
-    "/auth": {
+    "/auth/logout": {
       "get": {
-        "description": "This is an example endpoint",
+        "description": "",
         "responses": {
           "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "example1": {
-                    "value": {
-                      "message": "Hello from AUTH"
-                    }
-                  }
-                }
-              }
-            }
+            "description": "Successfully logged out"
           }
         }
       }
     },
-    "/admin": {
+    "/auth/new-token": {
       "get": {
-        "description": "This is an example endpoint",
+        "description": "",
         "responses": {
           "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "example1": {
-                    "value": {
-                      "message": "Hello from admin"
-                    }
+            "description": "New JWT token issued successfully"
+          }
+        }
+      }
+    },
+    "/auth/admin-register": {
+      "post": {
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "Admin registered successfully"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "409": {
+            "description": "Admin username already exists"
+          }
+        }
+      }
+    },
+    "/auth/admin-login": {
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Admin logged in successfully"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "404": {
+            "description": "Admin not found"
+          },
+          "401": {
+            "description": "Invalid credentials"
+          }
+        }
+      }
+    },
+    "/auth/admin-logout": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Admin logged out successfully"
+          }
+        }
+      }
+    },
+    "/admin/verify-recaptcha": {
+      "post": {
+        "description": "Verify the Google reCAPTCHA token to ensure the request is not automated.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "captchaToken": {
+                    "type": "string",
+                    "description": "The reCAPTCHA token provided by the client-side reCAPTCHA verification."
                   }
-                }
+                },
+                "required": ["captchaToken"]
               }
             }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Captcha verified successfully."
+          },
+          "400": {
+            "description": "No captcha token provided or captcha verification failed."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/api/movies": {
+      "get": {
+        "description": "Retrieve all movies.",
+        "responses": {
+          "200": {
+            "description": "A list of all movies."
+          }
+        }
+      },
+      "post": {
+        "description": "Create a new movie. Requires an image upload.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Movie poster image."
+                  }
+                },
+                "required": ["image"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Movie created successfully."
+          }
+        }
+      }
+    },
+    "/api/movies/{movieId}": {
+      "get": {
+        "description": "Retrieve details of a specific movie by its ID.",
+        "parameters": [
+          {
+            "name": "movieId",
+            "in": "path",
+            "required": true,
+            "description": "ID of the movie to retrieve.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Movie details retrieved successfully."
+          },
+          "404": {
+            "description": "Movie not found."
+          }
+        }
+      },
+      "put": {
+        "description": "Update details of a specific movie by its ID.",
+        "parameters": [
+          {
+            "name": "movieId",
+            "in": "path",
+            "required": true,
+            "description": "ID of the movie to update.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Movie updated successfully."
+          },
+          "404": {
+            "description": "Movie not found."
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete a specific movie by its ID.",
+        "parameters": [
+          {
+            "name": "movieId",
+            "in": "path",
+            "required": true,
+            "description": "ID of the movie to delete.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Movie deleted successfully."
+          },
+          "404": {
+            "description": "Movie not found."
+          }
+        }
+      }
+    },
+    "/api/rooms": {
+      "get": {
+        "description": "Retrieve all cinema room information.",
+        "responses": {
+          "200": {
+            "description": "A list of all cinema rooms."
+          }
+        }
+      }
+    },
+    "/api/rooms/{show_id}": {
+      "get": {
+        "description": "Retrieve cinema room information for a specific show.",
+        "parameters": [
+          {
+            "name": "show_id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the show to retrieve room information for.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cinema room information for the show retrieved successfully."
+          },
+          "404": {
+            "description": "Show not found."
+          }
+        }
+      }
+    },
+    "/api/create-room": {
+      "get": {
+        "description": "Generate a new cinema room.",
+        "responses": {
+          "200": {
+            "description": "Cinema room generated successfully."
+          }
+        }
+      }
+    },
+    "/api/all-users": {
+      "get": {
+        "description": "Retrieve information for all users.",
+        "responses": {
+          "200": {
+            "description": "List of all users."
+          }
+        }
+      }
+    },
+    "/api/user/{id}": {
+      "get": {
+        "description": "Retrieve information for a specific user by their ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the user to retrieve.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User information retrieved successfully."
+          },
+          "404": {
+            "description": "User not found."
+          }
+        }
+      },
+      "put": {
+        "description": "Update information for a specific user by their ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the user to update.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User information updated successfully."
+          },
+          "404": {
+            "description": "User not found."
+          }
+        }
+      }
+    },
+    "/api/change-user-password/{id}": {
+      "put": {
+        "description": "Change the password of a specific user by their ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the user to update password for.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User password updated successfully."
+          },
+          "404": {
+            "description": "User not found."
+          }
+        }
+      }
+    },
+    "/api/delete-profile": {
+      "delete": {
+        "description": "Delete the profile of the currently authenticated user.",
+        "responses": {
+          "200": {
+            "description": "User profile deleted successfully."
+          },
+          "401": {
+            "description": "Unauthorized."
+          }
+        }
+      }
+    },
+    "/api/all-news": {
+      "get": {
+        "description": "Retrieve all news.",
+        "responses": {
+          "200": {
+            "description": "List of all news."
+          }
+        }
+      }
+    },
+    "/api/news-all-titles": {
+      "get": {
+        "description": "Retrieve all news titles and banners.",
+        "responses": {
+          "200": {
+            "description": "List of all news titles and banners."
+          }
+        }
+      }
+    },
+    "/api/news": {
+      "get": {
+        "description": "Retrieve paginated news titles and banners.",
+        "responses": {
+          "200": {
+            "description": "Paginated list of news titles and banners."
+          }
+        }
+      },
+      "post": {
+        "description": "Create a new news article. Requires an image upload.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "News banner image."
+                  }
+                },
+                "required": ["image"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "News article created successfully."
+          }
+        }
+      }
+    },
+    "/api/news/{id}": {
+      "get": {
+        "description": "Retrieve a specific news article by its ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the news article to retrieve.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "News article retrieved successfully."
+          },
+          "404": {
+            "description": "News article not found."
+          }
+        }
+      },
+      "put": {
+        "description": "Update a specific news article by its ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the news article to update.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "News article updated successfully."
+          },
+          "404": {
+            "description": "News article not found."
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete a specific news article by its ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the news article to delete.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "News article deleted successfully."
+          },
+          "404": {
+            "description": "News article not found."
+          }
+        }
+      }
+    },
+    "/api/create-shows": {
+      "post": {
+        "description": "Create a new show.",
+        "responses": {
+          "201": {
+            "description": "Show created successfully."
+          }
+        }
+      }
+    },
+    "/api/delete-show/{showId}": {
+      "delete": {
+        "description": "Delete a specific show by its ID.",
+        "parameters": [
+          {
+            "name": "showId",
+            "in": "path",
+            "required": true,
+            "description": "ID of the show to delete.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Show deleted successfully."
+          },
+          "404": {
+            "description": "Show not found."
+          }
+        }
+      }
+    },
+    "/api/show-movies-today": {
+      "get": {
+        "description": "Retrieve all movies being shown today and in the next two days.",
+        "responses": {
+          "200": {
+            "description": "List of movies being shown today and in the next two days."
+          }
+        }
+      }
+    },
+    "/api/show-movies-about-release": {
+      "get": {
+        "description": "Retrieve all movies with release dates between the next three days and a month later.",
+        "responses": {
+          "200": {
+            "description": "List of upcoming movies with release dates in the specified range."
+          }
+        }
+      }
+    },
+    "/api/show-movie-days": {
+      "get": {
+        "description": "Retrieve all movies being shown and their schedules from today and the next two days.",
+        "responses": {
+          "200": {
+            "description": "List of movies and their schedules."
+          }
+        }
+      }
+    },
+    "/api/show-movie-days/{movieId}": {
+      "get": {
+        "description": "Retrieve details of a specific movie and its schedule for today and the next two days.",
+        "parameters": [
+          {
+            "name": "movieId",
+            "in": "path",
+            "required": true,
+            "description": "ID of the movie to retrieve schedule details for.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Movie and schedule details retrieved successfully."
+          },
+          "404": {
+            "description": "Movie not found."
+          }
+        }
+      }
+    },
+    "/api/booking-info": {
+      "get": {
+        "description": "Retrieve all booking information.",
+        "responses": {
+          "200": {
+            "description": "List of all booking information."
+          }
+        }
+      }
+    },
+    "/api/booking-info/{id}": {
+      "get": {
+        "description": "Retrieve booking information by booking ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the booking to retrieve.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Booking information retrieved successfully."
+          },
+          "404": {
+            "description": "Booking not found."
+          }
+        }
+      }
+    },
+    "/api/create-booking": {
+      "post": {
+        "description": "Create a new booking.",
+        "responses": {
+          "201": {
+            "description": "Booking created successfully."
+          }
+        }
+      }
+    },
+    "/api/payment-info/{id}": {
+      "get": {
+        "description": "Retrieve payment information by ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the payment to retrieve.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Payment information retrieved successfully."
+          },
+          "404": {
+            "description": "Payment not found."
+          }
+        }
+      }
+    },
+    "/api/create_intent_payment": {
+      "post": {
+        "description": "Create a payment intent.",
+        "responses": {
+          "201": {
+            "description": "Payment intent created successfully."
+          }
+        }
+      }
+    },
+    "/api/update-pd-status": {
+      "put": {
+        "description": "Update payment and booking status.",
+        "responses": {
+          "200": {
+            "description": "Payment and booking status updated successfully."
+          }
+        }
+      }
+    },
+    "all-booking-details": {
+      "get": {
+        "description": "Fetches a list of all bookings with fully populated details of referenced data, including users, shows, movies, rooms, and seats.",
+        "responses": {
+          "200": {
+            "description": "A list of bookings."
           }
         }
       }

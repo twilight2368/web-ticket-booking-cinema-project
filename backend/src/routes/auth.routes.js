@@ -20,11 +20,11 @@ const {
 const router = express.Router();
 
 //todo: ----------------------- AUTH ROUTES --------------------------------------
-router.get("/", (req, res, next) => {
-  return res.json({
-    message: "Hello from AUTH",
-  });
-});
+// router.get("/", (req, res, next) => {
+//   return res.json({
+//     message: "Hello from AUTH",
+//   });
+// });
 
 //* ----------------- User auth route ---------------------
 
@@ -243,7 +243,7 @@ router.post("/admin-login", async (req, res, next) => {
 });
 
 //TODO: Logout admin
-router.post("/admin-logout", (req, res, next) => {
+router.get("/admin-logout", (req, res, next) => {
   //? For stateless JWT, logout is client-side;
   res.status(200).json({ message: "Logout successful." });
 });
