@@ -3,6 +3,7 @@ const connectMongo = require("./src/models/connections/connectMongo");
 const { connectRedis } = require("./src/cache/redis/connection");
 const clc = require("cli-color");
 const { port: PORT } = require("./src/configs/app.config");
+require("./src/auth/security/tools/genKeyPair")
 
 const initSystem = async () => {
   try {
