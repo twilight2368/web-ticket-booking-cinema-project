@@ -1,9 +1,7 @@
 const jwt = require("jsonwebtoken");
-const fs = require("fs");
-const path = require("path");
 const { jwt: jwtConfig } = require("../../configs/auth.config");
 
-const JWT = jwtConfig.secret_key
+const JWT_KEY = jwtConfig.secret_key;
 
 function issueJWT(user) {
   const _id = user._id;

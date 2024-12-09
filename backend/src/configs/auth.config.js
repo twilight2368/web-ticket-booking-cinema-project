@@ -3,7 +3,7 @@ require("dotenv").config();
 const authConfig = {
   jwt: {
     expiresIn: "1d",
-    algorithm: "RS256",
+    algorithm: "HS256",
     secret_key: process.env.JWT_KEY,
   },
   secretSession: process.env.SECRET_SESSION || "hello world",

@@ -171,6 +171,19 @@
         }
       }
     },
+    "/api/movie-image/{movieId}": {
+      "put": {
+        "description": "Update movie poster",
+        "responses": {
+          "200": {
+            "description": "Movie updated successfully."
+          },
+          "404": {
+            "description": "Movie not found."
+          }
+        }
+      }
+    },
     "/api/movies/{movieId}": {
       "get": {
         "description": "Retrieve details of a specific movie by its ID.",

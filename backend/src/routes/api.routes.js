@@ -28,6 +28,7 @@ const {
   createMovie,
   updateMovie,
   deleteMovie,
+  updateMovieImage,
 } = require("../controllers/movie.controller");
 
 const {
@@ -102,7 +103,14 @@ router.post(
 
 //TODO: update movie
 router.put("/movies/:movieId", checkAdminLogin, updateMovie);
-
+//TODO: Update Movie Image
+router.put(
+  "/movie-image/:movieId",
+  checkAdminLogin,
+  upload.single("image"),
+  handlingFileImage,
+  updateMovieImage
+);
 //TODO: delete movie
 router.delete("/movies/:movieId", checkAdminLogin, deleteMovie);
 
