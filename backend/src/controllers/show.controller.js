@@ -251,9 +251,11 @@ const getMovieAndShowsCurrent = async (req, res, next) => {
 
       // Add the show to the movie's schedule
       movieEntry.movie.shows.push({
-        room_id: show.room_id,
-        time_start: show.time_start,
-        time_end: show.time_end,
+        id: show.id,
+        room_id: show["room_id"],
+        date_show: show["date_show"],
+        time_start: show["time_start"],
+        time_end: show["time_end"],
       });
     });
 

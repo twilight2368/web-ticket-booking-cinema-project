@@ -109,11 +109,11 @@ const generateRoom = async (req, res, next) => {
     } = req.body;
 
     // Validate SeatTypes exist
-    const vipSeatType = await SeatType.findOne({ name: "Vip" });
-    const normalSeatType = await SeatType.findOne({ name: "Normal" });
+    const vipSeatType = await SeatType.findOne({ name: "vip" });
+    const normalSeatType = await SeatType.findOne({ name: "normal" });
 
     if (!vipSeatType || !normalSeatType) {
-      throw new Error("Seat types 'Vip' and 'Normal' must exist.");
+      throw new Error("Seat types 'vip' and 'normal' must exist.");
     }
 
     // Calculate total seats

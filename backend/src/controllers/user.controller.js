@@ -1,5 +1,6 @@
 const User = require("../models/database/User");
-
+const bcrypt = require("bcrypt");
+const { saltRounds: SALT_ROUNDS } = require("../configs/auth.config");
 // * ------------------- ADMIN ----------------------------
 
 // TODO: Get all users' information
@@ -33,30 +34,42 @@ const getUserInfoByID = async (req, res, next) => {
 
 // * ------------------- USER -----------------------------
 
-// TODO: Change password
 const putChangeUserPassword = async (req, res, next) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.id; // Assuming user ID is stored in the JWT payload
     const { oldPassword, newPassword } = req.body;
 
-    const user = await User.findById(userId);
+    // Find the user and select the password field
+    const user = await User.findById(userId).select("+password");
     if (!user) {
       return res
         .status(404)
         .json({ success: false, message: "User not found" });
     }
 
-    // Verify old password
-    const isMatch = await user.comparePassword(oldPassword);
-    if (!isMatch) {
+    // Compare old password with the user's stored password
+    const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+    if (!isPasswordValid) {
       return res
         .status(400)
         .json({ success: false, message: "Incorrect old password" });
     }
 
-    // Update password
-    user.password = newPassword;
+    // Check password length
+    if (newPassword.length < 8 || newPassword.length > 20) {
+      return res
+        .status(400)
+        .json({ error: "Password must be between 8 and 20 characters long." });
+    }
+
+    // Hash the new password before saving
+    const hashedPassword = await bcrypt.hash(newPassword, SALT_ROUNDS);
+
+    // Update the user's password
+    user.password = hashedPassword;
     await user.save();
+
+    // Respond with success message
     res
       .status(200)
       .json({ success: true, message: "Password updated successfully" });
@@ -68,21 +81,11 @@ const putChangeUserPassword = async (req, res, next) => {
 
 const putChangeUserInfo = async (req, res, next) => {
   try {
-    const userIdFromParams = req.params.user_id;
-    const userIdFromToken = req.user.id;
-
-    // Check if the user IDs match
-    if (userIdFromParams !== userIdFromToken) {
-      return res.status(403).json({
-        success: false,
-        message: "You are not authorized to update this user's information.",
-      });
-    }
+    const userIdFromParams = req.params.id;
 
     const updates = req.body;
-
     // Perform the update operation
-    const user = await User.findByIdAndUpdate(userIdFromToken, updates, {
+    const user = await User.findByIdAndUpdate(userIdFromParams, updates, {
       new: true,
       runValidators: true,
     }).select("-password");
@@ -106,15 +109,6 @@ const putChangeUserInfo = async (req, res, next) => {
 const delDeleteUserProfile = async (req, res, next) => {
   try {
     const userIdFromParams = req.params.user_id;
-    const userIdFromToken = req.user.id;
-
-    // Check if the user IDs match
-    if (userIdFromParams !== userIdFromToken) {
-      return res.status(403).json({
-        success: false,
-        message: "You are not authorized to delete this user's information.",
-      });
-    }
 
     const user = await User.findByIdAndDelete(userIdFromParams);
     if (!user) {

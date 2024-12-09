@@ -13,7 +13,7 @@ const getAllNews = async (req, res, next) => {
 //TODO: Get all news title, banner, ID
 const getNewsTitlesAndBanners = async (req, res, next) => {
   try {
-    const news = await News.find({}, "_id title banner"); // Select specific fields
+    const news = await News.find({}, "_id title image_url"); // Select specific fields
     res.status(200).json(news);
   } catch (error) {
     next(error);
@@ -24,7 +24,7 @@ const getNewsTitlesAndBanners = async (req, res, next) => {
 const getNewsTitlesAndBannersPagination = async (req, res, next) => {
   try {
     const { page = 1, limit = 10 } = req.query; // Get page and limit from query parameters, with defaults
-    const news = await News.find({}, "_id title banner")
+    const news = await News.find({}, "_id title image_url")
       .skip((page - 1) * limit) // Skip documents for previous pages
       .limit(parseInt(limit)); // Limit results to the specified number
     const totalCount = await News.countDocuments(); // Get total count of documents

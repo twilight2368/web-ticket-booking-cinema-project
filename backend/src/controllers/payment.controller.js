@@ -3,6 +3,9 @@ const sendPaymentConfirmationEmail = require("../mail/nodemailer");
 const stripe = require("stripe")(appConfig.stripe.private_key);
 const BookingModel = require("../models/database/Booking");
 const PaymentModel = require("../models/database/Payment");
+const ShowModel = require("../models/database/Show");
+const { Seat } = require("../models/database/Seat");
+const Room = require("../models/database/Room");
 
 //TODO: Get all booking information
 const getBookingInformation = async (req, res, next) => {
@@ -115,10 +118,17 @@ const createBooking = async (req, res, next) => {
     const { user_id, show_id, seats, total_price } = req.body;
 
     // Validate required fields
-    if (!user_id || !show_id || !seats || !seats.length || !total_price) {
+    if (
+      !user_id ||
+      !show_id ||
+      !seats ||
+      !Array.isArray(seats) ||
+      seats.length === 0 ||
+      !total_price
+    ) {
       return res.status(400).json({
         message:
-          "Missing required fields: user_id, show_id, seats, or total_price.",
+          "Missing or invalid required fields: user_id, show_id, seats (must be a non-empty array), or total_price.",
       });
     }
 
@@ -132,7 +142,11 @@ const createBooking = async (req, res, next) => {
     const seatDocuments = await Seat.find({
       _id: { $in: seats },
       room_id: show.room_id,
-    });
+    }).populate("seat_type");
+
+    console.log("====================================");
+    console.log(seatDocuments);
+    console.log("====================================");
 
     if (seatDocuments.length !== seats.length) {
       return res.status(400).json({
@@ -141,12 +155,25 @@ const createBooking = async (req, res, next) => {
       });
     }
 
+    // Calculate total price of the selected seats
+    const calculatedTotalPrice = seatDocuments.reduce(
+      (sum, seat) => sum + seat["seat_type"].price,
+      0
+    );
+
+    // Compare with the provided total_price
+    if (calculatedTotalPrice !== total_price) {
+      return res.status(400).json({
+        message: `Price mismatch. Expected total: ${calculatedTotalPrice}, provided: ${total_price}.`,
+      });
+    }
+
     // Check if any of the seats are already booked
     const existingBookings = await BookingModel.find({
       show_id,
       status: "confirmed",
     });
-    
+
     const bookedSeats = new Set(
       existingBookings.flatMap((booking) => booking.seats)
     );
@@ -180,13 +207,33 @@ const createBooking = async (req, res, next) => {
 //TODO: Create payment intent for Stripe
 const create_intent_payment = async (req, res) => {
   try {
-    const { booking_id, user_id, payment_method, amount } = req.body;
+    const { booking_id, user_id, amount } = req.body;
 
     // Validate the incoming request
-    if (!booking_id || !user_id || !payment_method || !amount) {
+    if (!booking_id || !user_id || !amount) {
       return res
         .status(400)
         .json({ success: false, message: "All fields are required" });
+    }
+
+    const booking = await BookingModel.findById(booking_id);
+
+    if (!booking) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Can't find booking for payment" });
+    }
+
+    if (booking.status === "confirmed") {
+      return res
+        .status(400)
+        .json({ success: false, message: "Booking already success" });
+    }
+
+    if (booking.total_price !== amount) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Amount payment conflict" });
     }
 
     // Create a payment record in the database
@@ -216,8 +263,7 @@ const create_intent_payment = async (req, res) => {
 // Update payment and booking status
 const updatePaymentAndBookingStatus = async (req, res, next) => {
   try {
-    const { bookingId } = req.params; // Booking ID from the request params
-    const { paymentStatus, bookingStatus } = req.body; // Updated statuses
+    const { paymentStatus, bookingStatus, bookingId } = req.body; // Updated statuses
 
     // Validate input
     if (!bookingId) {
@@ -256,22 +302,16 @@ const updatePaymentAndBookingStatus = async (req, res, next) => {
       });
     }
 
-    if (paymentStatus) {
-      payment.payment_status = paymentStatus;
-      await payment.save();
-    }
+    payment.payment_status = paymentStatus;
+    await payment.save();
 
-    if (paymentStatus) {
-      payment.payment_status = paymentStatus;
-      await payment.save();
+    const paymentSaved = await PaymentModel.findOne({
+      booking_id: bookingId,
+    });
 
-      const paymentSaved = await PaymentModel.findOne({
-        booking_id: bookingId,
-      });
-      //* Send email if payment status is successful
-      if (paymentSaved.status === "successful") {
-        await sendPaymentConfirmationEmail(booking);
-      }
+    //* Send email if payment status is successful
+    if (paymentSaved.payment_status === "successful") {
+      await sendPaymentConfirmationEmail(booking);
     }
 
     // Response with the updated booking and payment details

@@ -9,7 +9,7 @@ const SeatTypeSchema = new mongoose.Schema({
   },
   name: {
     type: String,
-    enum: ["Normal", "Vip"], // Valid seat types
+    enum: ["normal", "vip"], // Valid seat types
     required: true,
   },
   price: {
@@ -50,4 +50,4 @@ const SeatSchema = new mongoose.Schema({
 const SeatType = mongoose.model("SeatType", SeatTypeSchema);
 const Seat = mongoose.model("Seat", SeatSchema);
 
-module.exports = { SeatType, Seat };
+module.exports = { SeatType: SeatType, Seat: Seat };

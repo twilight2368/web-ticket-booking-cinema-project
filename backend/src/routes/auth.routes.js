@@ -16,15 +16,16 @@ const {
   checkLoggedIn,
   checkIsSessionValid,
 } = require("../middlewares/auth.middleware");
+const authConfig = require("../configs/auth.config");
 
 const router = express.Router();
 
 //todo: ----------------------- AUTH ROUTES --------------------------------------
-// router.get("/", (req, res, next) => {
-//   return res.json({
-//     message: "Hello from AUTH",
-//   });
-// });
+router.get("/", (req, res, next) => {
+  return res.json({
+    message: "Hello from AUTH",
+  });
+});
 
 //* ----------------- User auth route ---------------------
 
@@ -92,7 +93,9 @@ router.post(
   (req, res, next) => {
     try {
       const tokenData = issueJWT(req.user);
+
       return res.json({
+        user_id: req.user.id,
         jwt: tokenData.token,
         message: "Successfully logged in",
       });
@@ -161,6 +164,7 @@ router.get("/header", checkLoggedIn, (req, res, next) => {
   });
 });
 
+//! Testing only
 router.get("/protected", checkLoggedIn, (req, res, next) => {
   try {
     res.status(200).json({
@@ -176,13 +180,20 @@ router.get("/protected", checkLoggedIn, (req, res, next) => {
 //TODO: Register admin
 router.post("/admin-register", async (req, res, next) => {
   try {
-    const { username, password } = req.body;
+    const { username, password, secret } = req.body;
 
     // Validate input
-    if (!username || !password) {
+    if (!username || !password || !secret) {
       return res
         .status(400)
-        .json({ message: "Username and password are required." });
+        .json({ message: "All needed information are required." });
+    }
+
+    // Check the secret password
+    if (secret !== authConfig.admin_secret_password) {
+      return res
+        .status(400)
+        .json({ message: "All needed information are required." });
     }
 
     // Check if the username already exists
@@ -210,17 +221,24 @@ router.post("/admin-register", async (req, res, next) => {
 //TODO: Login admin
 router.post("/admin-login", async (req, res, next) => {
   try {
-    const { username, password } = req.body;
+    const { username, password, secret } = req.body;
 
     // Validate input
-    if (!username || !password) {
+    if (!username || !password || !secret) {
       return res
         .status(400)
-        .json({ message: "Username and password are required." });
+        .json({ message: "All needed information are required." });
+    }
+
+    // Check the secret password
+    if (secret !== authConfig.admin_secret_password) {
+      return res
+        .status(400)
+        .json({ message: "All needed information are required." });
     }
 
     // Find the admin
-    const admin = await AdminModel.findOne({ username });
+    const admin = await AdminModel.findOne({ username }).select("+password");
     if (!admin) {
       return res.status(404).json({ message: "Admin not found." });
     }
@@ -234,6 +252,7 @@ router.post("/admin-login", async (req, res, next) => {
 
     const tokenData = issueJWT(admin);
     return res.json({
+      admin: admin.id,
       jwt: tokenData.token,
       message: "Successfully logged in",
     });

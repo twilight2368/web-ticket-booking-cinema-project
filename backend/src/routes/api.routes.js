@@ -76,18 +76,21 @@ const {
 } = require("../middlewares/auth.middleware");
 
 //todo: ----------------------- APP ROUTES --------------------------------------
-// router.get("/", (req, res, next) => {
-//   return res.json({
-//     message: "Hello from API",
-//   });
-// });
+router.get("/", (req, res, next) => {
+  return res.json({
+    message: "Hello from API",
+  });
+});
 
-// //? Movies routes
+//? Movies routes
 
+//TODO: get all movies
 router.get("/movies", getAllMovies);
 
+//TODO: get movie by id
 router.get("/movies/:movieId", getMovieById);
 
+//TODO: Create movie
 router.post(
   "/movies",
   checkAdminLogin,
@@ -96,8 +99,10 @@ router.post(
   createMovie
 ); //? Image require
 
+//TODO: update movie
 router.put("/movies/:movieId", checkAdminLogin, updateMovie);
 
+//TODO: delete movie
 router.delete("/movies/:movieId", checkAdminLogin, deleteMovie);
 
 //? Rooms routes
@@ -106,18 +111,18 @@ router.get("/rooms", getAllRoomInformation);
 //todo: Get cinema room information with the status of specific shows
 router.get("/rooms/:show_id", getRoomInformationByShow);
 //todo: Create room
-router.get("/create-room", checkAdminLogin, generateRoom);
+router.post("/create-room", checkAdminLogin, generateRoom);
 
 //? User routes
 router.get("/all-users", checkAdminLogin, getAllUserInfo);
 
 router.get("/user/:id", checkLoggedIn, getUserInfoByID);
 
-router.put("/change-user-info/:id", checkLoggedIn, putChangeUserInfo);
+router.put("/user/:id", checkLoggedIn, putChangeUserInfo);
 
 router.put("/change-user-password/:id", checkLoggedIn, putChangeUserPassword);
 
-router.delete("/delete-profile", checkLoggedIn, delDeleteUserProfile);
+router.delete("/delete-profile/:user_id", checkLoggedIn, delDeleteUserProfile);
 
 //? News routes
 router.get("/all-news", getAllNews);
@@ -157,7 +162,7 @@ router.get("/show-movie-days/:movieId", getAMovieAndItsShowsCurrent);
 //? Payment and booking route
 router.get("/booking-info", checkAdminLogin, getBookingInformation);
 
-router.get("/booking-info/:id", checkAdminLogin, getBookingInformationById);
+router.get("/booking-info/:id", checkLoggedIn, getBookingInformationById);
 
 router.post("/create-booking", checkLoggedIn, createBooking);
 

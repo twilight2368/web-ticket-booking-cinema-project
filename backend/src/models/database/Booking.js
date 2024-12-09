@@ -10,12 +10,10 @@ const BookingSchema = new mongoose.Schema(
     user_id: {
       type: String,
       ref: "user",
-      required: true, // Link to the user who made the booking
     },
     show_id: {
       type: String,
       ref: "show",
-      required: true, // Link to the show being booked
     },
     seats: [
       {

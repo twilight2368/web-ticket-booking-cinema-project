@@ -274,7 +274,7 @@
       }
     },
     "/api/create-room": {
-      "get": {
+      "post": {
         "description": "Generate a new cinema room.",
         "responses": {
           "200": {
@@ -363,7 +363,7 @@
         }
       }
     },
-    "/api/delete-profile": {
+    "/api/delete-profile/{user_id}": {
       "delete": {
         "description": "Delete the profile of the currently authenticated user.",
         "responses": {
@@ -676,7 +676,7 @@
         }
       }
     },
-    "all-booking-details": {
+    "/api/all-booking-details": {
       "get": {
         "description": "Fetches a list of all bookings with fully populated details of referenced data, including users, shows, movies, rooms, and seats.",
         "responses": {
