@@ -12,6 +12,8 @@ router.get("/", (req, res, next) => {
   });
 });
 
+
+//Todo: Verify captcha
 router.post("/verify-recaptcha", async (req, res, next) => {
   const { captchaToken } = req.body;
 
@@ -43,6 +45,7 @@ router.post("/verify-recaptcha", async (req, res, next) => {
   }
 });
 
+//TODO: Get a specific admin information
 router.get("/info/:id", checkAdminLogin, async (req, res, next) => {
   try {
     const { id } = req.params;

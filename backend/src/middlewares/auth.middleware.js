@@ -57,7 +57,7 @@ async function checkAdminLogin(req, res, next) {
       }
       next();
     } else {
-      res.status(401).json({ message: "Token Unauthorized" });
+      return res.status(401).json({ message: "Token Unauthorized" });
     }
   } catch (error) {
     next(error);

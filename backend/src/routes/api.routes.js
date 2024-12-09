@@ -82,12 +82,15 @@ router.get("/", (req, res, next) => {
   });
 });
 
-// //? Movies routes
+//? Movies routes
 
+//TODO: get all movies
 router.get("/movies", getAllMovies);
 
+//TODO: get movie by id
 router.get("/movies/:movieId", getMovieById);
 
+//TODO: Create movie
 router.post(
   "/movies",
   checkAdminLogin,
@@ -96,8 +99,10 @@ router.post(
   createMovie
 ); //? Image require
 
+//TODO: update movie
 router.put("/movies/:movieId", checkAdminLogin, updateMovie);
 
+//TODO: delete movie
 router.delete("/movies/:movieId", checkAdminLogin, deleteMovie);
 
 //? Rooms routes

@@ -3,16 +3,17 @@ const clc = require("cli-color");
 const appConfig = require("../configs/app.config");
 async function handlingFileImage(req, res, next) {
   try {
-    // Ensure a file is provided
-    if (!req.file) {
-      console.log("====================================");
-      console.log(clc.red("No Upload file"));
-      console.log("====================================");
-      next();
-    }
-
     // Wrap Cloudinary upload_stream in a promise
     const uploadToCloudinary = () => {
+      // Ensure a file is provided
+      if (!req.file) {
+        console.log("====================================");
+        console.log(clc.red("No Upload file"));
+        console.log("====================================");
+        return;
+      }
+
+      //TODO: If there is file exist
       return new Promise((resolve, reject) => {
         const upload_stream = cloudinary.uploader.upload_stream(
           { folder: appConfig.cloudinary.folder },
@@ -40,13 +41,14 @@ async function handlingFileImage(req, res, next) {
       console.log("====================================");
       console.log(clc.red("Upload file failed"));
       console.log("====================================");
+    } else {
+      console.log("====================================");
+      console.log(clc.green(`Upload file success: ${result.secure_url}`));
+      console.log("====================================");
+      // Attach the image URL to req.body
+      req.body.image_url = result.secure_url;
     }
 
-    console.log("====================================");
-    console.log(clc.green(`Upload file success: ${result.secure_url}`));
-    console.log("====================================");
-    // Attach the image URL to req.body
-    req.body.image_url = result.secure_url;
     // Proceed to the next middleware
     next();
   } catch (error) {

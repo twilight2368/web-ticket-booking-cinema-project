@@ -93,7 +93,9 @@ router.post(
   (req, res, next) => {
     try {
       const tokenData = issueJWT(req.user);
+
       return res.json({
+        user_id: req.user.id,
         jwt: tokenData.token,
         message: "Successfully logged in",
       });
@@ -250,6 +252,7 @@ router.post("/admin-login", async (req, res, next) => {
 
     const tokenData = issueJWT(admin);
     return res.json({
+      admin: admin.id,
       jwt: tokenData.token,
       message: "Successfully logged in",
     });

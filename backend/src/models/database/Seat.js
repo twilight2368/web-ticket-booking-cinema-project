@@ -9,7 +9,7 @@ const SeatTypeSchema = new mongoose.Schema({
   },
   name: {
     type: String,
-    enum: ["Normal", "Vip"], // Valid seat types
+    enum: ["normal", "vip"], // Valid seat types
     required: true,
   },
   price: {
