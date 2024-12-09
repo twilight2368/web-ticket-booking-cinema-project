@@ -50,4 +50,4 @@ const SeatSchema = new mongoose.Schema({
 const SeatType = mongoose.model("SeatType", SeatTypeSchema);
 const Seat = mongoose.model("Seat", SeatSchema);
 
-module.exports = { SeatType, Seat };
+module.exports = { SeatType: SeatType, Seat: Seat };

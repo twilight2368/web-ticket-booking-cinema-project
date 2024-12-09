@@ -21,7 +21,7 @@ async function checkLoggedIn(req, res, next) {
     if (verifyToken.status) {
       next();
     } else {
-      res.status(401).json({ message: "Token Unauthorized" });
+      return res.status(401).json({ message: "Token Unauthorized" });
     }
   } catch (error) {
     res.status(500).json({
@@ -50,9 +50,10 @@ async function checkAdminLogin(req, res, next) {
     const verifyToken = await verifyJWT(token);
 
     if (verifyToken.status) {
-      const admin = AdminModel.findById(verifyToken.decoded.sub);
+      const admin = await AdminModel.findById(verifyToken.decoded.sub);
+
       if (!admin) {
-        res.status(401).json({ message: "Token Unauthorized" });
+        return res.status(401).json({ message: "Token Unauthorized" });
       }
       next();
     } else {
