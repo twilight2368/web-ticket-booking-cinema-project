@@ -66,7 +66,16 @@ const {
   getPaymentInfo,
   create_intent_payment,
   updatePaymentAndBookingStatus,
+  getAllBookingsWithDetails,
 } = require("../controllers/payment.controller");
+
+//TODO: Import Authentication middlewares
+const {
+  checkAdminLogin,
+  checkLoggedIn,
+  checkIsSessionValid,
+} = require("../middlewares/auth.middleware");
+
 
 //todo: ----------------------- APP ROUTES --------------------------------------
 router.get("/", (req, res, next) => {
@@ -126,5 +135,6 @@ router.post("/create-booking", createBooking);
 router.get("/payment-info/:id", getPaymentInfo);
 router.post("/create_intent_payment", create_intent_payment);
 router.put("/update-pd-status", updatePaymentAndBookingStatus);
+router.get("/all-booking-details", getAllBookingsWithDetails);
 
 module.exports = router;

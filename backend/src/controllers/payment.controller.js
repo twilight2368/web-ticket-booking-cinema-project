@@ -14,6 +14,48 @@ const getBookingInformation = async (req, res, next) => {
   }
 };
 
+const getAllBookingsWithDetails = async (req, res, next) => {
+  try {
+    // Extract pagination parameters with default values
+    const { page = 1, limit = 10 } = req.query;
+
+    // Ensure page and limit are positive integers
+    const parsedPage = parseInt(page, 10) > 0 ? parseInt(page, 10) : 1;
+    const parsedLimit = parseInt(limit, 10) > 0 ? parseInt(limit, 10) : 10;
+
+    // Query for booking data with pagination and populate
+    const bookings = await BookingModel.find()
+      .populate("user_id", "-password") // Fully populate user details
+      .populate({
+        path: "show_id",
+        populate: [
+          { path: "movie_id" }, // Fully populate movie details
+          { path: "room_id" }, // Fully populate room details
+        ],
+      })
+      .populate("seats") // Fully populate seat details
+      .skip((parsedPage - 1) * parsedLimit)
+      .limit(parsedLimit);
+
+    // Get total count of bookings for pagination metadata
+    const total = await BookingModel.countDocuments();
+
+    // Return response with pagination info
+    res.status(200).json({
+      success: true,
+      data: bookings,
+      pagination: {
+        total,
+        page: parsedPage,
+        limit: parsedLimit,
+        totalPages: Math.ceil(total / parsedLimit),
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 //TODO: Get all booking information by id
 const getBookingInformationById = async (req, res, next) => {
   try {
@@ -242,4 +284,5 @@ module.exports = {
   getPaymentInfo,
   create_intent_payment,
   updatePaymentAndBookingStatus,
+  getAllBookingsWithDetails,
 };
