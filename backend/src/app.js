@@ -7,7 +7,7 @@ const passport = require("passport");
 const cookieParser = require("cookie-parser");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./docs/openapi/api.json");
-
+const path = require("path");
 //TODO: Import mongo store to connect session
 const MongoStore = require("connect-mongo");
 
@@ -91,13 +91,15 @@ app.use(passport.session());
 //* Set up  JSdoc
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+app.use("/", express.static(path.join(__dirname,"..", "public")));
+
 //* ---------- Routes ------------
 
-app.get("/", (req, res) => {
-  return res.json({
-    message: "Hello world",
-  });
-});
+// app.get("/", (req, res) => {
+//   return res.json({
+//     message: "Hello world",
+//   });
+// });
 
 // app.get("/error", (req, res, next) => {
 //   console.error("Error testing...");

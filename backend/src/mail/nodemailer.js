@@ -25,7 +25,7 @@ const sendPaymentConfirmationEmail = async (payment, booking) => {
 
     const mailOptions = {
       from: appConfig.nodemailer.email_from,
-      to: fullBooking.users.email, // Assuming the booking model has an email field
+      to: fullBooking.users.email,
       subject: "Payment Confirmation - Movie Ticket",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -40,7 +40,7 @@ const sendPaymentConfirmationEmail = async (payment, booking) => {
       `,
     };
 
-    // Send email // Add email sending timeout
+    // Send email
     // Add email sending timeout
     await Promise.race([
       transporter.sendMail(mailOptions),
