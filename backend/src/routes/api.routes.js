@@ -76,11 +76,11 @@ const {
 } = require("../middlewares/auth.middleware");
 
 //todo: ----------------------- APP ROUTES --------------------------------------
-// router.get("/", (req, res, next) => {
-//   return res.json({
-//     message: "Hello from API",
-//   });
-// });
+router.get("/", (req, res, next) => {
+  return res.json({
+    message: "Hello from API",
+  });
+});
 
 // //? Movies routes
 

@@ -20,11 +20,11 @@ const {
 const router = express.Router();
 
 //todo: ----------------------- AUTH ROUTES --------------------------------------
-// router.get("/", (req, res, next) => {
-//   return res.json({
-//     message: "Hello from AUTH",
-//   });
-// });
+router.get("/", (req, res, next) => {
+  return res.json({
+    message: "Hello from AUTH",
+  });
+});
 
 //* ----------------- User auth route ---------------------
 

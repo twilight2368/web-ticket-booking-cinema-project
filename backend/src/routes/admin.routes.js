@@ -4,12 +4,12 @@ const router = express.Router();
 const { checkAdminLogin } = require("../middlewares/auth.middleware");
 
 const Admin = require("../models/database/Admin");
-//todo: ----------------------- ADMIN ROUTES --------------------------------------
-// router.get("/", (req, res, next) => {
-//   return res.json({
-//     message: "Hello from admin",
-//   });
-// });
+// todo: ----------------------- ADMIN ROUTES --------------------------------------
+router.get("/", (req, res, next) => {
+  return res.json({
+    message: "Hello from admin",
+  });
+});
 
 router.post("/verify-recaptcha", async (req, res, next) => {
   const { captchaToken } = req.body;
