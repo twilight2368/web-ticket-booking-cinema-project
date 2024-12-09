@@ -36,14 +36,14 @@ const {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// app.use(
-//   cors({
-//     origin: CLIENT_URL,
-//     credentials: true,
-//   })
-// );
+const corsOptions = {
+  origin: "*", 
+  methods: ["GET", "POST", "PUT", "DELETE"], 
+  allowedHeaders: ["Content-Type", "Authorization", "x-custom-header"], 
+  credentials: true,
+};
 
-app.use(cors());
+app.use(cors(corsOptions));
 
 app.use(cookieParser());
 
@@ -91,7 +91,7 @@ app.use(passport.session());
 //* Set up  JSdoc
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.use("/", express.static(path.join(__dirname,"..", "public")));
+app.use("/", express.static(path.join(__dirname, "..", "public")));
 
 //* ---------- Routes ------------
 
