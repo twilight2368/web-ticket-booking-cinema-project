@@ -24,7 +24,7 @@ const appConfig = {
     service: "gmail",
     auth: {
       user: process.env.EMAIL_FROM,
-      pass: "your-app-password",
+      pass: process.env.APP_PASSWORD_GG,
     },
   },
 };
