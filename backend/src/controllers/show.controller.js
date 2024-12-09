@@ -3,6 +3,18 @@ const Movie = require("../models/database/Movie");
 const Room = require("../models/database/Room");
 const timeZoneUtil = require("../utils/helpers/time-zone");
 const moment = require("moment");
+
+//TODO: Get all shows
+const getAllShowsWithMovie = async (req, res, next) => {
+  try {
+    const allShows = await Show.find().populate("movie_id");
+
+    res.json(allShows);
+  } catch (error) {
+    next(error);
+  }
+};
+
 //TODO: Create new show with a specific movie
 const createShow = async (req, res, next) => {
   try {
@@ -348,4 +360,5 @@ module.exports = {
   getMovieAboutBeingShown,
   getMovieAndShowsCurrent,
   getAMovieAndItsShowsCurrent,
+  getAllShowsWithMovie,
 };

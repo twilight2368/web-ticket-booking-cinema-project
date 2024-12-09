@@ -127,6 +127,37 @@ const updateMovie = async (req, res, next) => {
   }
 };
 
+//TODO: Update Movie Image
+const updateMovieImage = async (req, res, next) => {
+  const { movieId } = req.params;
+
+  try {
+    const { image_url } = req.body;
+
+    const updatedMovie = await MovieModel.findByIdAndUpdate(
+      movieId,
+      {
+        image_url,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!updatedMovie) {
+      return res.status(404).json({ message: "Movie not found" });
+    }
+
+    return res.status(200).json({
+      message: "Movie updated successfully",
+      movie: updatedMovie,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 //TODO: Delete a movie
 const deleteMovie = async (req, res, next) => {
   const { movieId } = req.params;
@@ -163,4 +194,5 @@ module.exports = {
   getMovieById,
   updateMovie,
   deleteMovie,
+  updateMovieImage,
 };

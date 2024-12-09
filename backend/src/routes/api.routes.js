@@ -28,6 +28,7 @@ const {
   createMovie,
   updateMovie,
   deleteMovie,
+  updateMovieImage,
 } = require("../controllers/movie.controller");
 
 const {
@@ -58,6 +59,7 @@ const {
   getMovieAboutBeingShown,
   getMovieAndShowsCurrent,
   getAMovieAndItsShowsCurrent,
+  getAllShowsWithMovie,
 } = require("../controllers/show.controller");
 const {
   getBookingInformation,
@@ -101,7 +103,14 @@ router.post(
 
 //TODO: update movie
 router.put("/movies/:movieId", checkAdminLogin, updateMovie);
-
+//TODO: Update Movie Image
+router.put(
+  "/movie-image/:movieId",
+  checkAdminLogin,
+  upload.single("image"),
+  handlingFileImage,
+  updateMovieImage
+);
 //TODO: delete movie
 router.delete("/movies/:movieId", checkAdminLogin, deleteMovie);
 
@@ -149,6 +158,8 @@ router.delete("/news/:id", checkAdminLogin, deleteNewsById);
 router.post("/create-shows", checkAdminLogin, createShow);
 
 router.delete("/delete-show/:showId", checkAdminLogin, deleteShow);
+
+router.get("/all-shows", getAllShowsWithMovie);
 
 //todo: Get all movies what will be shown on today and the next 2 days
 router.get("/show-movies-today", getMovieBeingShown);
