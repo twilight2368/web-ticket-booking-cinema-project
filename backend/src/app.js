@@ -4,6 +4,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const session = require("express-session");
 const passport = require("passport");
+const helmet = require("helmet")
 const cookieParser = require("cookie-parser");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./docs/openapi/api.json");
@@ -35,6 +36,8 @@ const {
 //* Global Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(helmet())
 
 const corsOptions = {
   origin: "*", 
