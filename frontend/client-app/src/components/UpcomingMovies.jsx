@@ -56,17 +56,23 @@ function UpcomingMovies() {
   return (
     <div className="my-8">
       <h2 className="text-2xl font-bold text-white mb-4">🔴 Phim sắp chiếu</h2>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {movies.map((movie) => (
-          <Link to={`/movie/${movie.id}`} key={movie.id} className="bg-black rounded-lg shadow-md p-4 border-orange-300 border-2">
-            <img
-              src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-              alt={movie.title}
-              className="w-full h-64 object-cover rounded-md mb-4"
-            />
-            <h3 className="text-lg font-semibold text-white">{movie.title}</h3>
-            <p className="text-gray-400 text-sm">{getGenreNames(movie.genre_ids)}</p>
-            <p className="text-gray-400 text-sm">Ngày phát hành: {movie.release_date}</p>
+          <Link to={`/movie/${movie.id}`} key={movie.id} className="bg-black rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 flex border-orange-300 border-2 ">
+            <div className="flex-shrink-0 w-1/2">
+              <img
+                src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
+                alt={movie.title}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="p-4 flex-grow">
+              <h3 className="text-lg font-semibold text-white">{movie.title}</h3>
+              <p className="text-gray-400 text-sm">{getGenreNames(movie.genre_ids)}</p>
+              <p className="text-sm mb-2 text-white">
+                <span className="font-bold">Ngày phát hành:</span> {movie.release_date}
+              </p>
+            </div>
           </Link>
         ))}
       </div>

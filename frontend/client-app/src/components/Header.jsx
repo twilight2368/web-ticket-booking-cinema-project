@@ -48,10 +48,10 @@ function Header() {
         {/* Đăng nhập/Đăng ký ở bên phải */}
         <div className="flex justify-end space-x-4">
           <Link to="/login" className="hover:text-yellow-400 text-white">
-            Đăng nhập
+            <div className='border-2 rounded-lg border-orange-300 p-1'>Đăng nhập</div>
           </Link>
           <Link to="/register" className="hover:text-yellow-400 text-white">
-            Đăng ký
+            <div className='border-2 rounded-lg border-orange-300 p-1'>Đăng ký</div>
           </Link>
         </div>
       </div>
