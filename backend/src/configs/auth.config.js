@@ -12,6 +12,7 @@ const authConfig = {
   saltRounds: 10,
   port: process.env.AUTH_PORT || 8000,
   admin_secret_password: process.env.SECRET_ADMIN_KEY,
+  google_capcha_secret: process.env.SECRET_KEY_RECAPTCHA_GG,
 };
 
 module.exports = authConfig;

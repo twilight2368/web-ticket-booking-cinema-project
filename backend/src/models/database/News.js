@@ -16,7 +16,7 @@ const NewsSchema = new mongoose.Schema(
     title: {
       type: String,
       required: true,
-      minLength: 20,
+      minLength: 5,
       maxLength: 100,
     },
 

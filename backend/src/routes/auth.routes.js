@@ -236,7 +236,7 @@ router.post("/admin-login", async (req, res, next) => {
     }
 
     // Find the admin
-    const admin = await AdminModel.findOne({ username });
+    const admin = await AdminModel.findOne({ username }).select("+password");
     if (!admin) {
       return res.status(404).json({ message: "Admin not found." });
     }

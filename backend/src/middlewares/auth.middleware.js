@@ -50,7 +50,7 @@ async function checkAdminLogin(req, res, next) {
     const verifyToken = await verifyJWT(token);
 
     if (verifyToken.status) {
-      const admin = AdminModel.findById(verifyToken.decoded);
+      const admin = AdminModel.findById(verifyToken.decoded.sub);
       if (!admin) {
         res.status(401).json({ message: "Token Unauthorized" });
       }

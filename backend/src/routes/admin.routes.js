@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const { checkAdminLogin } = require("../middlewares/auth.middleware");
+const authConfig = require("../configs/auth.config");
 
 const Admin = require("../models/database/Admin");
 // todo: ----------------------- ADMIN ROUTES --------------------------------------
@@ -20,7 +21,7 @@ router.post("/verify-recaptcha", async (req, res, next) => {
       .json({ success: false, message: "No captcha token provided" });
   }
 
-  const secret_key = process.env.SECRET_KEY_RECAPTCHA_GG;
+  const secret_key = authConfig.google_capcha_secret;
 
   try {
     const response = await axios.post(
@@ -49,8 +50,7 @@ router.get("/info/:id", checkAdminLogin, async (req, res, next) => {
     if (!id) {
       return res.status(400).json({ message: "id are required." });
     }
-    const admin = Admin.findById(id).select("-password");
-
+    const admin = await Admin.findById(id);
     res.json(admin);
   } catch (error) {
     next(error);
