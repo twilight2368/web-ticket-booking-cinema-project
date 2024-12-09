@@ -14,7 +14,7 @@ export default function MovieAdminPage() {
       {/* Add Movie Button */}
       <div className="w-full flex justify-center mb-8">
         <Link to="add">
-          <Button color="blue" size="lg">
+          <Button color="blue">
             Thêm phim
           </Button>
         </Link>

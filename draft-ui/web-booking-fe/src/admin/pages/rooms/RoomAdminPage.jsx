@@ -10,7 +10,7 @@ export default function RoomAdminPage() {
         Quản lý phòng
       </div>
 
-      {/* Add Movie Button */}
+      {/* Add Room Button */}
       <div className="w-full flex justify-center mb-8">
         <AddRoomModal />
       </div>

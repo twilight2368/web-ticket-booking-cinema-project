@@ -22,6 +22,11 @@ import NotFoundAdminPage from "./admin/pages/NotFoundAdminPage";
 import RoomAdminPage from "./admin/pages/rooms/RoomAdminPage";
 import MovieAdminPage from "./admin/pages/movies/MovieAdminPage";
 import { AddMovieAdminPage } from "./admin/pages/movies/AddMovieAdminPage";
+import SchedulePage from "./admin/pages/schedule/SchedulePage";
+import CreateAdminNewsPage from "./admin/pages/news/CreateAdminNewsPage";
+import BookingAdminPage from "./admin/pages/booking/BookingAdminPage";
+import AdminNewsPage from "./admin/pages/news/AdminNewsPage";
+import UserAdminPage from "./admin/pages/users/UserAdminPage";
 
 function App() {
   return (
@@ -53,14 +58,14 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/admin/*" element={<AdminMainLayout />}>
-            <Route index element={<></>} />
-            <Route path="bookings" element={<></>} />
+            <Route index element={<SchedulePage />} />
+            <Route path="bookings" element={<BookingAdminPage />} />
             <Route path="movies" element={<MovieAdminPage />} />
             <Route path="movies/add" element={<AddMovieAdminPage />} />
             <Route path="rooms" element={<RoomAdminPage />} />
-            <Route path="shows" element={<></>} />
-            <Route path="news" element={<></>} />
-            <Route path="users" element={<></>} />
+            <Route path="news" element={<AdminNewsPage />} />
+            <Route path="news/add" element={<CreateAdminNewsPage />} />
+            <Route path="users" element={<UserAdminPage />} />
             <Route path="*" element={<NotFoundAdminPage />} />
           </Route>
         </Routes>
