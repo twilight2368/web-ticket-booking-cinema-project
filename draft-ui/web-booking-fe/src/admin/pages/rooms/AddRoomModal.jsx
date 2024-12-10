@@ -6,7 +6,6 @@ import {
   DialogBody,
   DialogFooter,
   Input,
-  Textarea,
 } from "@material-tailwind/react";
 import axios from "axios";
 import { useSelector } from "react-redux";

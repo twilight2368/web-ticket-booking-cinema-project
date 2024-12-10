@@ -1,7 +1,27 @@
 import { Button } from "@material-tailwind/react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
+import axios from "axios";
+import toast from "react-hot-toast";
+import DayDisplay from "../../../components/time/DayDisplay";
+import TimeDisplay from "../../../components/time/TimeDisplay";
+import { useSelector } from "react-redux";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function AdminNewsPage() {
+  const [newsList, setNewsList] = useState();
+
+  useEffect(() => {
+    axios
+      .get(`${BASE_URL}/api/all-news`)
+      .then((response) => {
+        setNewsList(response.data);
+      })
+      .catch((error) => {
+        toast.error("Failed to get all news");
+      });
+  }, []);
+
   return (
     <div className="w-full min-h-screen p-6 bg-gray-100">
       {" "}
@@ -32,18 +52,22 @@ export default function AdminNewsPage() {
               </tr>
             </thead>
             <tbody>
-              <NewsDisplayItem
-                title={"Hello world i am from Ghibli"}
-                date={"2024-12-01"}
-              />
-              <NewsDisplayItem
-                title={"Hello world i am from Ghibli"}
-                date={"2024-12-01"}
-              />
-              <NewsDisplayItem
-                title={"Hello world i am from Ghibli"}
-                date={"2024-12-01"}
-              />
+              {newsList ? (
+                <>
+                  {newsList.map((news) => {
+                    return (
+                      <NewsDisplayItem
+                        title={news.title}
+                        date={news.write_at}
+                        key={news._id}
+                        id={news._id}
+                      />
+                    );
+                  })}
+                </>
+              ) : (
+                <></>
+              )}
             </tbody>
           </table>
         </div>
@@ -53,20 +77,41 @@ export default function AdminNewsPage() {
 }
 
 const NewsDisplayItem = ({ id, title, date }) => {
+  const admin = useSelector((state) => state.admin);
+
+  const deleteNew = async () => {
+    axios
+      .delete(`${BASE_URL}/api/news/${id}`, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bear ${admin.admin.jwt}`,
+        },
+      })
+      .then((response) => {
+        toast.success("Delete success");
+      })
+      .catch((error) => {
+        toast.error("Delete faile");
+      });
+  };
+
   return (
     <tr className="hover:bg-gray-100">
       <td className="border border-gray-300 px-4 py-2 truncate">
         <div className="w-96 overflow-hidden whitespace-nowrap text-ellipsis">
-          {title}
+          <Link to={`/news/${id}`} className=" hover:underline">
+            {title}
+          </Link>
         </div>
       </td>
       <td className="border border-gray-300 px-4 py-2  truncate">
         <div className=" overflow-hidden text-center whitespace-nowrap text-ellipsis">
-          {date}
+          <DayDisplay isoDate={date} /> <span>-</span>
+          <TimeDisplay isoDate={date} />
         </div>
       </td>
       <td className="border border-gray-300 px-4 py-2 text-center">
-        <Button color="red" variant="outlined">
+        <Button color="red" variant="outlined" onClick={deleteNew}>
           xóa
         </Button>
       </td>

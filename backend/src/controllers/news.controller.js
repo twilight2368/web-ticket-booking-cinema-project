@@ -66,24 +66,6 @@ const createNews = async (req, res, next) => {
   }
 };
 
-//TODO: Update a news
-const updateNewsById = async (req, res, next) => {
-  try {
-    const { id } = req.params; // Extract ID from route parameters
-    const updatedData = req.body; // Retrieve updated data from request body
-    const news = await News.findByIdAndUpdate(id, updatedData, {
-      new: true, // Return the updated document
-      runValidators: true, // Run schema validations
-    });
-    if (!news) {
-      return res.status(404).json({ message: "News not found for update" });
-    }
-    res.status(200).json(news);
-  } catch (error) {
-    next(error);
-  }
-};
-
 //TODO: Delete a news
 const deleteNewsById = async (req, res, next) => {
   try {
@@ -104,6 +86,5 @@ module.exports = {
   getNewsTitlesAndBannersPagination,
   getSpecificNewsById,
   createNews,
-  updateNewsById,
   deleteNewsById,
 };
