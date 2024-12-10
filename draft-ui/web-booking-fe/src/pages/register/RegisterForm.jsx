@@ -28,22 +28,19 @@ export default function RegisterForm() {
     e.preventDefault();
     const { confirmPassword, ...payload } = formData;
     if (confirmPassword === formData.password) {
-      console.log("====================================");
-      console.log(payload);
-      console.log("====================================");
       axios
         .post(`${BASE_URL}/auth/register`, payload, {
           credentials: "include",
         })
         .then((response) => {
-          toast.success(response.data.message);
-          navigate("/login")
+          toast.success(response.data.message, { position: "top-right" });
+          navigate("/login");
         })
         .catch((error) => {
-          toast.error(error.response.data.message);
+          toast.error(error.response.data.message, { position: "top-right" });
         });
     } else {
-      toast.error("Xác nhận mật khẩu không khớp");
+      toast.error("Xác nhận mật khẩu không khớp", { position: "top-right" });
     }
   };
 

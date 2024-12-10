@@ -8,16 +8,19 @@ const initSystem = async () => {
   try {
     await connectMongo();
     //await connectRedis();
-    
 
     app.listen(PORT, () => {
       console.log("====================================");
       console.log(
-        "Server is listen on:" + clc.green("http://localhost:" + PORT)
+        "Server is listen on: " + clc.green("http://localhost:" + PORT)
       );
       console.log("====================================");
     });
-  } catch (error) {}
+  } catch (error) {
+    console.log("====================================");
+    console.error(error);
+    console.log("====================================");
+  }
 };
 
 initSystem();

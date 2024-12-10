@@ -101,14 +101,17 @@ router.post("/login", (req, res, next) => {
     }
 
     // Log the user in and issue a JWT token
-    req.login(user, (err) => {
+    req.login(user, async (err) => {
       if (err) {
         return next(err); // Forward any errors from login to the next middleware
       }
 
       const tokenData = issueJWT(req.user); // Issue JWT token
 
+      const user_info = await UserModel.findById(req.user.id);
+
       return res.json({
+        user_info: user_info,
         user_id: req.user.id,
         jwt: tokenData.token,
         message: "Successfully logged in",

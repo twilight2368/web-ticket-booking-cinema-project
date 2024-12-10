@@ -1,16 +1,19 @@
 import { Button, Card, CardBody, Input } from "@material-tailwind/react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { LoginContext } from "../../context/LoginContext";
+import { setuserId, setToken } from "../../app/stores/UserSlice";
 
-// Axios request with credentials
-axios.defaults.withCredentials = true;
 
 // LoginForm Component
 export default function LoginForm() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { setIsLogin } = useContext(LoginContext);
 
   const [formData, setFormData] = useState({
     username: "",
@@ -28,26 +31,19 @@ export default function LoginForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const payload = formData;
-    console.log("====================================");
-    console.log(payload);
-    console.log("====================================");
     axios
       .post(`${BASE_URL}/auth/login`, payload, {
         withCredentials: true,
       })
       .then((response) => {
-        console.log("====================================");
-        console.log(response);
-        console.log("====================================");
-        toast.success(response.data.message);
-
+        dispatch(setuserId(response.data.user_id));
+        dispatch(setToken(response.data.jwt));
+        setIsLogin(true);
+        toast.success(response.data.message, { position: "top-right" });
         navigate("/");
       })
       .catch((error) => {
-        console.log("====================================");
-        console.log(error);
-        console.log("====================================");
-        toast.error(error.response.data.message);
+        toast.error(error.response.data.message, { position: "top-right" });
       });
   };
 
