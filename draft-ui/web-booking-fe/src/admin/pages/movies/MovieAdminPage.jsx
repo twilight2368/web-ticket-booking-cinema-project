@@ -2,8 +2,29 @@ import { Button } from "@material-tailwind/react";
 import { Link } from "react-router";
 import UpdateImageModal from "../../components/UpdateImageModal";
 import { UpdateMovieModal } from "./UpdateMovieModal";
-
+import DayDisplay from "../../../components/time/DayDisplay";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export default function MovieAdminPage() {
+  const [movieList, setMovieList] = useState();
+
+  useEffect(() => {
+    try {
+      axios
+        .get(`${BASE_URL}/api/movies`)
+        .then((response) => {
+          setMovieList(response.data);
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message);
+        });
+    } catch (error) {
+      toast.error("Something went wrong!!!");
+    }
+  }, []);
+
   return (
     <div className="w-full min-h-screen p-6 bg-gray-100">
       {/* Page Header */}
@@ -14,9 +35,7 @@ export default function MovieAdminPage() {
       {/* Add Movie Button */}
       <div className="w-full flex justify-center mb-8">
         <Link to="add">
-          <Button color="blue">
-            Thêm phim
-          </Button>
+          <Button color="blue">Thêm phim</Button>
         </Link>
       </div>
 
@@ -41,24 +60,23 @@ export default function MovieAdminPage() {
               </tr>
             </thead>
             <tbody>
-              <MovieDisplayItem
-                movie_id={1}
-                title="Hello World"
-                durations={120}
-                release_date="2023-12-12"
-              />
-              <MovieDisplayItem
-                movie_id={2}
-                title="Another Movie"
-                durations={90}
-                release_date="2024-01-01"
-              />
-              <MovieDisplayItem
-                movie_id={3}
-                title="Yet Another Movie"
-                durations={150}
-                release_date="2024-03-15"
-              />
+              {movieList ? (
+                <>
+                  {movieList.map((movie) => {
+                    return (
+                      <MovieDisplayItem
+                        movie_id={movie._id}
+                        title={movie.title}
+                        durations={movie.duration_in_minutes}
+                        release_date={movie.release_date}
+                        movie={movie}
+                      />
+                    );
+                  })}
+                </>
+              ) : (
+                <></>
+              )}
             </tbody>
           </table>
         </div>
@@ -67,7 +85,13 @@ export default function MovieAdminPage() {
   );
 }
 
-const MovieDisplayItem = ({ movie_id, title, durations, release_date }) => {
+const MovieDisplayItem = ({
+  movie_id,
+  title,
+  durations,
+  release_date,
+  movie,
+}) => {
   return (
     <tr className="hover:bg-gray-100">
       <td className="border border-gray-300 px-4 py-2 w-96 truncate">
@@ -79,7 +103,7 @@ const MovieDisplayItem = ({ movie_id, title, durations, release_date }) => {
         {durations}
       </td>
       <td className="border border-gray-300 px-4 py-2 text-center">
-        {release_date}
+        <DayDisplay isoDate={release_date} />
       </td>
       <td className="border border-gray-300 px-4 py-2 text-center flex justify-center items-center gap-2">
         <Link to={`/movies/${movie_id}`}>
@@ -88,10 +112,13 @@ const MovieDisplayItem = ({ movie_id, title, durations, release_date }) => {
           </Button>
         </Link>
         <div>
-          <UpdateMovieModal />
+          <UpdateMovieModal movie={movie} />
         </div>
         <div>
-          <UpdateImageModal display_text="thay đổi poster" />
+          <UpdateImageModal
+            movie_id={movie_id}
+            display_text="thay đổi poster"
+          />
         </div>
       </td>
     </tr>

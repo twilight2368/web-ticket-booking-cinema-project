@@ -12,7 +12,6 @@ router.get("/", (req, res, next) => {
   });
 });
 
-
 //Todo: Verify captcha
 router.post("/verify-recaptcha", async (req, res, next) => {
   const { captchaToken } = req.body;
@@ -26,13 +25,18 @@ router.post("/verify-recaptcha", async (req, res, next) => {
   const secret_key = authConfig.google_capcha_secret;
 
   try {
-    const response = await axios.post(
-      `https://www.google.com/recaptcha/api/siteverify?secret=${secret_key}&response=${captchaToken}`
+    const response = await fetch(
+      `https://www.google.com/recaptcha/api/siteverify?secret=${secret_key}&response=${captchaToken}`,
+      {
+        method: "POST",
+      }
     );
 
-    if (response.data.success) {
+    const data = await response.json();
+
+    if (data.success) {
       console.log("====================================");
-      console.log(response.data);
+      console.log(data);
       console.log("====================================");
       return res.json({ success: true });
     } else {

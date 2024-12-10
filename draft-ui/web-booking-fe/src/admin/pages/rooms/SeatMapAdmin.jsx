@@ -62,8 +62,8 @@ function SeatDisplayItem({ seat }) {
       className={classNames(
         "md:w-12 md:h-12 h-6 w-6 rounded-md flex justify-center items-center text-white",
         {
-          "bg-yellow-800": seat.seat_type === "Vip",
-          "bg-blue-gray-400 ": seat.seat_type !== "Vip",
+          "bg-yellow-800": seat.seat_type.name === "vip",
+          "bg-blue-gray-400 ": seat.seat_type.name !== "vip",
         }
       )}
     >

@@ -8,7 +8,7 @@ import { Button, Card, CardBody } from "@material-tailwind/react";
 import { useNavigate } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { useContext, useEffect } from "react";
-import { clearUserInfor, setUserInfo } from "../../app/stores/UserSlice";
+import { clearUserInfor } from "../../app/stores/UserSlice";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { LoginContext } from "../../context/LoginContext";

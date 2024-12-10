@@ -264,7 +264,10 @@ router.post("/admin-login", async (req, res, next) => {
 
     const tokenData = issueJWT(admin);
     return res.json({
-      admin: admin.id,
+      admin: {
+        id: admin.id,
+        username: admin.username,
+      },
       jwt: tokenData.token,
       message: "Successfully logged in",
     });

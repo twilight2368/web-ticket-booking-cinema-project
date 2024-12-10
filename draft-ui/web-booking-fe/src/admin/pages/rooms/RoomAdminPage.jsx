@@ -1,8 +1,27 @@
 import { Button } from "@material-tailwind/react";
 import { AddRoomModal } from "./AddRoomModal";
 import { RoomMapDisplayModal } from "./RoomMapDisplayModal";
-
+import { useEffect, useState } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export default function RoomAdminPage() {
+  const [roomList, setRoomList] = useState();
+
+  useEffect(() => {
+    try {
+      axios
+        .get(`${BASE_URL}/api/rooms`)
+        .then((response) => {
+          setRoomList(response.data);
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message);
+        });
+    } catch (error) {
+      toast.error("Something went wrong!!!");
+    }
+  }, []);
   return (
     <div className="w-full min-h-screen p-6 bg-gray-100">
       {/* Page Header */}
@@ -36,27 +55,25 @@ export default function RoomAdminPage() {
               </tr>
             </thead>
             <tbody>
-              <RoomDisplayItem
-                room_id_id={1}
-                name="Num 1"
-                total_seat={50}
-                cols={10}
-                rows={5}
-              />
-              <RoomDisplayItem
-                room_id_id={2}
-                name="Num 2"
-                total_seat={50}
-                cols={10}
-                rows={5}
-              />
-              <RoomDisplayItem
-                room_id_id={3}
-                name="Num 3"
-                total_seat={50}
-                cols={10}
-                rows={5}
-              />
+              {roomList ? (
+                <>
+                  {roomList.map((room) => {
+                    return (
+                      <>
+                        <RoomDisplayItem
+                          name={room.name}
+                          total_seat={room.total_seats}
+                          cols={room.num_of_cols}
+                          rows={room.num_of_rows}
+                          seats={room.seats}
+                        />
+                      </>
+                    );
+                  })}
+                </>
+              ) : (
+                <></>
+              )}
             </tbody>
           </table>
         </div>
@@ -65,7 +82,7 @@ export default function RoomAdminPage() {
   );
 }
 
-const RoomDisplayItem = ({ name, total_seat, cols, rows }) => {
+const RoomDisplayItem = ({ name, total_seat, cols, rows, seats }) => {
   return (
     <tr className="hover:bg-gray-100">
       <td className="border border-gray-300 px-4 py-2 w-96 truncate">
@@ -80,7 +97,7 @@ const RoomDisplayItem = ({ name, total_seat, cols, rows }) => {
         {rows} - {cols}
       </td>
       <td className="border border-gray-300 px-4 py-2 text-center flex justify-center items-center gap-2">
-        <RoomMapDisplayModal />
+        <RoomMapDisplayModal seats={seats} />
       </td>
     </tr>
   );

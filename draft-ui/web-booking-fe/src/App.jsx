@@ -30,6 +30,7 @@ import UserAdminPage from "./admin/pages/users/UserAdminPage";
 import NewPageById from "./pages/news/NewPageById";
 
 import LoginProvider from "./context/LoginProvider";
+import LoginAdminProvider from "./admin/context/LoginAdminProvider";
 
 function App() {
   return (
@@ -39,40 +40,45 @@ function App() {
       </Helmet>
       <Toaster />
       <LoginProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/*" element={<MainLayout />}>
-              <Route index element={<HomePage />} />
-              <Route path="news" element={<NewsPage />} />
-              <Route path="news/:id" element={<NewPageById />} />
-              <Route path="ticket-price" element={<TicketPricePage />} />
-              <Route path="movies/*">
-                <Route index element={<MoviePage />} />
-                <Route path=":id" element={<MovieLayout />} />
+        <LoginAdminProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/*" element={<MainLayout />}>
+                <Route index element={<HomePage />} />
+                <Route path="news" element={<NewsPage />} />
+                <Route path="news/:id" element={<NewPageById />} />
+                <Route path="ticket-price" element={<TicketPricePage />} />
+                <Route path="movies/*">
+                  <Route index element={<MoviePage />} />
+                  <Route path=":id" element={<MovieLayout />} />
+                </Route>
+                <Route path="making-booking" element={<BookingPage />} />
+                <Route path="ticket/:id" element={<PaymentSuccess />} />
+                <Route path="payment-fail" element={<PaymentFail />} />
+                <Route path="profile" element={<ProfilePage />} />
+                <Route path="update-profile" element={<UpdateProfilePage />} />
+                <Route
+                  path="update-password"
+                  element={<UpdatePasswordPage />}
+                />
+                <Route path="*" element={<NotFoundPage />} />
               </Route>
-              <Route path="making-booking" element={<BookingPage />} />
-              <Route path="ticket/:id" element={<PaymentSuccess />} />
-              <Route path="payment-fail" element={<PaymentFail />} />
-              <Route path="profile" element={<ProfilePage />} />
-              <Route path="update-profile" element={<UpdateProfilePage />} />
-              <Route path="update-password" element={<UpdatePasswordPage />} />
-              <Route path="*" element={<NotFoundPage />} />
-            </Route>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/admin/*" element={<AdminMainLayout />}>
-              <Route index element={<SchedulePage />} />
-              <Route path="bookings" element={<BookingAdminPage />} />
-              <Route path="movies" element={<MovieAdminPage />} />
-              <Route path="movies/add" element={<AddMovieAdminPage />} />
-              <Route path="rooms" element={<RoomAdminPage />} />
-              <Route path="news" element={<AdminNewsPage />} />
-              <Route path="news/add" element={<CreateAdminNewsPage />} />
-              <Route path="users" element={<UserAdminPage />} />
-              <Route path="*" element={<NotFoundAdminPage />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/admin/*" element={<AdminMainLayout />}>
+                <Route index element={<SchedulePage />} />
+                <Route path="bookings" element={<BookingAdminPage />} />
+                <Route path="movies" element={<MovieAdminPage />} />
+                <Route path="movies/add" element={<AddMovieAdminPage />} />
+                <Route path="rooms" element={<RoomAdminPage />} />
+                <Route path="news" element={<AdminNewsPage />} />
+                <Route path="news/add" element={<CreateAdminNewsPage />} />
+                <Route path="users" element={<UserAdminPage />} />
+                <Route path="*" element={<NotFoundAdminPage />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </LoginAdminProvider>
       </LoginProvider>
     </>
   );

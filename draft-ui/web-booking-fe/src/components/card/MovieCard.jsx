@@ -13,7 +13,7 @@ export default function MovieCard({ movie }) {
                 <img
                   src={movie.image_url}
                   alt=""
-                  className=" w-full h-full object-cover rounded-lg shadow-md shadow-black"
+                  className=" w-full aspect-[2/3] object-cover object-center rounded-lg shadow-md shadow-black"
                 />
               </div>
               <div className="w-full">

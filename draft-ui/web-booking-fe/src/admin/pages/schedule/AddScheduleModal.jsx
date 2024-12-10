@@ -31,7 +31,15 @@ export function AddScheduleModal() {
               <Option>Material Tailwind Angular</Option>
               <Option>Material Tailwind Svelte</Option>
             </Select>
-            <Select variant="outlined" label="Select room">
+            <Select
+              variant="outlined"
+              label="Select room"
+              onChange={(e) => {
+                console.log("====================================");
+                console.log(e.target.value);
+                console.log("====================================");
+              }}
+            >
               <Option>Material Tailwind HTML</Option>
               <Option>Material Tailwind React</Option>
               <Option>Material Tailwind Vue</Option>

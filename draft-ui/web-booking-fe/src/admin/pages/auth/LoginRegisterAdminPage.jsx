@@ -28,7 +28,7 @@ export default function LoginRegisterAdminPage() {
               </>
             ) : (
               <>
-                <RegisterFormAdmin />
+                <RegisterFormAdmin setIsLoggingInAdmin={setIsLoggingInAdmin} />
               </>
             )}
             <div className=" w-96">

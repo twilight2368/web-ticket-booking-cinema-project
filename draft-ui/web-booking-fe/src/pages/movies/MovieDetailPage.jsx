@@ -29,7 +29,7 @@ export default function MovieLayout() {
                 <img
                   src="https://hanayukichan.wordpress.com/wp-content/uploads/2015/07/kiki-d0bf06d1aa41cf5a57d8db9f6eb72a41.jpg"
                   alt=""
-                  className="h-full object-cover object-center"
+                  className="h-full aspect-[2/3] object-cover object-center"
                 />
               </div>
               <div className="md:w-2/3 w-full overflow-auto">
