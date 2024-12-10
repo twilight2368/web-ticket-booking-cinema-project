@@ -131,7 +131,7 @@ export default function MovieLayout() {
           </>
         ) : (
           <>
-            <div className="w-full px-32 pt-12 grid grid-cols-2 md:grid-cols-8 sm:grid-cols-6 gap-6 text-center">
+            <div className="w-full sm:px-12 pt-12 grid md:grid-cols-4 sm:grid-cols-2 gap-6 text-center">
               <MovieScheduleLink to={"?showID=1"} />
             </div>
           </>

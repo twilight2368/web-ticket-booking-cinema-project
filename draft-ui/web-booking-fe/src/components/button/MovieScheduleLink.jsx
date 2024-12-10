@@ -6,7 +6,7 @@ export default function MovieScheduleLink({ to }) {
     <>
       <button
         color="white"
-        className=" hover:bg-blue-gray-800/60 border-[1px] border-white p-1 rounded-lg duration-200 text-white"
+        className="w-full hover:bg-blue-gray-800/60 border-[1px] border-white p-1 rounded-lg duration-200 text-white"
         onClick={() => {
           navigate(to);
         }}

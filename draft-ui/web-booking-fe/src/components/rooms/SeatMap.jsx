@@ -95,7 +95,7 @@ export default function SeatMap({ fakeRoomData, fakeSeatsData }) {
       </div>
 
       {/* Seat Legend */}
-      <div className="flex sm:space-x-4 sm:space-y-0 space-y-4 mb-4 sm:flex-row flex-col justify-center items-center">
+      <div className="flex sm:space-x-4 sm:space-y-4 md:space-y-0 mb-4 md:flex-row sm:flex-col justify-center items-center">
         <div className="flex items-center space-x-2">
           <div className="w-6 h-6 bg-blue-gray-400 rounded-md"></div>
           <span>Ghế thường</span>
