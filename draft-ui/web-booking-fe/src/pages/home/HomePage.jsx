@@ -2,6 +2,7 @@ import MovieList1 from "../../components/home/MovieList1";
 import MovieList2 from "../../components/home/MovieList2";
 
 export default function HomePage() {
+
   return (
     <div className="w-full">
       <div className=" relative w-full mb-24">

@@ -6,8 +6,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { LoginContext } from "../../context/LoginContext";
-import { setuserId, setToken } from "../../app/stores/UserSlice";
-
+import { setuserId, setToken, setUserInfo } from "../../app/stores/UserSlice";
 
 // LoginForm Component
 export default function LoginForm() {
@@ -36,8 +35,9 @@ export default function LoginForm() {
         withCredentials: true,
       })
       .then((response) => {
-        dispatch(setuserId(response.data.user_id));
-        dispatch(setToken(response.data.jwt));
+        dispatch(setuserId(response.data["user_id"]));
+        dispatch(setToken(response.data["jwt"]));
+        dispatch(setUserInfo(response.data["user_info"]));
         setIsLogin(true);
         toast.success(response.data.message, { position: "top-right" });
         navigate("/");

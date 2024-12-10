@@ -1,26 +1,31 @@
 import { Card, CardBody } from "@material-tailwind/react";
 import { Link } from "react-router";
+import DayDisplay from "../time/DayDisplay";
 
-export default function MovieCard() {
+export default function MovieCard({ movie }) {
   return (
     <div className="w-full">
-      <Link to="/movies/1">
+      <Link to={`/movies/${movie._id}`}>
         <Card className=" w-full text-white bg-black/0">
           <CardBody className="p-0">
             <div className="w-full h-full">
               <div className="w-full mb-2">
                 <img
-                  src="https://i.ebayimg.com/images/g/pEUAAOSwr~hjBQrB/s-l1200.jpg"
+                  src={movie.image_url}
                   alt=""
                   className=" w-full h-full object-cover rounded-lg shadow-md shadow-black"
                 />
               </div>
               <div className="w-full">
                 <p className=" text-lg text-white truncate text-center">
-                  {"Howl's Moving Castle"}
+                  {movie.title ? movie.title : ""}
                 </p>
-                <p className=" text-sm text-gray-600 truncate text-center">
-                  {"20/11/2024"}
+                <p className=" text-sm text-gray-500 truncate text-center">
+                  {movie.release_date ? (
+                    <DayDisplay isoDate={movie.release_date} />
+                  ) : (
+                    ""
+                  )}
                 </p>
               </div>
             </div>
