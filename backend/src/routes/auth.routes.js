@@ -60,11 +60,9 @@ router.post("/register", async (req, res, next) => {
 
     // Check password length
     if (password.length < 8 || password.length > 20) {
-      return res
-        .status(400)
-        .json({
-          message: "Password must be between 8 and 20 characters long.",
-        });
+      return res.status(400).json({
+        message: "Password must be between 8 and 20 characters long.",
+      });
     }
 
     // Hash the password
@@ -89,23 +87,35 @@ router.post("/register", async (req, res, next) => {
 });
 
 //TODO: Login user
-router.post(
-  "/login",
-  passport.authenticate("local", { session: true }),
-  (req, res, next) => {
-    try {
-      const tokenData = issueJWT(req.user);
+router.post("/login", (req, res, next) => {
+  passport.authenticate("local", { session: true }, (err, user, info) => {
+    if (err) {
+      return next(err); // Forward errors to the next middleware (e.g., error handler)
+    }
+
+    if (!user) {
+      // Return a 401 Unauthorized error with the specific message
+      return res
+        .status(401)
+        .json({ message: info.message || "Authentication failed" });
+    }
+
+    // Log the user in and issue a JWT token
+    req.login(user, (err) => {
+      if (err) {
+        return next(err); // Forward any errors from login to the next middleware
+      }
+
+      const tokenData = issueJWT(req.user); // Issue JWT token
 
       return res.json({
         user_id: req.user.id,
         jwt: tokenData.token,
         message: "Successfully logged in",
       });
-    } catch (error) {
-      next(error);
-    }
-  }
-);
+    });
+  })(req, res, next); // Execute the authentication
+});
 
 //TODO: Logout user
 router.get("/logout", (req, res, next) => {
@@ -135,7 +145,7 @@ router.get("/new-token", checkIsSessionValid, (req, res, next) => {
     const tokenData = issueJWT(req.user);
     return res.json({
       jwt: tokenData.token,
-      message: "Successfully logged in",
+      message: "Successfully get token",
     });
   } catch (error) {
     next(error);
@@ -157,9 +167,6 @@ router.get("/cookie", checkCookie, (req, res, next) => {
 router.get("/header", checkLoggedIn, (req, res, next) => {
   console.log("====================================");
   console.log(req.user);
-  console.log("====================================");
-  console.log("====================================");
-  console.log(req.user.id);
   console.log("====================================");
   res.json({
     data: "Hello world",

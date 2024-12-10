@@ -38,7 +38,7 @@ const {
 //* Global Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(cookieParser());
 app.use(helmet());
 
 const allowOrigins = ["http://localhost:5173", "http://localhost:3000"];
@@ -58,8 +58,6 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
-app.use(cookieParser());
 
 //* Logging middlewares
 
@@ -94,6 +92,8 @@ app.use(
     }),
     cookie: {
       maxAge: SESSION_COOKIE_TTL,
+      httpOnly: true,
+      secure: false,
     },
   })
 );

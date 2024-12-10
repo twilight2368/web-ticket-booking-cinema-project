@@ -1,9 +1,11 @@
 import { Button, Card, CardBody, Input } from "@material-tailwind/react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import axios from "axios";
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export default function RegisterForm() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
     first_name: "",
@@ -24,29 +26,21 @@ export default function RegisterForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (formData.confirmPassword === formData.password) {
-      fetch(`${BASE_URL}/server/auth/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include", // Include cookies in the request
-        body: JSON.stringify(formData),
-      })
-        .then((res) => {
-          if (!res.ok) {
-            console.log("====================================");
-            console.log(res);
-            console.log("====================================");
-          } else {
-            return res.json();
-          }
+    const { confirmPassword, ...payload } = formData;
+    if (confirmPassword === formData.password) {
+      console.log("====================================");
+      console.log(payload);
+      console.log("====================================");
+      axios
+        .post(`${BASE_URL}/auth/register`, payload, {
+          credentials: "include",
         })
-        .then((data) => {
-          console.log("====================================");
-          console.log(data);
-          console.log("====================================");
+        .then((response) => {
+          toast.success(response.data.message);
+          navigate("/login")
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message);
         });
     } else {
       toast.error("Xác nhận mật khẩu không khớp");
@@ -72,7 +66,6 @@ export default function RegisterForm() {
                     color="gray"
                     className="w-full"
                     name="username"
-                    value={formData.username}
                     onChange={handleInputChange}
                   />
                 </div>
@@ -82,8 +75,7 @@ export default function RegisterForm() {
                     label="Họ"
                     color="gray"
                     className="w-full"
-                    name="firstName"
-                    value={formData.firstName}
+                    name="first_name"
                     onChange={handleInputChange}
                   />
                 </div>
@@ -93,8 +85,7 @@ export default function RegisterForm() {
                     label="Tên"
                     color="gray"
                     className="w-full"
-                    name="lastName"
-                    value={formData.lastName}
+                    name="last_name"
                     onChange={handleInputChange}
                   />
                 </div>
@@ -104,8 +95,7 @@ export default function RegisterForm() {
                     label="Số điện thoại"
                     color="gray"
                     className="w-full"
-                    name="phoneNumber"
-                    value={formData.phoneNumber}
+                    name="phone_number"
                     onChange={handleInputChange}
                   />
                 </div>
@@ -117,7 +107,6 @@ export default function RegisterForm() {
                     color="gray"
                     className="w-full"
                     name="email"
-                    value={formData.email}
                     onChange={handleInputChange}
                   />
                 </div>
@@ -129,7 +118,6 @@ export default function RegisterForm() {
                     color="gray"
                     className="w-full"
                     name="password"
-                    value={formData.password}
                     onChange={handleInputChange}
                   />
                 </div>
@@ -141,7 +129,6 @@ export default function RegisterForm() {
                     color="gray"
                     className="w-full"
                     name="confirmPassword"
-                    value={formData.confirmPassword}
                     onChange={handleInputChange}
                   />
                 </div>
