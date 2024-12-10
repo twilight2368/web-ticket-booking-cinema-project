@@ -7,7 +7,7 @@ const { port: PORT } = require("./src/configs/app.config");
 const initSystem = async () => {
   try {
     await connectMongo();
-    await connectRedis();
+    //await connectRedis();
     
 
     app.listen(PORT, () => {

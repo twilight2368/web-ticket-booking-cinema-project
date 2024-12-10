@@ -46,7 +46,7 @@ const getSpecificNewsById = async (req, res, next) => {
     const { id } = req.params; // Extract ID from route parameters
     const news = await News.findById(id); // Fetch document by its ID
     if (!news) {
-      return res.status(404).json({ error: "News not found" });
+      return res.status(404).json({ message: "News not found" });
     }
     res.status(200).json(news);
   } catch (error) {
@@ -76,7 +76,7 @@ const updateNewsById = async (req, res, next) => {
       runValidators: true, // Run schema validations
     });
     if (!news) {
-      return res.status(404).json({ error: "News not found for update" });
+      return res.status(404).json({ message: "News not found for update" });
     }
     res.status(200).json(news);
   } catch (error) {
@@ -90,7 +90,7 @@ const deleteNewsById = async (req, res, next) => {
     const { id } = req.params; // Extract ID from route parameters
     const news = await News.findByIdAndDelete(id);
     if (!news) {
-      return res.status(404).json({ error: "News not found for deletion" });
+      return res.status(404).json({ message: "News not found for deletion" });
     }
     res.status(200).json({ message: "News deleted successfully", news });
   } catch (error) {

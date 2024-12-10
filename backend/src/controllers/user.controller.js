@@ -59,7 +59,7 @@ const putChangeUserPassword = async (req, res, next) => {
     if (newPassword.length < 8 || newPassword.length > 20) {
       return res
         .status(400)
-        .json({ error: "Password must be between 8 and 20 characters long." });
+        .json({ message: "Password must be between 8 and 20 characters long." });
     }
 
     // Hash the new password before saving

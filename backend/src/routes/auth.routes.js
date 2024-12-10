@@ -44,7 +44,7 @@ router.post("/register", async (req, res, next) => {
       !phone_number ||
       !password
     ) {
-      return res.status(400).json({ error: "All fields are required." });
+      return res.status(400).json({ message: "All fields are required." });
     }
 
     // Check if the username, email already exists
@@ -55,14 +55,16 @@ router.post("/register", async (req, res, next) => {
     if (existingUser) {
       return res
         .status(400)
-        .json({ error: "Username or email already exists." });
+        .json({ message: "Username or email already exists." });
     }
 
     // Check password length
     if (password.length < 8 || password.length > 20) {
       return res
         .status(400)
-        .json({ error: "Password must be between 8 and 20 characters long." });
+        .json({
+          message: "Password must be between 8 and 20 characters long.",
+        });
     }
 
     // Hash the password

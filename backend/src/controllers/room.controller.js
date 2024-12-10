@@ -40,13 +40,13 @@ const getRoomInformationByShow = async (req, res, next) => {
 
     // Validate `show_id` parameter
     if (!show_id) {
-      return res.status(400).json({ error: "Show ID is required" });
+      return res.status(400).json({ message: "Show ID is required" });
     }
 
     // Fetch show details
     const show = await ShowModel.findById(show_id).populate("room_id");
     if (!show) {
-      return res.status(404).json({ error: "Show not found" });
+      return res.status(404).json({ message: "Show not found" });
     }
 
     const roomId = show.room_id._id;
@@ -54,7 +54,7 @@ const getRoomInformationByShow = async (req, res, next) => {
     // Fetch room details
     const room = await RoomModel.findById(roomId);
     if (!room) {
-      return res.status(404).json({ error: "Room not found" });
+      return res.status(404).json({ message: "Room not found" });
     }
 
     // Fetch all seats for the room
