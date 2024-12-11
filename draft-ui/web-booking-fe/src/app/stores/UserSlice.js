@@ -28,15 +28,15 @@ export const UserSlice = createSlice({
     },
     clearToken: (state, action) => {
       state.token = "";
-      localStorage.clear("jwt");
+      localStorage.removeItem("jwt");
     },
     clearUserInfor: (state, action) => {
       state.user_info = null;
       state.user_id = "";
       state.token = "";
-      localStorage.clear("user_info");
-      localStorage.clear("user_id");
-      localStorage.clear("jwt");
+      localStorage.removeItem("user_info");
+      localStorage.removeItem("user_id");
+      localStorage.removeItem("jwt");
     },
   },
 });

@@ -63,7 +63,7 @@ export default function ProfilePage() {
   };
 
   useEffect(() => {
-    if (user.user_id === "" || !user.user_info || !isLogin || user.jwt === "") {
+    if (!localStorage.getItem("user_info")) {
       toast.error("Something went wrong!!!");
       navigate("/");
     }

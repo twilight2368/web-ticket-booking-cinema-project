@@ -23,6 +23,9 @@ export default function MainLayout() {
           })
           .then((response) => {
             dispatch(setToken(response.data.jwt));
+            console.log('====================================');
+            console.log("Here");
+            console.log('====================================');
           })
           .catch((error) => {
             if (error.response.data.message == "Session Unauthorized") {
@@ -36,7 +39,7 @@ export default function MainLayout() {
         setIsLogin(true);
       }
     } else {
-      dispatch(clearUserInfor());
+      dispatch(clearUserInfor());  
       setIsLogin(false);
     }
   }, [user.token]);
