@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router";
+import TimeDisplay from "../time/TimeDisplay";
 
-export default function MovieScheduleLink({ to }) {
+export default function MovieScheduleLink({ to, name, time }) {
   const navigate = useNavigate();
   return (
     <>
@@ -11,9 +12,11 @@ export default function MovieScheduleLink({ to }) {
           navigate(to);
         }}
       >
-        <span className=" text-xs">Room-1</span>
+        <span className=" text-xs">--- {name} ---</span>
         <br />
-        <span>00:00</span>
+        <span>
+          <TimeDisplay isoDate={time} />
+        </span>
       </button>
     </>
   );

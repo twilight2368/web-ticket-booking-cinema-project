@@ -336,15 +336,7 @@ const getAMovieAndItsShowsCurrent = async (req, res, next) => {
     res.status(200).json({
       success: true,
       data: {
-        movie: {
-          _id: movie._id,
-          title: movie.title,
-          description: movie.description,
-          duration_in_minutes: movie.duration_in_minutes,
-          genre: movie.genre,
-          image_url: movie.image_url,
-          trailer_url: movie.trailer_url,
-        },
+        movie: movie,
         shows: showsByDate,
       },
     });

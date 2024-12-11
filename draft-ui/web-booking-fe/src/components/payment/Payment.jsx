@@ -5,27 +5,27 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
-
+import { Button } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PK_KEY);
-import { Button } from "@material-tailwind/react";
 
-export default function Payment({ clientSecret }) {
+
+export default function Payment({ clientSecret, booking_id }) {
   const options = {
     clientSecret: clientSecret,
   };
   return (
     <div className=" flex justify-center items-center">
-      {clientSecret ? (
-        <></>
-      ) : (
+      {clientSecret && stripePromise ? (
         <>
           <Elements stripe={stripePromise} options={options}>
             <CheckoutForm />
           </Elements>
         </>
+      ) : (
+        <></>
       )}
     </div>
   );
