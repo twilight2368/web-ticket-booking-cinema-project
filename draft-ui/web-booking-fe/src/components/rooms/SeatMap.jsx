@@ -129,7 +129,7 @@ export default function SeatMap({ fakeRoomData, fakeSeatsData }) {
             <p className=" text-right px-6 after:content-['¥']">
               Tổng cộng:{" "}
               {selectedSeats.reduce((total, seat) => {
-                return total + (seat.seat_type === "Vip" ? 600 : 500);
+                return total + (seat.seat_type === "vip" ? 600 : 500);
               }, 0)}{" "}
             </p>
             <div className="w-full p-6 flex justify-end items-center">

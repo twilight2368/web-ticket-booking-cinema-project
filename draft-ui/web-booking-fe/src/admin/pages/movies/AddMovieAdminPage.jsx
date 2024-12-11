@@ -16,6 +16,7 @@ export function AddMovieAdminPage() {
     actors: "",
     director: "",
     genre: "",
+    country: "",
     duration_in_minutes: "",
     release_date: "",
     parental_guidance: "",
@@ -134,6 +135,13 @@ export function AddMovieAdminPage() {
           label="Genre"
           name="genre"
           value={formData.genre}
+          onChange={handleInputChange}
+        />
+        <Input
+          className="w-full"
+          label="Country"
+          name="country"
+          value={formData.country}
           onChange={handleInputChange}
         />
         <Input

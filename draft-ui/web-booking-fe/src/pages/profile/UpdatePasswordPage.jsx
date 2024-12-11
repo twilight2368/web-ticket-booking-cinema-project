@@ -2,7 +2,7 @@ import { useState } from "react";
 import { LockOpenIcon } from "@heroicons/react/24/solid";
 import { Button, Card, CardBody, Input } from "@material-tailwind/react";
 import axios from "axios";
-import { toast } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 

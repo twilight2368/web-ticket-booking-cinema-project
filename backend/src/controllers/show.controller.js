@@ -7,7 +7,7 @@ const moment = require("moment");
 //TODO: Get all shows
 const getAllShowsWithMovie = async (req, res, next) => {
   try {
-    const allShows = await Show.find().populate("movie_id");
+    const allShows = await Show.find().populate("movie_id").populate("room_id");
 
     res.json(allShows);
   } catch (error) {
