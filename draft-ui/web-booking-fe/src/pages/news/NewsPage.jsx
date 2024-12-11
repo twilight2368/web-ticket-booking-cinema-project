@@ -1,10 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IconButton } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import NewsCard from "../../components/card/NewsCard";
+import axios from "axios";
+import toast from "react-hot-toast";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function NewsPage() {
   const [active, setActive] = useState(1);
+  const [total, setTotal] = useState(1);
+  const [newsList, setNewsList] = useState();
+
+  useEffect(() => {
+    axios
+      .get(`${BASE_URL}/api/news?page=${active}&limit=8`)
+      .then((response) => {
+        setActive(response.data.currentPage);
+        setTotal(response.data.totalPages);
+        setNewsList(response.data.items);
+      })
+      .catch((error) => {
+        toast.error("Can get news information");
+      });
+  }, [active]);
 
   const next = () => {
     if (active === 10) return;
@@ -27,9 +45,25 @@ export default function NewsPage() {
 
       {/* News Grid */}
       <div className="w-full px-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 mb-12 sm:mb-16">
-        {[...Array(8)].map((_, index) => (
-          <NewsCard key={index} />
-        ))}
+        {newsList ? (
+          <>
+            {newsList.map((news, i) => {
+              return (
+                <>
+                  {" "}
+                  <NewsCard
+                    title={news.title}
+                    id={news._id}
+                    date={news.write_at}
+                    image_url={news.image_url}
+                  />
+                </>
+              );
+            })}
+          </>
+        ) : (
+          <></>
+        )}
       </div>
 
       {/* Pagination */}
@@ -39,20 +73,20 @@ export default function NewsPage() {
             size="sm"
             color="white"
             onClick={prev}
-            disabled={active === 1}
+            disabled={active === total}
             className="w-8 h-8 sm:w-10 sm:h-10"
           >
             <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" />
           </IconButton>
           <span className="text-sm sm:text-base font-normal text-gray-600">
             Page <strong className="text-white">{active}</strong> of{" "}
-            <strong className="text-white">10</strong>
+            <strong className="text-white">{total}</strong>
           </span>
           <IconButton
             size="sm"
             onClick={next}
             color="white"
-            disabled={active === 10}
+            disabled={active === total}
             className="w-8 h-8 sm:w-10 sm:h-10"
           >
             <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />

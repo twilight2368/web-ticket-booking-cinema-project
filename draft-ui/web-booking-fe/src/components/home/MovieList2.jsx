@@ -11,9 +11,9 @@ export default function MovieList2() {
     axios
       .get(`${BASE_URL}/api/show-movies-about-release`)
       .then((response) => {
-        console.log("====================================");
-        console.log(response);
-        console.log("====================================");
+        // console.log("====================================");
+        // console.log(response);
+        // console.log("====================================");
         setMovieList(response.data.data);
       })
       .catch((error) => {

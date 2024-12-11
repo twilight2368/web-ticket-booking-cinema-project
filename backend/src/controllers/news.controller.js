@@ -24,7 +24,8 @@ const getNewsTitlesAndBanners = async (req, res, next) => {
 const getNewsTitlesAndBannersPagination = async (req, res, next) => {
   try {
     const { page = 1, limit = 10 } = req.query; // Get page and limit from query parameters, with defaults
-    const news = await News.find({}, "_id title image_url")
+    const news = await News.find({})
+      .select("-content -writer")
       .skip((page - 1) * limit) // Skip documents for previous pages
       .limit(parseInt(limit)); // Limit results to the specified number
     const totalCount = await News.countDocuments(); // Get total count of documents

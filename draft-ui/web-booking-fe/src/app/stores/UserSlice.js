@@ -26,17 +26,22 @@ export const UserSlice = createSlice({
       state.token = action.payload;
       localStorage.setItem("jwt", action.payload); // Persist token to localStorage
     },
+    clearToken: (state, action) => {
+      state.token = "";
+      localStorage.clear("jwt");
+    },
     clearUserInfor: (state, action) => {
       state.user_info = null;
       state.user_id = "";
       state.token = "";
+      localStorage.clear("user_info");
       localStorage.clear("user_id");
       localStorage.clear("jwt");
     },
   },
 });
 
-export const { setUserInfo, setuserId, setToken, clearUserInfor } =
+export const { setUserInfo, setuserId, setToken, clearUserInfor, clearToken } =
   UserSlice.actions;
 
 export default UserSlice.reducer;

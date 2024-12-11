@@ -4,7 +4,8 @@ import { Button, Card, CardBody, Input } from "@material-tailwind/react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { clearToken } from "../../app/stores/UserSlice";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export default function UpdatePasswordPage() {
@@ -15,7 +16,7 @@ export default function UpdatePasswordPage() {
   });
 
   const user = useSelector((state) => state.user);
-
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -51,8 +52,12 @@ export default function UpdatePasswordPage() {
         navigate("/profile");
       })
       .catch((error) => {
-        console.error(error);
-        toast.error("Update failed!!!");
+        const errorMessage = error.response.data.message;
+        if (errorMessage == "Token Unauthorized") {
+          dispatch(clearToken());
+        } else {
+          toast.error(error.response.data.message);
+        }
       });
   };
 

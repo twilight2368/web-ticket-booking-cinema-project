@@ -8,7 +8,7 @@ import { Button, Card, CardBody } from "@material-tailwind/react";
 import { useNavigate } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { useContext, useEffect } from "react";
-import { clearUserInfor } from "../../app/stores/UserSlice";
+import { clearToken, clearUserInfor } from "../../app/stores/UserSlice";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { LoginContext } from "../../context/LoginContext";
@@ -52,7 +52,12 @@ export default function ProfilePage() {
           navigate("/");
         })
         .catch((error) => {
-          toast.error(error.response.data.message);
+          const errorMessage = error.response.data.message;
+          if (errorMessage == "Token Unauthorized") {
+            dispatch(clearToken());
+          } else {
+            toast.error(error.response.data.message);
+          }
         });
     }
   };
@@ -127,6 +132,15 @@ export default function ProfilePage() {
                 }}
               >
                 cập nhật mật khẩu
+              </Button>
+              <Button
+                color="white"
+                className="w-full  truncate"
+                onClick={() => {
+                  dispatch(clearToken());
+                }}
+              >
+                Nhận token mới (Testing )
               </Button>
               <Button
                 color="red"

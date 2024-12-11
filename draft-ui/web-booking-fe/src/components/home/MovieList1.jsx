@@ -11,9 +11,9 @@ export default function MovieList1() {
     axios
       .get(`${BASE_URL}/api/show-movies-today`)
       .then((response) => {
-        console.log("====================================");
-        console.log(response);
-        console.log("====================================");
+        // console.log("====================================");
+        // console.log(response);
+        // console.log("====================================");
         setMovieList(response.data.data);
       })
       .catch((error) => {

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { setUserInfo } from "../../app/stores/UserSlice";
+import { clearToken, setUserInfo } from "../../app/stores/UserSlice";
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function UpdateProfilePage() {
@@ -60,7 +60,12 @@ export default function UpdateProfilePage() {
         navigate("/profile");
       })
       .catch((error) => {
-        toast.error("Update failed!!!");
+        const errorMessage = error.response.data.message;
+        if (errorMessage == "Token Unauthorized") {
+          dispatch(clearToken());
+        } else {
+          toast.error(error.response.data.message);
+        }
       });
   };
 
