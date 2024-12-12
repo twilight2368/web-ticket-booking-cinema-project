@@ -109,6 +109,13 @@ export function UpdateMovieModal({ movie }) {
               name="genre"
               defaultValue={formData.genre}
               onChange={handleInputChange}
+            />{" "}
+            <Input
+              className="w-full"
+              label="Country"
+              name="country"
+              defaultValue={formData.country}
+              onChange={handleInputChange}
             />
             <Input
               label="Duration in minutes"
