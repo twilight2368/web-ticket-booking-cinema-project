@@ -75,7 +75,6 @@ export default function BookingPage() {
 
         if (
           PaymentIntentResponse.status === 201 &&
-          PaymentIntentResponse.data._id &&
           PaymentIntentResponse.data.clientSecret
         ) {
           setBookingId(bookingCreateResponse.data._id);
