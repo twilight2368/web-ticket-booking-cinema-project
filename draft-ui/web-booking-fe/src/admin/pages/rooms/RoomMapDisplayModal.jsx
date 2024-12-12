@@ -22,10 +22,8 @@ export function RoomMapDisplayModal({ seats }) {
         <DialogHeader className=" uppercase pt-12 flex justify-center items-center bg-gray-900 text-white">
           <span>Sơ đồ chỗ ngồi</span>
         </DialogHeader>
-        <DialogBody className="h-[600px] flex justify-center items-center bg-gray-900">
+        <DialogBody className="h-[600px] flex flex-col gap-12  justify-center items-center bg-gray-900">
           <SeatMapAdmin fakeSeatsData={seats} />
-        </DialogBody>
-        <DialogFooter className="bg-gray-900 flex justify-center items-center">
           <Button
             variant="text"
             color="red"
@@ -34,7 +32,7 @@ export function RoomMapDisplayModal({ seats }) {
           >
             <span>đóng</span>
           </Button>
-        </DialogFooter>
+        </DialogBody>
       </Dialog>
     </>
   );

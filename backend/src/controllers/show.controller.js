@@ -58,6 +58,10 @@ const createShow = async (req, res, next) => {
       "minutes"
     );
 
+    console.log("====================================");
+    console.log(serverDateShow, serverTimeStart, serverTimeEnd);
+    console.log("====================================");
+
     // Check for overlapping shows in the same room
     const existingShows = await Show.find({
       room_id: room_id,

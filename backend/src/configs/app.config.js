@@ -10,7 +10,7 @@ const appConfig = {
       api_key: process.env.CLOUDINARY_API_KEY,
       api_secret: process.env.CLOUDINARY_API_SECRET,
     },
-    folder: "web-booking-upload",
+    folder: process.env.CLOUDINARY_FOLDER_NAME,
     image: {
       default_poster_movie:
         "https://res.cloudinary.com/dy2xmyytw/image/upload/v1733622170/82648f28c011896cd0128956e8ebf230_aw3mzu.jpg",

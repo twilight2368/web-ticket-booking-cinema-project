@@ -49,26 +49,17 @@ export default function BookingPage() {
         }
       );
 
-      console.log("====================================");
-      console.log(bookingCreateResponse);
-      console.log("====================================");
-
       if (
-        bookingCreateResponse.statusText === "Created" &&
         bookingCreateResponse.status === 201 &&
         bookingCreateResponse.data._id
       ) {
-        console.log("====================================");
-        console.log(bookingCreateResponse.data);
-        console.log("====================================");
-
         const paymenPayload = {
           booking_id: bookingCreateResponse.data._id,
           user_id: user.user_id,
           amount: cart.total_price,
         };
 
-        const PaymentIntentResopnse = await axios.post(
+        const PaymentIntentResponse = await axios.post(
           `${BASE_URL}/api/create_intent_payment`,
           paymenPayload,
           {
@@ -78,18 +69,16 @@ export default function BookingPage() {
           }
         );
 
+        console.log("====================================");
+        console.log(PaymentIntentResponse);
+        console.log("====================================");
+
         if (
-          PaymentIntentResopnse.status === 201 &&
-          PaymentIntentResopnse.statusText === "Created"
+          PaymentIntentResponse.status === 201 &&
+          PaymentIntentResponse.data.clientSecret
         ) {
-          console.log("====================================");
-          console.log(
-            PaymentIntentResopnse.data._id,
-            PaymentIntentResopnse.data.clientSecret
-          );
-          console.log("====================================");
           setBookingId(bookingCreateResponse.data._id);
-          setClientSecret(PaymentIntentResopnse.data.clientSecret);
+          setClientSecret(PaymentIntentResponse.data.clientSecret);
         }
       }
     } catch (error) {

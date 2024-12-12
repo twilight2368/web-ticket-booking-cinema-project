@@ -6,11 +6,11 @@ const SERVER_TIMEZONE = "Asia/Bangkok"; // UTC+7
 const timeZoneUtil = {
   /**
    * Convert a input time to the server's timezone (Asia/Bangkok).
-   * @param {Date | string} utcTime - The UTC time to convert.
+   * @param {Date | string} utcTime - The UTC+0 time to convert.
    * @returns {moment.Moment} The converted time in the server's timezone.
    */
   convertToServerTimezone: (inputDate) => {
-    return moment(inputDate).tz("Asia/Bangkok");
+    return moment(inputDate).tz(SERVER_TIMEZONE);
   },
 
   /**
@@ -19,7 +19,7 @@ const timeZoneUtil = {
    * @returns {moment.Moment} The converted time in the server's timezone.
    */
   convertDateToServerTimezone: (inputDate) => {
-    return moment(inputDate, "YYYY-MM-DD").tz("Asia/Bangkok");
+    return moment(inputDate, "YYYY-MM-DD").tz(SERVER_TIMEZONE, true);
   },
 
   /**
@@ -28,7 +28,7 @@ const timeZoneUtil = {
    * @returns {moment.Moment} The converted time in the server's timezone.
    */
   convertDateAndTimeToServerTimezone: (inputDate) => {
-    return moment(inputDate, "YYYY-MM-DD HH:mm").tz("Asia/Bangkok");
+    return moment(inputDate, "YYYY-MM-DD HH:mm").tz(SERVER_TIMEZONE, true);
   },
 
   /**
