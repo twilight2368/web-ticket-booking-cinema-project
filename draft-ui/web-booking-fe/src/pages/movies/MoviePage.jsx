@@ -80,7 +80,7 @@ export default function MoviePage() {
             })}
           </>
         ) : (
-          <>2</>
+          <></>
         )}
       </div>
     </div>
