@@ -94,7 +94,7 @@ app.use(
       maxAge: SESSION_COOKIE_TTL,
       httpOnly: true,
       sameSite:"none",
-      secure: false,
+      secure: true,
     },
   })
 );
