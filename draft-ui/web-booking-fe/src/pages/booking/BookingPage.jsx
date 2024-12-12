@@ -69,6 +69,10 @@ export default function BookingPage() {
           }
         );
 
+        console.log("====================================");
+        console.log(PaymentIntentResponse);
+        console.log("====================================");
+
         if (
           PaymentIntentResponse.status === 201 &&
           PaymentIntentResponse.data._id &&
