@@ -73,7 +73,7 @@ export default function NewsPage() {
             size="sm"
             color="white"
             onClick={prev}
-            disabled={active === total}
+            disabled={active === 1}
             className="w-8 h-8 sm:w-10 sm:h-10"
           >
             <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" />
