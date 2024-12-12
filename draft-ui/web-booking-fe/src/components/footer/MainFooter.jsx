@@ -23,7 +23,7 @@ export default function MainFooter() {
             <li>Liên hệ</li>
           </ul>
           <p className="my-12 text-center">
-            <Link to="admin" className="mt-3 hover:text-red-300">
+            <Link to="/admin" className="mt-3 hover:text-red-300">
               Admin
             </Link>
           </p>
