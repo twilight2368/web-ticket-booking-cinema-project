@@ -113,7 +113,7 @@ export default function MovieLayout() {
                         </p>
                         <p>
                           <strong>Diễn viên: </strong>
-                          {movie?.actors?.join(", ") || "Not specified"}
+                          {movie?.actors || "Not specified"}
                         </p>
                         <p>
                           <strong>Đạo diễn: </strong>
