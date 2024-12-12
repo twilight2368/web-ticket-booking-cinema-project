@@ -93,6 +93,7 @@ app.use(
     cookie: {
       maxAge: SESSION_COOKIE_TTL,
       httpOnly: true,
+      sameSite:"none",
       secure: false,
     },
   })
