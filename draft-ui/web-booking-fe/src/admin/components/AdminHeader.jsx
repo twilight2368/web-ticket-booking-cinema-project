@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { setMovies, setRooms } from "../../app/stores/AdminSlice";
+import ReloadButton from "./ReloadButton";
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export default function AdminHeader() {
   const [time, setTime] = useState(DateTime.now().setZone("Asia/Bangkok"));
@@ -48,7 +49,10 @@ export default function AdminHeader() {
     }
   }, []);
   return (
-    <div className=" flex flex-row justify-end items-center px-12 py-6">
+    <div className=" flex flex-row justify-between items-center px-12 py-6">
+      <div>
+        <ReloadButton />
+      </div>
       <div className=" text-right">
         <div className="max-w-96 text-lg font-black">
           <p className=" w-full truncate  before:content-['Hello,']">
