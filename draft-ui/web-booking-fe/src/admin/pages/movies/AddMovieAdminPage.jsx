@@ -64,6 +64,7 @@ export function AddMovieAdminPage() {
     form.append("actors", formData.actors);
     form.append("director", formData.director);
     form.append("genre", formData.genre);
+    form.append("country", formData.country);
     form.append("duration_in_minutes", formData.duration_in_minutes);
     form.append("release_date", formData.release_date);
     form.append("parental_guidance", formData.parental_guidance);
@@ -106,68 +107,58 @@ export function AddMovieAdminPage() {
           className="w-full"
           label="Title"
           name="title"
-          value={formData.title}
           onChange={handleInputChange}
         />
         <Textarea
           className="w-full"
           label="Description"
           name="description"
-          value={formData.description}
           onChange={handleInputChange}
         />
         <Textarea
           className="w-full"
           label="Actors"
           name="actors"
-          value={formData.actors}
           onChange={handleInputChange}
         />
         <Input
           className="w-full"
           label="Director"
           name="director"
-          value={formData.director}
           onChange={handleInputChange}
         />
         <Textarea
           className="w-full"
           label="Genre"
           name="genre"
-          value={formData.genre}
           onChange={handleInputChange}
         />
         <Input
           className="w-full"
           label="Country"
           name="country"
-          value={formData.country}
           onChange={handleInputChange}
         />
         <Input
           label="Duration in minutes"
           type="number"
           name="duration_in_minutes"
-          value={formData.duration_in_minutes}
           onChange={handleInputChange}
         />
         <Input
           label="Release Date"
           type="date"
           name="release_date"
-          value={formData.release_date}
           onChange={handleInputChange}
         />
         <Input
           label="Parental Guidance (G, PG, PG-13, R, NC-17)"
           name="parental_guidance"
-          value={formData.parental_guidance}
           onChange={handleInputChange}
         />
         <Input
           label="Trailer URL"
           name="trailer_url"
-          value={formData.trailer_url}
           onChange={handleInputChange}
         />
 
