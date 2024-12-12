@@ -1,6 +1,6 @@
-import { Button } from "@material-tailwind/react";
+import { IconButton } from "@material-tailwind/react";
 import React from "react";
-
+import { ArrowPathRoundedSquareIcon } from "@heroicons/react/24/outline";
 export default function ReloadButton() {
   const reloadPage = () => {
     // Reload the page without causing routing issues
@@ -9,11 +9,9 @@ export default function ReloadButton() {
 
   return (
     <div>
-      <Button
-        onClick={reloadPage}
-      >
-        Reload Page
-      </Button>
+      <IconButton onClick={reloadPage}>
+        <ArrowPathRoundedSquareIcon className="h-6 w-6" />
+      </IconButton>
     </div>
   );
 }
