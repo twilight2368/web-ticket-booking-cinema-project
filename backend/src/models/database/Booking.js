@@ -42,6 +42,6 @@ const BookingSchema = new mongoose.Schema(
 // Add an index to optimize lookups
 BookingSchema.index({ user_id: 1, show_id: 1 });
 
-const BookingModel = mongoose.model("Booking", BookingSchema);
+const BookingModel = mongoose.model("booking", BookingSchema);
 
 module.exports = BookingModel;

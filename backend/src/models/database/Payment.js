@@ -32,6 +32,6 @@ const PaymentSchema = new mongoose.Schema(
 // Add an index to optimize queries by booking_id and payment_status
 PaymentSchema.index({ booking_id: 1, payment_status: 1 });
 
-const PaymentModel = mongoose.model("Payment", PaymentSchema);
+const PaymentModel = mongoose.model("payment", PaymentSchema);
 
 module.exports = PaymentModel;
