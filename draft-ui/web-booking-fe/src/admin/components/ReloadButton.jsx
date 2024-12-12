@@ -13,7 +13,7 @@ export default function ReloadButton() {
         onClick={reloadPage}
       >
         Reload Page
-      </But>
+      </Button>
     </div>
   );
 }
