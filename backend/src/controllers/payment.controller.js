@@ -71,7 +71,6 @@ const getBookingInformationById = async (req, res, next) => {
     }
 
     const booking = await BookingModel.findById(id)
-      .populate("user_id") // Populate user details
       .populate({
         path: "show_id",
         populate: [
@@ -79,7 +78,8 @@ const getBookingInformationById = async (req, res, next) => {
           { path: "room_id", select: "-seats" }, // Populate room details excluding seats
         ],
       })
-      .populate("seats"); // Populate seat details
+      .populate("seats")
+      .select("-user_id");
 
     if (!booking) {
       return res
