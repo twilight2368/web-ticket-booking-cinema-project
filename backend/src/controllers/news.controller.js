@@ -24,7 +24,8 @@ const getNewsTitlesAndBanners = async (req, res, next) => {
 const getNewsTitlesAndBannersPagination = async (req, res, next) => {
   try {
     const { page = 1, limit = 10 } = req.query; // Get page and limit from query parameters, with defaults
-    const news = await News.find({}, "_id title image_url")
+    const news = await News.find({})
+      .select("-content -writer")
       .skip((page - 1) * limit) // Skip documents for previous pages
       .limit(parseInt(limit)); // Limit results to the specified number
     const totalCount = await News.countDocuments(); // Get total count of documents
@@ -46,7 +47,7 @@ const getSpecificNewsById = async (req, res, next) => {
     const { id } = req.params; // Extract ID from route parameters
     const news = await News.findById(id); // Fetch document by its ID
     if (!news) {
-      return res.status(404).json({ error: "News not found" });
+      return res.status(404).json({ message: "News not found" });
     }
     res.status(200).json(news);
   } catch (error) {
@@ -66,31 +67,13 @@ const createNews = async (req, res, next) => {
   }
 };
 
-//TODO: Update a news
-const updateNewsById = async (req, res, next) => {
-  try {
-    const { id } = req.params; // Extract ID from route parameters
-    const updatedData = req.body; // Retrieve updated data from request body
-    const news = await News.findByIdAndUpdate(id, updatedData, {
-      new: true, // Return the updated document
-      runValidators: true, // Run schema validations
-    });
-    if (!news) {
-      return res.status(404).json({ error: "News not found for update" });
-    }
-    res.status(200).json(news);
-  } catch (error) {
-    next(error);
-  }
-};
-
 //TODO: Delete a news
 const deleteNewsById = async (req, res, next) => {
   try {
     const { id } = req.params; // Extract ID from route parameters
     const news = await News.findByIdAndDelete(id);
     if (!news) {
-      return res.status(404).json({ error: "News not found for deletion" });
+      return res.status(404).json({ message: "News not found for deletion" });
     }
     res.status(200).json({ message: "News deleted successfully", news });
   } catch (error) {
@@ -104,6 +87,5 @@ module.exports = {
   getNewsTitlesAndBannersPagination,
   getSpecificNewsById,
   createNews,
-  updateNewsById,
   deleteNewsById,
 };

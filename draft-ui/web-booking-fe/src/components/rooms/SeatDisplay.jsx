@@ -4,6 +4,9 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 // Individual Seat Component
 export default function SeatDisplay({
   seat,
+  seat_row,
+  seat_col,
+  seat_type,
   isReserved,
   isSelected,
   onSelect,
@@ -15,9 +18,8 @@ export default function SeatDisplay({
         {
           "bg-gray-900 cursor-not-allowed": isReserved,
           "bg-blue-400": isSelected,
-          "bg-yellow-800":
-            !isReserved && !isSelected && seat.seat_type === "Vip",
-          "bg-blue-gray-400 ": !isSelected && seat.seat_type !== "Vip",
+          "bg-yellow-800": !isReserved && !isSelected && seat_type === "vip",
+          "bg-blue-gray-400 ": !isSelected && seat_type !== "vip",
           "hover:opacity-80 cursor-pointer": !isReserved,
         }
       )}
@@ -28,7 +30,7 @@ export default function SeatDisplay({
         <XMarkIcon strokeWidth={6} className=" h-6 w-6 text-blue-gray-800" />
       ) : (
         <span className=" text-xs sm:hidden hidden md:block lg:block ">
-          {seat.seat_row}-{seat.seat_column}
+          {seat_row}-{seat_col}
         </span>
       )}
     </button>

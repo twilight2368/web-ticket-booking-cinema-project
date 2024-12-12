@@ -1,19 +1,22 @@
 import { useNavigate } from "react-router";
+import TimeDisplay from "../time/TimeDisplay";
 
-export default function MovieScheduleLink({ to }) {
+export default function MovieScheduleLink({ to, name, time }) {
   const navigate = useNavigate();
   return (
     <>
       <button
         color="white"
-        className=" hover:bg-blue-gray-800/60 border-[1px] border-white p-1 rounded-lg duration-200 text-white"
+        className="w-full hover:bg-blue-gray-800/60 border-[1px] border-white p-1 rounded-lg duration-200 text-white"
         onClick={() => {
           navigate(to);
         }}
       >
-        <span className=" text-xs">Room-1</span>
+        <span className=" text-xs">--- {name} ---</span>
         <br />
-        <span>00:00</span>
+        <span>
+          <TimeDisplay isoDate={time} />
+        </span>
       </button>
     </>
   );

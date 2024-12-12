@@ -2,7 +2,10 @@ import { Button, Card, CardBody } from "@material-tailwind/react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { QRCodeCanvas } from "qrcode.react";
-export default function PaymentSuccess() {
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const MY_URL = import.meta.env.VITE_API_MY_URL;
+
+export default function PaymentDetailPage() {
   const navigate = useNavigate();
   return (
     <div className="w-full padding-for-header">

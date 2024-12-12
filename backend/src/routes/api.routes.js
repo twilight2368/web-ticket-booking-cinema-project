@@ -50,7 +50,6 @@ const {
   createNews,
   getSpecificNewsById,
   deleteNewsById,
-  updateNewsById,
 } = require("../controllers/news.controller");
 const {
   createShow,
@@ -61,6 +60,7 @@ const {
   getAMovieAndItsShowsCurrent,
   getAllShowsWithMovie,
 } = require("../controllers/show.controller");
+
 const {
   getBookingInformation,
   getBookingInformationById,
@@ -149,8 +149,6 @@ router.post(
 ); //? Image require
 
 router.get("/news/:id", getSpecificNewsById);
-
-router.put("/news/:id", checkAdminLogin, updateNewsById);
 
 router.delete("/news/:id", checkAdminLogin, deleteNewsById);
 

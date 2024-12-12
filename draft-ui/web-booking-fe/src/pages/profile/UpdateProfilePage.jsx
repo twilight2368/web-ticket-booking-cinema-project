@@ -1,7 +1,74 @@
 import { PencilIcon } from "@heroicons/react/24/solid";
 import { Button, Card, CardBody, Input } from "@material-tailwind/react";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router";
+import { clearToken, setUserInfo } from "../../app/stores/UserSlice";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function UpdateProfilePage() {
+  const userPreInfo = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    username: "",
+    first_name: "",
+    last_name: "",
+    phone_number: "",
+    email: "",
+  });
+
+  useEffect(() => {
+    if (userPreInfo.user_info) {
+      setFormData({
+        username: userPreInfo.user_info.username,
+        first_name: userPreInfo.user_info.first_name,
+        last_name: userPreInfo.user_info.last_name,
+        phone_number: userPreInfo.user_info.phone_number,
+        email: userPreInfo.user_info.email,
+      });
+    }
+  }, []);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const payload = formData;
+
+    console.log("====================================");
+    console.log(payload);
+    console.log("====================================");
+
+    axios
+      .put(`${BASE_URL}/api/user/${userPreInfo.user_id}`, payload, {
+        headers: {
+          Authorization: `Bear ${userPreInfo.token}`,
+        },
+      })
+      .then((response) => {
+        dispatch(setUserInfo(response.data.data));
+        toast.success("Update success");
+        navigate("/profile");
+      })
+      .catch((error) => {
+        const errorMessage = error.response.data.message;
+        if (errorMessage == "Token Unauthorized") {
+          dispatch(clearToken());
+        } else {
+          toast.error(error.response.data.message);
+        }
+      });
+  };
+
   return (
     <div className=" padding-for-header">
       <div className="container mx-auto px-4 py-8 mb-16">
@@ -26,7 +93,9 @@ export default function UpdateProfilePage() {
                     label="Tên tài khoản"
                     color="white"
                     className="w-full"
-                    defaultValue={"Value..."}
+                    defaultValue={formData.username}
+                    name="username"
+                    onChange={handleInputChange}
                   />
                 </div>
                 <div className="col-span-1">
@@ -35,7 +104,9 @@ export default function UpdateProfilePage() {
                     label="Họ"
                     color="white"
                     className="w-full"
-                    defaultValue={"Value..."}
+                    defaultValue={formData.last_name}
+                    name="last_name"
+                    onChange={handleInputChange}
                   />
                 </div>
                 <div className="col-span-1">
@@ -44,7 +115,9 @@ export default function UpdateProfilePage() {
                     label="Tên"
                     color="white"
                     className="w-full"
-                    defaultValue={"Value..."}
+                    defaultValue={formData.first_name}
+                    name="first_name"
+                    onChange={handleInputChange}
                   />
                 </div>
                 <div className="col-span-2">
@@ -53,7 +126,9 @@ export default function UpdateProfilePage() {
                     label="Số điện thoại"
                     color="white"
                     className="w-full"
-                    defaultValue={"Value..."}
+                    defaultValue={formData.phone_number}
+                    name="phone_number"
+                    onChange={handleInputChange}
                   />
                 </div>
                 <div className="col-span-2">
@@ -63,24 +138,19 @@ export default function UpdateProfilePage() {
                     type="email"
                     color="white"
                     className="w-full"
-                    defaultValue={"Value..."}
+                    defaultValue={formData.email}
+                    name="email"
+                    onChange={handleInputChange}
                   />
                 </div>
               </div>
             </div>
-            {false ? (
-              <>
-                <div className="h-8 md:h-8 text-center w-full text-gray-400 mb-2"></div>
-              </>
-            ) : (
-              <>
-                <div className="h-8 md:h-8 text-center w-full text-red-400 mb-2">
-                  Something went wrong!!!
-                </div>
-              </>
-            )}
             <div className="mb-4">
-              <Button color="white" className="w-full  truncate">
+              <Button
+                color="white"
+                className="w-full truncate"
+                onClick={handleSubmit}
+              >
                 Cập nhật
               </Button>
             </div>

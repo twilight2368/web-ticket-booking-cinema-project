@@ -40,13 +40,13 @@ const getRoomInformationByShow = async (req, res, next) => {
 
     // Validate `show_id` parameter
     if (!show_id) {
-      return res.status(400).json({ error: "Show ID is required" });
+      return res.status(400).json({ message: "Show ID is required" });
     }
 
     // Fetch show details
     const show = await ShowModel.findById(show_id).populate("room_id");
     if (!show) {
-      return res.status(404).json({ error: "Show not found" });
+      return res.status(404).json({ message: "Show not found" });
     }
 
     const roomId = show.room_id._id;
@@ -54,14 +54,14 @@ const getRoomInformationByShow = async (req, res, next) => {
     // Fetch room details
     const room = await RoomModel.findById(roomId);
     if (!room) {
-      return res.status(404).json({ error: "Room not found" });
+      return res.status(404).json({ message: "Room not found" });
     }
 
     // Fetch all seats for the room
     const seats = await Seat.find({ room_id: roomId }).populate("seat_type");
 
     // Fetch all bookings for the show
-    const bookings = await BookingModel.find({ show_id });
+    const bookings = await BookingModel.find({ show_id, status: "confirmed" });
 
     // Map booked seats for quick lookup
     const bookedSeats = new Set(bookings.flatMap((booking) => booking.seats));

@@ -44,7 +44,7 @@ router.post("/register", async (req, res, next) => {
       !phone_number ||
       !password
     ) {
-      return res.status(400).json({ error: "All fields are required." });
+      return res.status(400).json({ message: "All fields are required." });
     }
 
     // Check if the username, email already exists
@@ -55,14 +55,14 @@ router.post("/register", async (req, res, next) => {
     if (existingUser) {
       return res
         .status(400)
-        .json({ error: "Username or email already exists." });
+        .json({ message: "Username or email already exists." });
     }
 
     // Check password length
     if (password.length < 8 || password.length > 20) {
-      return res
-        .status(400)
-        .json({ error: "Password must be between 8 and 20 characters long." });
+      return res.status(400).json({
+        message: "Password must be between 8 and 20 characters long.",
+      });
     }
 
     // Hash the password
@@ -87,23 +87,38 @@ router.post("/register", async (req, res, next) => {
 });
 
 //TODO: Login user
-router.post(
-  "/login",
-  passport.authenticate("local", { session: true }),
-  (req, res, next) => {
-    try {
-      const tokenData = issueJWT(req.user);
+router.post("/login", (req, res, next) => {
+  passport.authenticate("local", { session: true }, (err, user, info) => {
+    if (err) {
+      return next(err); // Forward errors to the next middleware (e.g., error handler)
+    }
+
+    if (!user) {
+      // Return a 401 Unauthorized error with the specific message
+      return res
+        .status(401)
+        .json({ message: info.message || "Authentication failed" });
+    }
+
+    // Log the user in and issue a JWT token
+    req.login(user, async (err) => {
+      if (err) {
+        return next(err); // Forward any errors from login to the next middleware
+      }
+
+      const tokenData = issueJWT(req.user); // Issue JWT token
+
+      const user_info = await UserModel.findById(req.user.id);
 
       return res.json({
+        user_info: user_info,
         user_id: req.user.id,
         jwt: tokenData.token,
         message: "Successfully logged in",
       });
-    } catch (error) {
-      next(error);
-    }
-  }
-);
+    });
+  })(req, res, next); // Execute the authentication
+});
 
 //TODO: Logout user
 router.get("/logout", (req, res, next) => {
@@ -133,7 +148,7 @@ router.get("/new-token", checkIsSessionValid, (req, res, next) => {
     const tokenData = issueJWT(req.user);
     return res.json({
       jwt: tokenData.token,
-      message: "Successfully logged in",
+      message: "Successfully get token",
     });
   } catch (error) {
     next(error);
@@ -155,9 +170,6 @@ router.get("/cookie", checkCookie, (req, res, next) => {
 router.get("/header", checkLoggedIn, (req, res, next) => {
   console.log("====================================");
   console.log(req.user);
-  console.log("====================================");
-  console.log("====================================");
-  console.log(req.user.id);
   console.log("====================================");
   res.json({
     data: "Hello world",
@@ -252,7 +264,10 @@ router.post("/admin-login", async (req, res, next) => {
 
     const tokenData = issueJWT(admin);
     return res.json({
-      admin: admin.id,
+      admin: {
+        id: admin.id,
+        username: admin.username,
+      },
       jwt: tokenData.token,
       message: "Successfully logged in",
     });

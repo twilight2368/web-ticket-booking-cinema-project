@@ -4,10 +4,24 @@ import SeatDisplay from "./SeatDisplay";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import {
+  seatTotalPriceFromSeat,
+  setMovie,
+  setRoom,
+  setSeatList,
+  setShow,
+} from "../../app/stores/CartSlice";
 // Seat Map Component
-export default function SeatMap({ fakeRoomData, fakeSeatsData }) {
+export default function SeatMap({
+  SeatsData,
+  room_data,
+  show_data,
+  movie_data,
+}) {
   const [selectedSeats, setSelectedSeats] = useState([]);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   // Check if a seat is adjacent to any of the selected seats
   const isAdjacent = (seat) => {
     for (let selectedSeat of selectedSeats) {
@@ -31,19 +45,27 @@ export default function SeatMap({ fakeRoomData, fakeSeatsData }) {
 
   // Handle seat selection
   const handleSeatSelect = (seat) => {
-    if (selectedSeats.some((s) => s._id === seat._id)) {
-      setSelectedSeats((prev) => prev.filter((s) => s._id !== seat._id));
+    if (selectedSeats.some((s) => s.seat_id === seat.seat_id)) {
+      setSelectedSeats((prev) =>
+        prev.filter((s) => s.seat_id !== seat.seat_id)
+      );
     } else {
       // Only allow selection if it's adjacent to a selected seat or if there are no selected seats
-      if (selectedSeats.length === 0 || isAdjacent(seat)) {
-        setSelectedSeats((prev) => [...prev, seat]);
+      if (!selectedSeats.is_booked) {
+        if (selectedSeats.length === 0 || isAdjacent(seat)) {
+          setSelectedSeats((prev) => [...prev, seat]);
+        } else {
+          toast.error(
+            " Mua ghế tạo ghế trống.\n Quý khách nên chọn ghế bên cạnh ",
+            {
+              position: "bottom-center",
+            }
+          );
+        }
       } else {
-        toast.error(
-          " Mua ghế tạo ghế trống.\n Quý khách nên chọn ghế bên cạnh ",
-          {
-            position: "bottom-center",
-          }
-        );
+        toast.error(" Ghế đã được đặt trước.\n Quý khách nên chọn ghế khác ", {
+          position: "bottom-center",
+        });
       }
     }
   };
@@ -51,7 +73,7 @@ export default function SeatMap({ fakeRoomData, fakeSeatsData }) {
   // Organize seats by row
   const getSeatsByRow = () => {
     const seatsByRow = {};
-    fakeSeatsData.forEach((seat) => {
+    SeatsData.forEach((seat) => {
       if (!seatsByRow[seat.seat_row]) {
         seatsByRow[seat.seat_row] = [];
       }
@@ -59,6 +81,14 @@ export default function SeatMap({ fakeRoomData, fakeSeatsData }) {
     });
 
     return seatsByRow;
+  };
+
+  const submitHandling = () => {
+    dispatch(setSeatList(selectedSeats));
+    dispatch(setShow(show_data));
+    dispatch(setRoom(room_data));
+    dispatch(setMovie(movie_data));
+    navigate("/making-booking");
   };
 
   const seatsByRow = getSeatsByRow();
@@ -80,9 +110,12 @@ export default function SeatMap({ fakeRoomData, fakeSeatsData }) {
                       <SeatDisplay
                         key={seat._id}
                         seat={seat}
-                        isReserved={seat.seat_row == 5}
+                        seat_col={seat.seat_column}
+                        seat_type={seat.seat_type.name}
+                        seat_row={seat.seat_row}
+                        isReserved={seat.is_booked}
                         isSelected={selectedSeats.some(
-                          (s) => s._id === seat._id
+                          (s) => s.seat_id === seat.seat_id
                         )}
                         onSelect={handleSeatSelect}
                       />
@@ -95,7 +128,7 @@ export default function SeatMap({ fakeRoomData, fakeSeatsData }) {
       </div>
 
       {/* Seat Legend */}
-      <div className="flex sm:space-x-4 sm:space-y-0 space-y-4 mb-4 sm:flex-row flex-col justify-center items-center">
+      <div className="flex sm:space-x-4 sm:space-y-4 md:space-y-0 mb-4 md:flex-row sm:flex-col justify-center items-center">
         <div className="flex items-center space-x-2">
           <div className="w-6 h-6 bg-blue-gray-400 rounded-md"></div>
           <span>Ghế thường</span>
@@ -129,7 +162,7 @@ export default function SeatMap({ fakeRoomData, fakeSeatsData }) {
             <p className=" text-right px-6 after:content-['¥']">
               Tổng cộng:{" "}
               {selectedSeats.reduce((total, seat) => {
-                return total + (seat.seat_type === "Vip" ? 600 : 500);
+                return total + seat.seat_type.price;
               }, 0)}{" "}
             </p>
             <div className="w-full p-6 flex justify-end items-center">
@@ -138,9 +171,7 @@ export default function SeatMap({ fakeRoomData, fakeSeatsData }) {
                 color="red"
                 variant="gradient"
                 disabled={!selectedSeats.length}
-                onClick={() => {
-                  navigate("/making-booking");
-                }}
+                onClick={submitHandling}
               >
                 thanh toán
               </Button>

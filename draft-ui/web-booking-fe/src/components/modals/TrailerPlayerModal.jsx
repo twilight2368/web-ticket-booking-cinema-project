@@ -1,14 +1,7 @@
 import { useState } from "react";
-import {
-  Button,
-  Dialog,
-  DialogBody,
-  DialogFooter,
-} from "@material-tailwind/react";
+import { Button, Dialog, DialogBody } from "@material-tailwind/react";
 
-import ReactPlayer from "react-player";
-
-export default function TrailerPlayerModal() {
+export default function TrailerPlayerModal({ trailer_url }) {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(!open);
@@ -22,7 +15,7 @@ export default function TrailerPlayerModal() {
         <DialogBody className=" h-[96] aspect-video p-0 rounded bg-black">
           <iframe
             className="w-full h-full"
-            src="https://www.youtube.com/embed/i63STOtAL2g"
+            src={trailer_url}
             allowfullscreen
           ></iframe>
         </DialogBody>

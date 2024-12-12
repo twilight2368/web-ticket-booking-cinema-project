@@ -4,11 +4,13 @@ const cors = require("cors");
 const morgan = require("morgan");
 const session = require("express-session");
 const passport = require("passport");
-const helmet = require("helmet")
+const helmet = require("helmet");
 const cookieParser = require("cookie-parser");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./docs/openapi/api.json");
 const path = require("path");
+
+const appConfig = require("./configs/app.config");
 //TODO: Import mongo store to connect session
 const MongoStore = require("connect-mongo");
 
@@ -36,19 +38,26 @@ const {
 //* Global Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(helmet());
 
-app.use(helmet())
+const allowOrigins = ["http://localhost:5173", "http://localhost:3000"];
+if (!appConfig.dev_mode) {
+  allowOrigins.push(appConfig.client_url);
+}
 
+console.log("====================================");
+console.log(allowOrigins);
+console.log("====================================");
+// CORS Configuration
 const corsOptions = {
-  origin: "*", 
-  methods: ["GET", "POST", "PUT", "DELETE"], 
-  allowedHeaders: ["Content-Type", "Authorization", "x-custom-header"], 
+  origin: allowOrigins,
   credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 app.use(cors(corsOptions));
-
-app.use(cookieParser());
 
 //* Logging middlewares
 
@@ -83,6 +92,8 @@ app.use(
     }),
     cookie: {
       maxAge: SESSION_COOKIE_TTL,
+      httpOnly: true,
+      secure: false,
     },
   })
 );

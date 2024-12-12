@@ -1,7 +1,28 @@
 import { Button } from "@material-tailwind/react";
 import { AddScheduleModal } from "./AddScheduleModal";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
+import DayDisplay from "../../../components/time/DayDisplay";
+import TimeDisplay from "../../../components/time/TimeDisplay";
 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export default function SchedulePage() {
+  const [showList, setShowList] = useState();
+
+  useEffect(() => {
+    axios
+      .get(`${BASE_URL}/api/all-shows`)
+      .then((response) => {
+        setShowList(response.data);
+        //toast.success("Get all shows data successful");
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error("Get all shows data failed");
+      });
+  }, []);
+
   return (
     <div className="w-full min-h-screen p-6 bg-gray-100">
       {/* Page Header */}
@@ -38,27 +59,26 @@ export default function SchedulePage() {
               </tr>
             </thead>
             <tbody>
-              <ScheduleDisplayItem
-                name_room={"Room-n"}
-                name_movie={"Hello world i am from Ghibli"}
-                day={"2024-12-01"}
-                time_start={"10:00"}
-                time_end={"12:00"}
-              />
-              <ScheduleDisplayItem
-                name_room={"Room-n"}
-                name_movie={"Hello world i am from Ghibli"}
-                day={"2024-12-01"}
-                time_start={"10:00"}
-                time_end={"12:00"}
-              />
-              <ScheduleDisplayItem
-                name_room={"Room-n"}
-                name_movie={"Hello world i am from Ghibli"}
-                day={"2024-12-01"}
-                time_start={"10:00"}
-                time_end={"12:00"}
-              />
+              {showList ? (
+                <>
+                  {" "}
+                  {showList.map((show) => {
+                    return (
+                      <>
+                        <ScheduleDisplayItem
+                          name_room={show.room_id.name}
+                          name_movie={show.movie_id.title}
+                          day={show.date_show}
+                          time_start={show.time_start}
+                          time_end={show.time_end}
+                        />
+                      </>
+                    );
+                  })}{" "}
+                </>
+              ) : (
+                <></>
+              )}
             </tbody>
           </table>
         </div>
@@ -86,9 +106,12 @@ const ScheduleDisplayItem = ({
           {name_movie}
         </div>
       </td>
-      <td className="border border-gray-300 px-4 py-2 text-center">{day}</td>
       <td className="border border-gray-300 px-4 py-2 text-center">
-        {time_start} - {time_end}
+        <DayDisplay isoDate={day} />
+      </td>
+      <td className="border border-gray-300 px-4 py-2 text-center">
+        <TimeDisplay isoDate={time_start} /> -
+        <TimeDisplay isoDate={time_end} />
       </td>
       <td className="border border-gray-300 px-4 py-2 text-center">
         <Button color="red" variant="outlined">

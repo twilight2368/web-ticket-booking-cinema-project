@@ -1,11 +1,21 @@
-import { Button, Input } from "@material-tailwind/react";
+import { Button, Input, Spinner } from "@material-tailwind/react";
 import React, { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function CreateAdminNewsPage() {
+  const [title, setTitle] = useState("");
   const [value, setValue] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
+  const [imageFile, setImageFile] = useState(null); // For sending the file
+  const admin = useSelector((state) => state.admin);
+  const navigate = useNavigate();
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, false] }],
@@ -32,6 +42,52 @@ export default function CreateAdminNewsPage() {
         setImagePreview(reader.result);
       };
       reader.readAsDataURL(file);
+      setImageFile(file); // Save the file for form submission
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!title || !value) {
+      toast.error("Please fill in all required fields!");
+      return;
+    }
+
+    setIsLoading(true);
+
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("content", value);
+    formData.append("writer", admin.admin.admin.id);
+    if (imageFile) {
+      formData.append("image", imageFile);
+    }
+
+    try {
+      axios
+        .post(`${BASE_URL}/api/news/`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bear ${admin.admin.jwt}`,
+          },
+        })
+        .then((response) => {
+          console.log("====================================");
+          console.log(response);
+          console.log("====================================");
+          toast.success("Add news successfull");
+          setIsLoading(false);
+          navigate("/admin/news");
+        })
+        .catch((error) => {
+          console.log("====================================");
+          console.log(error);
+          console.log("====================================");
+          toast.error("Something went wrong!!!");
+          setIsLoading(false);
+        });
+    } catch (error) {
+      console.error("Error creating news:", error);
+      toast.error("Failed to create news.");
     }
   };
 
@@ -41,7 +97,12 @@ export default function CreateAdminNewsPage() {
         Quản lý tin tức
       </div>
       <div className="w-full py-3">
-        <Input label="title" size="lg" />
+        <Input
+          label="Title"
+          size="lg"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
       </div>
       <ReactQuill
         modules={modules}
@@ -70,7 +131,15 @@ export default function CreateAdminNewsPage() {
         </div>
       </div>
       <div className=" w-full flex justify-center items-center">
-        <Button color="blue">xác nhận</Button>
+        <Button variant="gradient" onClick={handleSubmit} disabled={isLoading}>
+          {isLoading ? (
+            <Spinner />
+          ) : (
+            <>
+              <span>Thêm</span>
+            </>
+          )}
+        </Button>
       </div>
     </div>
   );

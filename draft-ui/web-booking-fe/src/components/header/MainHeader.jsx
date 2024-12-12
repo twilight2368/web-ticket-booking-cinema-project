@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useContext, useState } from "react";
 import MainLogo from "../logo/MainLogo";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Button } from "@material-tailwind/react";
@@ -8,9 +8,12 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/solid";
 
+import { LoginContext } from "../../context/LoginContext";
+
 export default function MainHeader() {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { isLogin } = useContext(LoginContext);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -64,14 +67,14 @@ export default function MainHeader() {
 
           {/* User Actions */}
           <div className="w-auto">
-            {!true ? (
+            {isLogin ? (
               <div className="hidden md:flex items-center space-x-2">
                 <UserCircleIcon className="h-8 w-8 text-white" />
                 <Link
                   to="/profile"
                   className="text-white hover:underline text-sm truncate w-40"
                 >
-                  <p className=" truncate">Username </p>
+                  <p className=" truncate">Thông tin tài khoản</p>
                 </Link>
               </div>
             ) : (
@@ -152,7 +155,7 @@ export default function MainHeader() {
                 Giá vé
               </NavLink>
 
-              {!true ? (
+              {isLogin ? (
                 <div className="flex items-center space-x-2">
                   <UserCircleIcon className="h-8 w-8 text-white" />
                   <Link
@@ -160,7 +163,7 @@ export default function MainHeader() {
                     className="text-white hover:underline text-sm w-40"
                     onClick={toggleMenu}
                   >
-                    <p className=" truncate">Username</p>
+                    <p className=" truncate">Thông tin tài khoản</p>
                   </Link>
                 </div>
               ) : (

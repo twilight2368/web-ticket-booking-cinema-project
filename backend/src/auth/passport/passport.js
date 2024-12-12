@@ -9,13 +9,19 @@ passport.use(
       const user = await User.findOne({
         $or: [{ username: username }, { email: username }],
       }).select("+password");
+
       if (!user) {
-        return done(null, false, { message: "Incorrect username or email." });
+        return done(null, false, {
+          message: "Incorrect username, email or password",
+        });
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
+
       if (!isMatch) {
-        return done(null, false, { message: "Incorrect password." });
+        return done(null, false, {
+          message: "Incorrect username, email or password",
+        });
       }
 
       return done(null, user);
