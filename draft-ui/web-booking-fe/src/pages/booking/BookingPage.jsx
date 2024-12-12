@@ -49,18 +49,17 @@ export default function BookingPage() {
         }
       );
 
-      console.log("====================================");
-      console.log(bookingCreateResponse);
-      console.log("====================================");
+      // console.log("====================================");
+      // console.log(bookingCreateResponse);
+      // console.log("====================================");
 
       if (
-        bookingCreateResponse.statusText === "Created" &&
         bookingCreateResponse.status === 201 &&
         bookingCreateResponse.data._id
       ) {
-        console.log("====================================");
-        console.log(bookingCreateResponse.data);
-        console.log("====================================");
+        // console.log("====================================");
+        // console.log(bookingCreateResponse.data);
+        // console.log("====================================");
 
         const paymenPayload = {
           booking_id: bookingCreateResponse.data._id,
