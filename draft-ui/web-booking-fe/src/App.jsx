@@ -15,8 +15,7 @@ import TicketPricePage from "./pages/tickets/TicketPricePage";
 import MoviePage from "./pages/movies/MoviePage";
 import MovieLayout from "./pages/movies/MovieDetailPage";
 import BookingPage from "./pages/booking/BookingPage";
-import PaymentSuccess from "./pages/payment/PaymentSuccess";
-import PaymentFail from "./pages/payment/PaymentFail";
+
 import AdminMainLayout from "./admin/layouts/AdminMainLayout";
 import NotFoundAdminPage from "./admin/pages/NotFoundAdminPage";
 import RoomAdminPage from "./admin/pages/rooms/RoomAdminPage";
@@ -31,6 +30,7 @@ import NewPageById from "./pages/news/NewPageById";
 
 import LoginProvider from "./context/LoginProvider";
 import LoginAdminProvider from "./admin/context/LoginAdminProvider";
+import PaymentDetailPage from "./pages/payment/PaymentDetailPage";
 
 function App() {
   return (
@@ -53,8 +53,8 @@ function App() {
                   <Route path=":id" element={<MovieLayout />} />
                 </Route>
                 <Route path="making-booking" element={<BookingPage />} />
-                <Route path="ticket/:id" element={<PaymentSuccess />} />
-                <Route path="payment-fail" element={<PaymentFail />} />
+                <Route path="booking/:id" element={<PaymentDetailPage />} />
+
                 <Route path="profile" element={<ProfilePage />} />
                 <Route path="update-profile" element={<UpdateProfilePage />} />
                 <Route

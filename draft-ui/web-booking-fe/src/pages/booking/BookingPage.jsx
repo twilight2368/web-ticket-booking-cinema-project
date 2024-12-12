@@ -1,12 +1,20 @@
-import { Button, Card, CardBody } from "@material-tailwind/react";
-import { useEffect, useRef, useState } from "react";
+import { Button, Card, CardBody, Spinner } from "@material-tailwind/react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
+import axios from "axios";
+import toast from "react-hot-toast";
 import TimeDisplay from "../../components/time/TimeDisplay";
 import { useDispatch } from "react-redux";
 import { seatTotalPriceFromSeat } from "../../app/stores/CartSlice";
 import DayDisplay from "../../components/time/DayDisplay";
+import { clearToken } from "../../app/stores/UserSlice";
+import Payment from "../../components/payment/Payment";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export default function BookingPage() {
+  const [bookingId, setBookingId] = useState();
+  const [clientSecret, setClientSecret] = useState();
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
   const cart = useSelector((state) => state.cart);
@@ -16,6 +24,99 @@ export default function BookingPage() {
     dispatch(seatTotalPriceFromSeat());
   }, []);
 
+  const handlingBooking = async () => {
+    setLoading(true);
+    try {
+      const seats = [];
+      for (const seat of cart.seats) {
+        seats.push(seat.seat_id);
+      }
+
+      const payload = {
+        user_id: user.user_id,
+        show_id: cart.show.show_id,
+        seats: seats,
+        total_price: cart.total_price,
+      };
+
+      const bookingCreateResponse = await axios.post(
+        `${BASE_URL}/api/create-booking`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bear ${user.token}`,
+          },
+        }
+      );
+
+      console.log("====================================");
+      console.log(bookingCreateResponse);
+      console.log("====================================");
+
+      if (
+        bookingCreateResponse.statusText === "Created" &&
+        bookingCreateResponse.status === 201 &&
+        bookingCreateResponse.data._id
+      ) {
+        console.log("====================================");
+        console.log(bookingCreateResponse.data);
+        console.log("====================================");
+
+        const paymenPayload = {
+          booking_id: bookingCreateResponse.data._id,
+          user_id: user.user_id,
+          amount: cart.total_price,
+        };
+
+        const PaymentIntentResopnse = await axios.post(
+          `${BASE_URL}/api/create_intent_payment`,
+          paymenPayload,
+          {
+            headers: {
+              Authorization: `Bear ${user.token}`,
+            },
+          }
+        );
+
+        if (
+          PaymentIntentResopnse.status === 201 &&
+          PaymentIntentResopnse.statusText === "Created"
+        ) {
+          console.log("====================================");
+          console.log(
+            PaymentIntentResopnse.data._id,
+            PaymentIntentResopnse.data.clientSecret
+          );
+          console.log("====================================");
+          setBookingId(bookingCreateResponse.data._id);
+          setClientSecret(PaymentIntentResopnse.data.clientSecret);
+        }
+      }
+    } catch (error) {
+      // Comprehensive error handling
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error("Data:", error.response.data);
+        console.error("Status:", error.response.status);
+
+        if (error.response.data.message == "Token Unauthorized") {
+          dispatch(clearToken());
+        } else {
+          toast.error(error.response.data.message);
+        }
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error("No response received:", error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error("Error setting up request:", error.message);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       {!cart.movie ||
@@ -23,8 +124,7 @@ export default function BookingPage() {
       !cart.room ||
       !cart.show ||
       user.info ||
-      user.user_id === "" ||
-      user.token === "" ? (
+      user.user_id === "" ? (
         <>
           <div className="w-full h-screen flex flex-col gap-6 justify-center items-center">
             <div className="text-3xl font-bold">
@@ -150,52 +250,74 @@ export default function BookingPage() {
               </div>
 
               <div className="md:w-1/3 w-full flex justify-center items-top">
-                <Card className="bg-black/0 w-full">
-                  <CardBody className="px-6 py-0">
-                    <div className=" text-white">
-                      <div className="border-[1px] rounded-lg border-blue-gray-600 p-6 flex justify-center flex-col gap-6 w-full">
-                        <table className=" w-full text-left text-lg mb-12  shadow-md">
-                          <tbody>
-                            <tr className="">
-                              <td className="px-4 py-2 font-medium text-gray-300">
-                                Thanh toán
-                              </td>
-                              <td className="px-4 py-2 text-gray-400">
-                                {cart.total_price} ¥
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className="px-4 py-2 font-medium text-gray-300">
-                                Phí
-                              </td>
-                              <td className="px-4 py-2 text-gray-400">0 </td>
-                            </tr>
-                            <tr className="">
-                              <td className="px-4 py-2 font-medium text-gray-300">
-                                Tổng cộng
-                              </td>
-                              <td className="px-4 py-2 font-black text-white">
-                                {cart.total_price} ¥
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                        <Button color="red" className="w-full">
-                          Xác nhận thanh toán
-                        </Button>
-                        <Button
-                          color="black"
-                          className="w-full"
-                          onClick={() => {
-                            navigate(-1);
-                          }}
-                        >
-                          trở lại
-                        </Button>
-                      </div>
-                    </div>
-                  </CardBody>
-                </Card>
+                {!clientSecret || !bookingId ? (
+                  <>
+                    <Card className="bg-black/0 w-full">
+                      <CardBody className="px-6 py-0">
+                        <div className=" text-white">
+                          <div className="border-[1px] rounded-lg border-blue-gray-600 p-6 flex justify-center flex-col gap-6 w-full">
+                            <table className=" w-full text-left text-lg mb-12  shadow-md">
+                              <tbody>
+                                <tr className="">
+                                  <td className="px-4 py-2 font-medium text-gray-300">
+                                    Thanh toán
+                                  </td>
+                                  <td className="px-4 py-2 text-gray-400">
+                                    {cart.total_price} ¥
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td className="px-4 py-2 font-medium text-gray-300">
+                                    Phí
+                                  </td>
+                                  <td className="px-4 py-2 text-gray-400">
+                                    0{" "}
+                                  </td>
+                                </tr>
+                                <tr className="">
+                                  <td className="px-4 py-2 font-medium text-gray-300">
+                                    Tổng cộng
+                                  </td>
+                                  <td className="px-4 py-2 font-black text-white">
+                                    {cart.total_price} ¥
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <Button
+                              color="red"
+                              className="w-full flex justify-center"
+                              onClick={handlingBooking}
+                              disabled={loading}
+                            >
+                              {loading ? (
+                                <Spinner className=" h-4 w-4" />
+                              ) : (
+                                <>Xác nhận thanh toán</>
+                              )}
+                            </Button>
+                            <Button
+                              color="black"
+                              className="w-full"
+                              onClick={() => {
+                                navigate(-1);
+                              }}
+                            >
+                              trở lại
+                            </Button>
+                          </div>
+                        </div>
+                      </CardBody>
+                    </Card>
+                  </>
+                ) : (
+                  <>
+                    <Payment
+                      clientSecret={clientSecret}
+                      booking_id={bookingId}
+                    />
+                  </>
+                )}
               </div>
             </div>
           </div>

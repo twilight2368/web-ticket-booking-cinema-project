@@ -144,9 +144,9 @@ const createBooking = async (req, res, next) => {
       room_id: show.room_id,
     }).populate("seat_type");
 
-    console.log("====================================");
-    console.log(seatDocuments);
-    console.log("====================================");
+    // console.log("====================================");
+    // console.log(seatDocuments);
+    // console.log("====================================");
 
     if (seatDocuments.length !== seats.length) {
       return res.status(400).json({
@@ -253,7 +253,7 @@ const create_intent_payment = async (req, res) => {
     console.log(paymentIntent);
 
     return res
-      .status(200)
+      .status(201)
       .json({ success: true, clientSecret: paymentIntent.client_secret });
   } catch (error) {
     next(error);

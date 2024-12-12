@@ -61,7 +61,7 @@ const getRoomInformationByShow = async (req, res, next) => {
     const seats = await Seat.find({ room_id: roomId }).populate("seat_type");
 
     // Fetch all bookings for the show
-    const bookings = await BookingModel.find({ show_id });
+    const bookings = await BookingModel.find({ show_id, status: "confirmed" });
 
     // Map booked seats for quick lookup
     const bookedSeats = new Set(bookings.flatMap((booking) => booking.seats));
