@@ -38,6 +38,14 @@ const createShow = async (req, res, next) => {
       return res.status(404).json({ message: "Room not found" });
     }
 
+    // Check if the date_show is before the movie's release_date
+    if (moment(date_show).isBefore(moment(movie.release_date))) {
+      return res.status(400).json({
+        message: "The show date cannot be before the movie's release date.",
+        release_date: movie.release_date,
+      });
+    }
+
     // Convert input times to server timezone (UTC+7)
 
     const serverDateShow = timeZoneUtil.convertDateToServerTimezone(date_show);
@@ -289,9 +297,16 @@ const getAMovieAndItsShowsCurrent = async (req, res, next) => {
         message: "Movie ID is required",
       });
     }
+    // Get the current date in server's timezone
+    const todayInServerZone = timeZoneUtil.getCurrentTimeInServerZone();
 
-    const currentTime = timeZoneUtil.getCurrentTimeInServerZone();
-    const endDate = moment(currentTime).add(2, "days").endOf("day");
+    // Calculate the start and end of the date range in server timezone
+    const startDate = todayInServerZone.clone().startOf("day");
+    const endDate = todayInServerZone.clone().add(2, "days").endOf("day");
+
+    // Convert start and end dates to UTC+7
+    const startDateInServerZone = startDate.toDate();
+    const endDateInServerZone = endDate.toDate();
 
     const movie = await Movie.findById(movieId);
     if (!movie) {
@@ -306,8 +321,8 @@ const getAMovieAndItsShowsCurrent = async (req, res, next) => {
         $match: {
           movie_id: movieId,
           date_show: {
-            $gte: currentTime.toDate(),
-            $lte: endDate.toDate(),
+            $gte: startDateInServerZone,
+            $lte: endDateInServerZone,
           },
         },
       },

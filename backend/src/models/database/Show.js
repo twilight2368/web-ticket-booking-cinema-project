@@ -45,6 +45,6 @@ const ShowSchema = new mongoose.Schema({
 // Adding an index for faster query performance
 ShowSchema.index({ movie_id: 1, room_id: 1, date_show: 1 });
 
-const ShowModel = mongoose.model("Show", ShowSchema);
+const ShowModel = mongoose.model("show", ShowSchema);
 
 module.exports = ShowModel;

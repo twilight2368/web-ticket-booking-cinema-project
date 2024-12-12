@@ -171,7 +171,7 @@ router.get("/show-movie-days/:movieId", getAMovieAndItsShowsCurrent);
 //? Payment and booking route
 router.get("/booking-info", checkAdminLogin, getBookingInformation);
 
-router.get("/booking-info/:id", checkLoggedIn, getBookingInformationById);
+router.get("/booking-info/:id", getBookingInformationById);
 
 router.post("/create-booking", checkLoggedIn, createBooking);
 
