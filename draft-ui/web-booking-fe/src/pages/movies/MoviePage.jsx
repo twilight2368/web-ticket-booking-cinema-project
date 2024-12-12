@@ -51,7 +51,7 @@ export default function MoviePage() {
             </Button>
           ))
         ) : (
-          <p>No days available to display movies.</p>
+          <p className=" uppercase">không có lịch chiếu phim</p>
         )}
       </div>
       <div className="lg:px-12 grid lg:grid-cols-2 sm:grid-cols-1 gap-6 mb-24">
@@ -73,9 +73,7 @@ export default function MoviePage() {
             />
           ))
         ) : (
-          <p>
-            <Spinner className=" h-4 w-4" />
-          </p>
+          <></>
         )}
       </div>
     </div>
