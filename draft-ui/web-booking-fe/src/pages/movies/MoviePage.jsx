@@ -44,7 +44,7 @@ export default function MoviePage() {
             <Button
               key={i}
               variant={i === chosenDayList ? "filled" : "outlined"}
-              color={i === chosenDayList ? "blue" : "gray"}
+              color="white"
               onClick={() => setChosenDayList(i)}
             >
               {day}
