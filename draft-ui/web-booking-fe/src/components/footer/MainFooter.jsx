@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import LogoBigSVG from "../../assets/studio-ghibli-logo.svg";
 
 export default function MainFooter() {
@@ -21,6 +22,11 @@ export default function MainFooter() {
             <li>Hỏi đáp</li>
             <li>Liên hệ</li>
           </ul>
+          <p className="my-12 text-center">
+            <Link to="admin" className="mt-3 hover:text-red-300">
+              Admin
+            </Link>
+          </p>
           <div className="text-center space-y-2 text-xs md:text-base mb-10">
             <p>Địa chỉ: Số 1 Đại Cồ Việt, Hai Bà Trưng, Hà Nội</p>
             <div className="text-center text-sm mt-2">
