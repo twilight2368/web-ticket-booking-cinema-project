@@ -24,8 +24,6 @@ export function RoomMapDisplayModal({ seats }) {
         </DialogHeader>
         <DialogBody className="h-[600px] flex justify-center items-center bg-gray-900">
           <SeatMapAdmin fakeSeatsData={seats} />
-        </DialogBody>
-        <DialogFooter className="bg-gray-900 flex justify-center items-center">
           <Button
             variant="text"
             color="red"
@@ -34,7 +32,7 @@ export function RoomMapDisplayModal({ seats }) {
           >
             <span>đóng</span>
           </Button>
-        </DialogFooter>
+        </DialogBody>
       </Dialog>
     </>
   );
