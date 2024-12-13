@@ -33,7 +33,6 @@ const {
 const {
   secretSession: SECRET_SESSION,
   sessionCookieTTL: SESSION_COOKIE_TTL,
-  sessionDomain: SESSION_DOMAIN,
 } = require("./configs/auth.config");
 
 //* Global Middlewares
@@ -57,8 +56,7 @@ app.use(
     origin: allowOrigins,
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
-    exposedHeaders: ["Set-Cookie"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
@@ -96,6 +94,7 @@ app.use(
     cookie: {
       maxAge: SESSION_COOKIE_TTL,
       httpOnly: true,
+      sameSite: "none",
       secure: true,
     },
   })
