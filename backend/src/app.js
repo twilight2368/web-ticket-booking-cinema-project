@@ -93,8 +93,8 @@ app.use(
     cookie: {
       maxAge: SESSION_COOKIE_TTL,
       httpOnly: true,
-      sameSite: "lax",
-      secure: false,
+      sameSite: "none",
+      secure: true,
     },
   })
 );
@@ -102,6 +102,13 @@ app.use(
 require("./auth/passport/passport");
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use((req, res, next) => {
+  if (req.session && req.session.cookie) {
+    req.session.cookie.secure = true; // Set secure flag dynamically
+  }
+  next();
+});
 
 //* Set up  JSdoc
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
