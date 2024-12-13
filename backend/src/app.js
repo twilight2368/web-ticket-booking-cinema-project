@@ -94,7 +94,7 @@ app.use(
     cookie: {
       maxAge: SESSION_COOKIE_TTL,
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: "none",
       secure: true,
       domain: SESSION_DOMAIN,
     },
