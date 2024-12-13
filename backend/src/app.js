@@ -38,7 +38,7 @@ const {
 //* Global Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+app.use(cookieParser(SECRET_SESSION));
 app.use(helmet());
 
 const allowOrigins = ["http://localhost:5173", "http://localhost:3000"];
@@ -50,14 +50,15 @@ console.log("====================================");
 console.log(allowOrigins);
 console.log("====================================");
 // CORS Configuration
-const corsOptions = {
-  origin: allowOrigins,
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-};
 
-app.use(cors(corsOptions));
+app.use(
+  cors({
+    origin: allowOrigins,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 //* Logging middlewares
 
@@ -81,6 +82,10 @@ if (DEV_MODE) {
  * * Custom PassportJS setup
  */
 
+if (!appConfig.dev_mode) {
+  app.set("trust proxy", 1); //! trust first proxy must have on deployment
+}
+
 app.use(
   session({
     secret: SECRET_SESSION,
@@ -93,7 +98,8 @@ app.use(
     cookie: {
       maxAge: SESSION_COOKIE_TTL,
       httpOnly: true,
-      secure: false,
+      sameSite: "none",
+      secure: true,
     },
   })
 );
