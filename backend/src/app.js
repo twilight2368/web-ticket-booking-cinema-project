@@ -38,7 +38,9 @@ const {
 //* Global Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+app.use(cookieParser(SECRET_SESSION, {
+  d
+}));
 app.use(helmet());
 
 const allowOrigins = ["http://localhost:5173", "http://localhost:3000"];
