@@ -83,7 +83,7 @@ if (DEV_MODE) {
  */
 
 if (!appConfig.dev_mode) {
-  app.set("trust proxy", 1); // trust first proxy
+  app.set("trust proxy", 1); //! trust first proxy must have on deployment
 }
 
 app.use(
