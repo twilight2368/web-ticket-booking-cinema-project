@@ -149,7 +149,7 @@ router.get("/logout", (req, res, next) => {
 });
 
 //TODO: Get new JWT token
-router.get("/new-token", checkIsSessionValid, (req, res, next) => {
+router.get("/new-token", checkCookie, checkIsSessionValid, (req, res, next) => {
   try {
     const tokenData = issueJWT(req.user);
     return res.json({
