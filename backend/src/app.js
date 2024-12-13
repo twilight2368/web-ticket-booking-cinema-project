@@ -82,6 +82,11 @@ if (DEV_MODE) {
  * * Custom PassportJS setup
  */
 
+if (!appConfig.dev_mode) {
+  app.set("trust proxy", 1); // trust first proxy
+  session.cookie.secure = true; // serve secure cookies
+}
+
 app.use(
   session({
     secret: SECRET_SESSION,

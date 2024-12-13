@@ -10,8 +10,6 @@ const authConfig = {
   secretHash: "",
   sessionTTL: 0,
   sessionCookieTTL: 1000 * 60 * 60 * 24 * 3, //"3d"
-  sessionDomain:
-    process.env.NODE_ENV == "development" ? "localhost" : process.env.BE_DOMAIN,
   saltRounds: 10,
   port: process.env.AUTH_PORT || 8000,
   admin_secret_password: process.env.SECRET_ADMIN_KEY,
