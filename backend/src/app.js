@@ -51,14 +51,16 @@ console.log("====================================");
 console.log(allowOrigins);
 console.log("====================================");
 // CORS Configuration
-const corsOptions = {
-  origin: allowOrigins,
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-};
 
-app.use(cors(corsOptions));
+app.use(
+  cors({
+    origin: allowOrigins,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
+    exposedHeaders: ["Set-Cookie"],
+  })
+);
 
 //* Logging middlewares
 
