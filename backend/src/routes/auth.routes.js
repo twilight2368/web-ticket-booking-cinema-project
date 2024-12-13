@@ -110,6 +110,12 @@ router.post("/login", (req, res, next) => {
 
       const user_info = await UserModel.findById(req.user.id);
 
+      console.log("User Logged In:", user.id);
+      console.log("Session ID:", req.sessionID);
+
+      // Manually check and log cookie details
+      console.log("Session Cookie:", req.session.cookie);
+
       return res.json({
         user_info: user_info,
         user_id: req.user.id,

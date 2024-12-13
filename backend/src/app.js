@@ -96,7 +96,6 @@ app.use(
       httpOnly: true,
       sameSite: "none",
       secure: true,
-      domain: SESSION_DOMAIN,
     },
   })
 );
