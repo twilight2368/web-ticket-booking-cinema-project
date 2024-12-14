@@ -10,13 +10,13 @@ import MovieDetail from "./components/MovieDetail";
 import MovieSchedule from "./components/MovieSchedule";
 import Login from "./components/Login"
 import Register from "./components/Register"
+import TicketPricePage from "./components/TicketPricePage";
 
 function App() {
   return (
     <Router>
       <Header/>
-      <div className="grid grid-cols-3 grid-rows-[auto_1fr_auto] min-h-screen gap-4 p-4 bg-gray-900 scroll-smooth">
-        <main className="col-start-1 col-span-3 row-start-2 min-h-0">
+      <main className="bg-gray-900">
           <Routes>
             <Route path="/" element={
               <>
@@ -30,9 +30,9 @@ function App() {
             <Route path="/movie/:id" element={<MovieDetail />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/prices" element={<TicketPricePage/>} />
           </Routes>
         </main>
-      </div>
       <Footer/>
     </Router>
   );
