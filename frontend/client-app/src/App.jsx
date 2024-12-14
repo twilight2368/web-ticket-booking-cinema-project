@@ -16,7 +16,7 @@ function App() {
   return (
     <Router>
       <Header/>
-      <main className="bg-gray-900">
+      <main className="flex flex-col min-h-screen bg-gray-900 pt-[70px]">
           <Routes>
             <Route path="/" element={
               <>
@@ -32,7 +32,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/prices" element={<TicketPricePage/>} />
           </Routes>
-        </main>
+      </main>
       <Footer/>
     </Router>
   );
