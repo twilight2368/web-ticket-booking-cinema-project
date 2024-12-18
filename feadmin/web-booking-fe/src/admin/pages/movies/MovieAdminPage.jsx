@@ -120,4 +120,3 @@ const MovieDisplayItem = ({ movie_id, title, durations, release_date, movie }) =
     </tr>
   );
 };
-
