@@ -200,6 +200,10 @@ router.post("/admin-register", async (req, res, next) => {
   try {
     const { username, password, secret } = req.body;
 
+    console.log("====================================");
+    console.log(username, password, secret);
+    console.log("====================================");
+
     // Validate input
     if (!username || !password || !secret) {
       return res
@@ -211,7 +215,7 @@ router.post("/admin-register", async (req, res, next) => {
     if (secret !== authConfig.admin_secret_password) {
       return res
         .status(400)
-        .json({ message: "All needed information are required." });
+        .json({ message: "All secret information are required." });
     }
 
     // Check if the username already exists
@@ -241,6 +245,10 @@ router.post("/admin-login", async (req, res, next) => {
   try {
     const { username, password, secret } = req.body;
 
+    console.log("====================================");
+    console.log(username, password, secret);
+    console.log("====================================");
+
     // Validate input
     if (!username || !password || !secret) {
       return res
@@ -252,7 +260,7 @@ router.post("/admin-login", async (req, res, next) => {
     if (secret !== authConfig.admin_secret_password) {
       return res
         .status(400)
-        .json({ message: "All needed information are required." });
+        .json({ message: "All secret information are required." });
     }
 
     // Find the admin
